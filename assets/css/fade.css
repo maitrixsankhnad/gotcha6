@@ -1,0 +1,175 @@
+.img-portfolio {
+    margin-bottom: 30px;
+}
+
+.img-hover:hover {
+    opacity: 0.8;
+}
+
+#landing_fade {
+    padding-top: 10%;
+}
+
+#landing_fade_caption {
+    padding-bottom: 20px;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+
+
+#landing_btn{
+    background-color: transparent;
+    color: rgba(255,255,255,1);
+}
+
+#landing_btn:hover{
+    background-color: rgba(255,255,255, .2);
+    color: white;
+}
+
+#landing_nav > li {
+    color: white;
+}
+
+#carousel_fade-fade #carousel_fade-inner .item {
+    opacity: 0;
+    transition-property: opacity;
+}
+#carousel_fade-fade #carousel_fade-inner .active {
+    opacity: 1;
+}
+#carousel_fade-fade #carousel_fade-inner .active.left,
+#carousel_fade-fade #carousel_fade-inner .active.right {
+    left: 0;
+    opacity: 0;
+    z-index: 1;
+}
+#carousel_fade-fade #carousel_fade-inner .next.left,
+#carousel_fade-fade #carousel_fade-inner .prev.right {
+    opacity: 1;
+}
+#carousel_fade-fade #carousel_fade-control {
+    z-index: 2;
+}
+@media all and (transform-3d),
+(-webkit-transform-3d) {
+    #carousel_fade-fade #carousel_fade-inner > .item.next,
+    #carousel_fade-fade #carousel_fade-inner > .item.active.right {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    #carousel_fade-fade #carousel_fade-inner > .item.prev,
+    #carousel_fade-fade #carousel_fade-inner > .item.active.left {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+    #carousel_fade-fade #carousel_fade-inner > .item.next.left,
+    #carousel_fade-fade #carousel_fade-inner > .item.prev.right,
+    #carousel_fade-fade #carousel_fade-inner > .item.active {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+.item:nth-child(1) {
+    background: url('../img/gray_wallpaper.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.item:nth-child(2) {
+    background: url('../img/stairs.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.item:nth-child(3) {
+    background: url('../img/windows.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+#carousel_fade {
+    z-index: -99;
+}
+#carousel_fade .item {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+.title {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  text-shadow: 2px 2px #000;
+  color: #FFF;
+}
+
+
+/* Pricing Page Styles */
+
+.price {
+    display: block;
+    font-size: 50px;
+    line-height: 50px;
+}
+
+.price sup {
+    top: -20px;
+    left: 2px;
+    font-size: 20px;
+}
+
+.period {
+    display: block;
+    font-style: italic;
+}
+
+/* Footer Styles */
+
+
+.navbar-inverse {
+  color: white;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: white;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover {
+  color: rgb(0,100,0);
+}
+
+.navbar-inverse .navbar-nav>.active> a, 
+.navbar-inverse .navbar-nav>.active> a:focus, 
+.navbar-inverse .navbar-nav>.active> a:hover {
+  background: white; 
+  color: rgb(0,100,0);
+}
+
+/* Responsive Styles */
+
+@media(max-width:991px) {
+    .customer-img,
+    .img-related {
+        margin-bottom: 30px;
+    }
+}
+
+@media(max-width:767px) {
+    .img-portfolio {
+        margin-bottom: 15px;
+    }
+
+    header#carousel_fade #carousel_fade {
+        height: 70%;
+    }
+}
