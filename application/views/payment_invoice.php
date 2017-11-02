@@ -60,34 +60,42 @@ if(!AID){
                   </div>
                   <!-- info row -->
                   <div class="row invoice-info">
-                    <div class="col-sm-4 invoice-col"> From
+                    <div class="col-sm-4 invoice-col"> To
                       <address>
                       <strong><?=$userData[0]['fld_fname']?>
                           <?=$userData[0]['fld_mname']?>
                            <?=$userData[0]['fld_lname'];?>
                        </strong> <br>
-                      795 Freedom Ave, Suite 600 <br>
-                      New York, CA 94107 <br>
-                      Phone: 1 (804) 123-9876 <br>
+                     
+                     
                       Email: <?=$userData[0]['fld_email']; ?>
+                     
                       </address>
                     </div>
                     <!-- /.col -->
-                    <div class="col-sm-4 invoice-col"> To
+                    <div class="col-sm-4 invoice-col"> From
                       <address>
                       <strong>Admin</strong> <br>
-                      795 Freedom Ave, Suite 600 <br>
-                      New York, CA 94107 <br>
-                      Phone: 1 (804) 123-9876 <br>
-                      Email: admin@gotcha.com
+                      <?php  
+                      $adminAddress = getDefault();
+                      $countryData = getCountryName($adminAddress[0]['fld_country']);
+                    
+                      if (!empty($adminAddress)) { ?> 
+                      <?=$adminAddress[0]['fld_address1']; ?> <br>
+                      <?=$adminAddress[0]['fld_address2']; ?><br>
+                      <?=$adminAddress[0]['fld_city']; ?>  <?=$countryData[0]['fld_CountryName']?>  <?=$adminAddress[0]['fld_zip']; ?><br>
+                      Phone: <?=$adminAddress[0]['fld_phone']; ?><br>
+                      Email: <?=$adminAddress[0]['fld_email']; ?>
+                       <?php }?>
                       </address>
                     </div>
                     <!-- /.col -->
                     <div class="col-sm-4 invoice-col"> <b>Invoice : <?=str_pad($invoice[0]['fld_incident_id'],10,0,STR_PAD_LEFT)?></b> <br>
                       <br>
                       <b>Payment ID:</b> <?=$invoice[0]['fld_payment_id']?><br>
-                      <b>Payment Due:</b> 2/22/2014 <br>
-                      <b>Account:</b> 968-34567 </div>
+                      <b>Payment Status:</b> <?=$invoice[0]['fld_payment_status']?> <br>
+<!--                      <b>Account:</b> 968-34567 -->
+                    </div>
                     <!-- /.col --> 
                   </div>
                   <!-- /.row --> 
@@ -98,10 +106,10 @@ if(!AID){
                         <thead>
                           <tr>
                             <th>Qty</th>
-                            <th>Product</th>
+                            <th>Job</th>
                             <th>Plan</th>
                             <th style="width: 59%">Description</th>
-                            <th>Subtotal</th>
+                            <th>Total</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -133,17 +141,15 @@ if(!AID){
                         <table class="table">
                           <tbody>
                             <tr>
-                              <th style="width:50%">Subtotal:</th>
-                              <td><?=$invoice[0]['fld_total']?> <small><?=$invoice[0]['fld_currency']?></small></td>
-                            </tr>
-                            <tr>
+
+<!--                            <tr>
                               <th>Tax (9.3%)</th>
                               <td>$0.00</td>
                             </tr>
                             <tr>
                               <th>Shipping:</th>
                               <td>$0.00</td>
-                            </tr>
+                            </tr>-->
                             <tr>
                               <th>Total:</th>
                               <td><?=$invoice[0]['fld_total']?> <small><?=$invoice[0]['fld_currency']?></small></td>
@@ -159,8 +165,8 @@ if(!AID){
                   <div class="row no-print">
                     <div class="col-xs-12">
                       <button class="btn btn-default" onClick="window.print();"><i class="fa fa-print"></i> Print</button>
-                      <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-                      <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
+<!--                      <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>-->
+                      <button class="btn btn-primary pull-right" onClick="window.print();" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
                     </div>
                   </div>
                 </section>

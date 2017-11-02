@@ -238,4 +238,10 @@ class Common_model extends CI_Model {
        $query = $this->db->query($sql);
        return $query;
     }
+    
+    function getCountryName($cCodeName= '') {
+        $sql = "select * from tbl_country where fld_CountryCode= '" . $cCodeName . "' ";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
 }

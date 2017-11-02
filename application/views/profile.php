@@ -309,15 +309,28 @@ $isNotificationPanl = 'true';
                                       <a onClick="appendNewHour()" href="javascript:void(0);"><i class="fa fa-plus" aria-hidden="true"></i> Add More Time Slot</a> </div>
                                     <div class="col-md-10 ">
                                       <div class="row boxReadernr">
+                                          <?php $timeslot = scheduleSlot($user[0]['fld_id']);
+                                             if(!empty($timeslot)){                           
+                                            foreach($timeslot as $timeslotData){
+                                                 $startHour = date('h', strtotime($timeslotData['fld_start_time'])); 
+                                                 $startMinute = date('i', strtotime($timeslotData['fld_start_time'])); 
+                                                
+                                                 $endHour = date('h', strtotime($timeslotData['fld_end_time'])); 
+                                               
+                                                 $endMinute = date('i', strtotime($timeslotData['fld_end_time']));  
+                                        
+                                         // print_r($timeslot);
+                                          
+                                             ?>  <?php  }} ?>  
                                         <div class="form-group col-md-6">
                                           <label>Start Time</label>
                                           <div class="row">
                                             <div class="col-xs-6">
-                                              <select title="Hours" name="starthours[]" class="hrsP" data-size="5" data-width="100%" data-live-search="true">
+                                              <select title="Hours" name="starthours[]"  id ="hrstart" class="hrsP" data-size="5" data-width="100%" data-live-search="true">
                                               </select>
                                             </div>
                                             <div class="col-xs-6">
-                                              <select title="Minuts" name="startminutes[]" class="mintsP" data-size="5" data-width="100%" data-live-search="true">
+                                              <select title="Minuts"   name="startminutes[]" class="mintsP" data-size="5" data-width="100%" data-live-search="true">
                                               </select>
                                             </div>
                                           </div>
@@ -326,18 +339,21 @@ $isNotificationPanl = 'true';
                                           <label>End Time</label>
                                           <div class="row">
                                             <div class="col-xs-6">
-                                              <select title="Hours" name="endhours[]" class="hrsP" data-size="5" data-width="100%" data-live-search="true">
+                                              <select title="Hours"  name="endhours[]" class="hrsP" data-size="5" data-width="100%" data-live-search="true">
                                               </select>
                                             </div>
                                             <div class="col-xs-6">
-                                              <select title="Minuts" name="endminutes[]" class="mintsP" data-size="5" data-width="100%" data-live-search="true">
+                                              <select title="Minuts"  name="endminutes[]" class="mintsP" data-size="5" data-width="100%" data-live-search="true">
                                               </select>
                                             </div>
                                           </div>
                                         </div>
+                                          
+                                      
                                         <div style="margin-bottom:10px;" class="clearfix"></div>
                                       </div>
                                       <div class="row setBoxNewHor"> </div>
+                                      
                                     </div>
                                   </div>
                                   <div class="clearfix"></div>
@@ -466,9 +482,14 @@ $isNotificationPanl = 'true';
 <script>
 timeSlot=0; 
 	boxHourMint=$('.boxReadernr').html(); 
+       // var temp = "10";
+       // alert(temp);
 	$(function (){
 		getHoursMinuts();
+               
+                
 		$('.inlineBlockFull select.mintsP, .inlineBlockFull select.hrsP').selectpicker();
+//                $("#hrstart > [value=" + temp + "]").attr("selected", "selected");
 	});
 </script> 
 <script>

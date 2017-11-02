@@ -442,4 +442,13 @@ if(! function_exists('getSelectedInciSME')){
         return $result;
     }
 }
+
+if(! function_exists('getCountryName')){
+	function getCountryName($cCodeName='')
+	{
+        $CI = & get_instance();
+	return $CI->common_model->getCountryName($cCodeName);
+	}
+}
+
 ?>
