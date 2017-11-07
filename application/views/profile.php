@@ -294,7 +294,7 @@ $isNotificationPanl = 'true';
                                       <label class="uploadLblcClick" for="resumeUp">Click here to upload <i class="fa fa-upload" aria-hidden="true"></i></label>
                                       <input id="resumeUp" type="file" accept=".pdf,.txt,.docx,.doc" name="fld_resume" size="20" value="<?=$user[0]['fld_resume']; ?>">
                                       <?php if($user[0]['fld_resume']){ ?>
-                                      <a href="<?=base_url()?>dashboard/download/<?=$user[0]['fld_resume']; ?>" class="dwn">Download <i class="fa fa-download" aria-hidden="true"></i></a>
+                                      <a href="<?=base_url()?>uploads/resume/<?=$user[0]['fld_resume']; ?>" target="_blank" class="dwn">Download <i class="fa fa-download" aria-hidden="true"></i></a>
                                       <?php } ?>
                                     </div>
                                     <?php } ?>
