@@ -24,7 +24,7 @@ if(!AID){
         <!--Start: page title -->
         <div class="page-title">
           <div class="title_left">
-            <h3>All Package List</h3>
+            <h3>All User Review List</h3>
           </div>
           <?php if($admin[0]['fld_role'] == '0'){?>
           <div class="title_right"> <a class="pull-right btn btn-primary" href="<?=base_url()?>review/add"><i class="fa fa-star"></i> Add New Rating</a> </div>
@@ -41,7 +41,7 @@ if(!AID){
               
               <!--Start: x title -->
               <div class="x_title">
-                <h2>View All Package</h2>
+                <h2>View All User Review </h2>
                 <div class="clearfix"></div>
               </div>
               <!--End: x title --> 
@@ -73,7 +73,7 @@ if(!AID){
 						$ratedBy = userInfo($ratingData['fld_rating_ID']);
 					?>
                     <tr>
-                      <td><a href="<?=base_url()?>dashboard/incident_preview/<?=encode($incidentData[0]['fld_id'])?>" target="_blank">
+                      <td><a href="<?=base_url()?>superadmin/incident_preview/<?=encode($incidentData[0]['fld_id'])?>" target="_blank">
                         <?=trimData($incidentData[0]['fld_inci_title'], 30, true)?>
                         </a></td>
                       <?php if($ratingData['fld_isAdmin']=='1'){?>

@@ -59,7 +59,7 @@ if(!$aid){
                              } ?> 
                                 </strong> <br/>
                                 <span>&nbsp;</span>
-                                <p><a class="homebox" href="<?=base_url()?>dashboard/all_incident">  Total Incident</a></p>
+                                <p><a class="homebox" href="<?=base_url()?>superadmin/incidents">  Total Incident</a></p>
                             </div>
                             <i class="glyphicon glyphicon-tags"></i>
 
@@ -77,7 +77,7 @@ if(!$aid){
                        ?>
                                 </strong> <br/>
                                 <span>&nbsp;</span>
-                                <p><a class="homebox" href="<?=base_url()?>dashboard/all_incident">  Total Active Incident</a></p>
+                                <p><a class="homebox" href="<?=base_url()?>superadmin/incidents">  Total Active Incident</a></p>
                             </div>
                             <i class="glyphicon glyphicon-tags"></i>
                             </a>  
@@ -94,7 +94,7 @@ if(!$aid){
                         }?>
                                 </strong> <br/>
                                 <span>&nbsp;</span>
-                                <p><a class="homebox" href="<?=base_url()?>dashboard/all_incident">  Total Complete Incident</a></p>
+                                <p><a class="homebox" href="<?=base_url()?>superadmin/incidents">  Total Complete Incident</a></p>
                             </div>
                             <i class="glyphicon glyphicon-tags"></i>
 

@@ -63,7 +63,7 @@ if(!AID){
                         
                     ?>
                     <tr>
-                      <td><a href="<?=base_url()?>dashboard/incident_preview/<?=encode($inciListAll['fld_id']); ?>" target="_blank">
+                      <td><a href="<?=base_url()?>superadmin/incident_preview/<?=encode($inciListAll['fld_id']); ?>" target="_blank">
                         <?=truncate($inciListAll['fld_inci_title'],50)?></a></td>
                       
 

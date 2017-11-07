@@ -75,7 +75,7 @@ if(!AID){
                     <tr>
                       <td><?=$paymentData['fld_payment_id']?></td>
                       <td><?=$paymentData['fld_total']?> <small><?=$paymentData['fld_currency']?></small></td>
-                      <td><a href="<?=base_url()?>dashboard/incident_preview/<?=encode($incidentData[0]->fld_id); ?>" target="_blank">
+                      <td><a href="<?=base_url()?>superadmin/incident_preview/<?=encode($incidentData[0]->fld_id); ?>" target="_blank">
                         <?=truncate($incidentData[0]->fld_inci_title,20)?>
                         </a></td>
                       <td><a target="_blank" href="<?=base_url()?>userprofile/<?=encode($userData[0]['fld_id']);?>" >
