@@ -49,11 +49,11 @@ if(!$aid){
 							<!--Start:  x title -->
 							<div class="x_title">
 								<h2>View Incident Details</h2>
-								<ul class="navbar-right">
+<!--								<ul class="navbar-right">
 									<li><a class="btn btn-info btn-sm" href="#"> Track Incident</a></li>
 									<li><a class="btn btn-danger btn-sm" href="#"> Decline</a></li>
 									<li><a class="btn btn-success btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg" > Asign SME</a></li>
-								</ul>
+								</ul>-->
 								<div class="clearfix"></div>
 							</div>
 							<!--End:  x title -->
