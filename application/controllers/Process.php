@@ -835,6 +835,12 @@ class Process extends CI_Controller {
 				$process = $this->common_model->deleteData('tbl_user_service_tag',array('fld_id'=>$id));
 				echo json_encode(array('id' => $process));
 				exit;
+                                
+            case 'package':
+             $tbleName = 'tbl_package';  
+             $process = $this->common_model->deleteData('tbl_package',array('fld_id'=>$id));
+				echo json_encode(array('id' => $process));
+				exit;
             case 'cancelIncident':
                 $tbleName = 'tbl_incident';
                 $data = array(
@@ -847,6 +853,7 @@ class Process extends CI_Controller {
 			case 'contact':
                 $tbleName = 'tbl_contact';
                 break;
+                
 			case 'sAdmin':
                 $process = $this->common_model->deleteData('tbl_admin',array('fld_id'=>$id));
 				echo json_encode(array('id' => $process));
