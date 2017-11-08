@@ -36,10 +36,11 @@ class Review extends CI_Controller {
 		$adminData['usersList'] = $this->common_model->getAll(array('fld_isDeleted'=>'0', 'fld_status'=>'0'),'','tbl_user');
 		$this->load->view('review_edit',$adminData);
 	}
-	public function preview()
+	public function preview($id='')
 	{
 		$adminData['admin'] = $this->fullAdminData();
-		$adminData['rating'] = $this->common_model->getAll(array('fld_isDeleted'=>'0'),'','tbl_rating');
+		$adminData['id'] = decode($id);
+		$adminData['rating'] = $this->common_model->getAll(array('fld_isDeleted'=>'0', 'fld_id' => $adminData['id']),'','tbl_rating');
 		$this->load->view('review_edit',$adminData);
 	}
 }

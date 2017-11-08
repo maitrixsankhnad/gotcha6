@@ -6986,7 +6986,6 @@ function ChangeIncidentTimeStatus(selfObj,fld_id,fld_sme_id){
 
 function getIncidentSMEList(selfObj,id){
         var id = $(selfObj).data('iid');
-        
 	    $('#preloader').fadeIn();
 		$.ajax({
 			url: base_url+'Process/incidentsmeListModel/'+id,

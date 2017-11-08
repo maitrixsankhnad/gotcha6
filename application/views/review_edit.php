@@ -13,20 +13,31 @@ if($id){
 	$incidentData = incident($rating[0]['fld_incident_id']);
 	$incidentTitle = $incidentData[0]['fld_inci_title'];
 	$incidentID = $incidentData[0]['fld_id'];
-	$ratedTO = userInfo($rating[0]['fld_uid']);
+	
+	$ratedTO = userInfo($rating[0]['fld_rating_ID']);
 	$to_id = $ratedTO[0]['fld_id'];
 	$to_username = $ratedTO[0]['fld_username'];
 	$to_fname = $ratedTO[0]['fld_fname'];
 	$to_lname = $ratedTO[0]['fld_lname'];
 	
-	$ratedBy = userInfo($rating[0]['fld_rating_ID']);
-	$by_id = $ratedBy[0]['fld_id'];
-	$by_username = $ratedBy[0]['fld_username'];
-	$by_fname = $ratedBy[0]['fld_fname'];
-	$by_lname = $ratedBy[0]['fld_lname'];
+	if($rating[0]['fld_isAdmin'] == '1'){
+		$ratedBy = userInfo($rating[0]['fld_uid']);
+		$by_id = $ratedBy[0]['fld_id'];
+		$by_username = $ratedBy[0]['fld_username'];
+		$by_fname = $ratedBy[0]['fld_fname'];
+		$by_lname = $ratedBy[0]['fld_lname'];
+		$profURL = 'userprofile/';
+	}else{
+		$ratedBy = adminInfo($rating[0]['fld_uid']);
+		$by_id = $ratedBy[0]['fld_id'];
+		$by_username = $ratedBy[0]['fld_username'].' (Admin)';
+		$by_fname = $ratedBy[0]['fld_fname'];
+		$by_lname = $ratedBy[0]['fld_lname'];
+		$profURL = 'superadmin/admin_users/edit/';
+	}	
 }else{
 	$subBtn = 'Add Review';
-	$isSolved = $feedback = $ratingVal = $incidentData = $incidentTitle = $incidentID = $ratedTO = $to_id = $to_username = $to_fname = $to_lname = $ratedBy = $by_id = 	$by_username = $by_fname = $by_lname = '';
+	$isSolved = $feedback = $ratingVal = $incidentData = $incidentTitle = $incidentID = $ratedTO = $to_id = $to_username = $to_fname = $to_lname = $ratedBy = $by_id = 	$by_username = $by_fname = $by_lname = $profURL = '';
 }
 ?>
 <!DOCTYPE html>
@@ -77,9 +88,14 @@ if($id){
                         <?php if($id){?>
                         <div class="form-group">
                           <label class="control-label col-sm-3">Rating By</label>
-                          <div class="col-sm-9"> <a class="form-control" data-toggle="tooltip"  data-original-title="<?=$by_fname.' '.$by_lname?>" href="<?=base_url()?>/userprofile/<?=encode($by_id)?>">
+                          <div class="col-sm-9"> 
+
+                          
+                          
+                          	<a class="form-control" data-toggle="tooltip"  data-original-title="<?=$by_fname.' '.$by_lname?>" href="<?=base_url().$profURL.encode($by_id)?>">
                             <?=$by_username?>
-                            </a> </div>
+                            </a>
+                          </div>
                         </div>
                         <div class="form-group">
                           <label class="control-label col-sm-3">Rating To</label>

@@ -1234,8 +1234,11 @@ class Process extends CI_Controller {
     public function incidentsmeListModel($incID) {
         $iid = decode($incID);
         $inciSME = assignedSMEData($iid);
-       
-        $adminData = '';
+		$adminInfo = adminInfo();
+		$adminData = $actionBTN = '';
+       	if($adminInfo[0]['fld_role'] == '0'){
+			$actionBTN = '<th class="col-md-1">Action</th>';
+		}
         $usetPreview = '<div class="modal-dialog modal-lg">
 		
 		  <input type="hidden" value="' . $incID . '" class="selectedIID" />
@@ -1252,7 +1255,7 @@ class Process extends CI_Controller {
                     <th>Paypal Id</th>
                     <th>Total Work</th>
                     <th>Amount Paid </th>
-                    <th class="col-md-1">Action</th>
+                    '.$actionBTN.'
                   </tr>
                 </thead>
                 <tbody class="boxInputFull">';
@@ -1275,11 +1278,13 @@ class Process extends CI_Controller {
                                 <td>' . $inciSMEData[0]['fld_fname'] . ' ' . $inciSMEData[0]['fld_mname'] . ' ' . $inciSMEData[0]['fld_lname'] . '</td>
                                 <td>' . $inciSMEData[0]['fld_paypal'] . '</td>
                                 <td> '.$totaltime[0]->TotalTime .'</td>
-                                <td> '.$amount.'</td>
-                                <td><div class="col-md-2">
+                                <td> '.$amount.'</td>';
+				if($adminInfo[0]['fld_role'] == '0'){
+				$adminData .= '<td><div class="col-md-2">
                                        '.$paybutton.' 
                                       </div></td>
                               </tr>';
+				}
         }
         $usetPreview .= $adminData . '</tbody>
               </table>
