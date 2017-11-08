@@ -302,6 +302,7 @@ $isNotificationPanl = 'true';
                                   <div class="clearfix"></div>
                                   <br>
                                   <?php if ($user_type != 0){?>
+                                  <?php if ($user_type==2){?>
                                   <div class="form-group inlineBlockFull col-md-12">
                                     <div class="col-md-2">
                                       <label class="form-label">Availability</label>
@@ -356,21 +357,27 @@ $isNotificationPanl = 'true';
                                       
                                     </div>
                                   </div>
+                                   <?php } ?>
                                   <div class="clearfix"></div>
                                   <?php if ($user_type==2){?>
                                   <div class="row">
                                     <div class="form-group inlineBlockFull col-md-12">
                                       <label class="form-label col-md-2 col-xs-3">Service Tags</label>
                                       <div class="col-md-10 col-xs-9">
-                                        <select class="selectpicker" name="servicetags[]" data-width="100%" data-live-search="true" data-actions-box="true" multiple data-selected-text-format="count > 3">
-                                          <?php
-												
-                                                foreach ($serviceTag as $tag){ ?>
-                                          <option data-subtext="<?php echo $tag['fld_manufacturer']; ?>" value="<?php echo $tag['fld_id']; ?>" <?php if(in_array($tag['fld_id'], $tagsId)){ echo "selected";}else{} ?>>
-                                          <?=$tag['fld_serviceName']; ?>
-                                          </option>
-                                          <?php  }?>
-                                        </select>
+                                       
+                                        <select name="servicetags[]"  class="form-control selectpicker" title="Select Services" data-live-search="true" multiple data-size="8">
+                                            <?php
+
+                                                if($user[0]['fld_user_type'] == '2'){
+                                                        $userServiceTag = get_user_service_tag_name($user[0]['fld_id']);
+                                                }
+                                                $userTagList = array_column($userServiceTag, 'fld_serviceTag_id');
+                                                foreach($serviceTag as $serviceTagData){
+                                                        $isService = in_array($serviceTagData['fld_id'], $userTagList) ? 'selected':'';
+                                                        echo '<option '.$isService.' value="'.$serviceTagData['fld_id'].'" >'.$serviceTagData['fld_serviceName'].'</option>';
+                                                }
+                                        ?>
+                                          </select>
                                       </div>
                                     </div>
                                   </div>
