@@ -83,10 +83,16 @@ if(!$aid){
                                                               $status = "<span class='btn btn-warning btn-xs'>Pending</span>";
                                                               break;
                                                           case 2:
-                                                              $status = "<span class='btn btn-info btn-xs'>Approve</span>";
+                                                              $status = "<span class='btn btn-info btn-xs'>Approved</span>";
+                                                              break;
+                                                          case 3:
+                                                              $status = "<span class='btn label label-cancel btn-xs'>Cancelled</span>";
+                                                              break;
+                                                          case 4:
+                                                              $status = "<span class='btn label label-danger btn-xs'>Declined</span>";
                                                               break;
                                                           default:
-                                                              $status = "<span class='btn btn-warning btn-xs'>Pending</span>";
+                                                              $status = "<span class='btn btn-warning btn-xs'>In Progress</span>";
                                                       }
 
 
@@ -104,8 +110,15 @@ if(!$aid){
 									</div>
 									<div class="form-group col-xs-12  col-sm-12 col-md-4">
 										<label>Service Tags</label>
-										<p class="value-text"><span class="btn btn-info btn-xs">Cisco Collaboration</span><span class="btn btn-info btn-xs">Cisco SAN Switches</span><span class="btn btn-info btn-xs">Laptop Issue</span></p>
-									</div>
+                                                                                <p class="value-text">
+                                                                                    <?php $arr = array();
+                                                                                        $arr = get_incident_rel_service_tag_name($inci[0]->fld_id);												
+                                                                                        foreach($arr as $serviceTag){ 
+                                                                                    ?>
+										<span class="btn btn-info btn-xs"><?php echo $serviceTag['fld_serviceName'];?></span>
+									            <?php } ?>
+                                                                                </p>
+                                                                        </div>
 								</div>
 								<!--End: Incidents -->
 								
@@ -121,7 +134,7 @@ if(!$aid){
 								<div class="row">
 									<div class="form-group col-xs-12 col-sm-6 col-md-6">
 										<label>Customer Name</label>
-										<p class="value-text"><a href="#" data-toggle="modal" data-target=".user-details"><?php 
+										<p class="value-text"><a href="#" onClick="getUserDetails('<?=encode($inci[0]->fld_uid)?>')"  data-target=".user-details"><?php 
 															$customer = get_user_name($inci[0]->fld_uid);
 															echo $customer;
 													  		?></a></p>
