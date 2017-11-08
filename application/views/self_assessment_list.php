@@ -62,35 +62,40 @@ if(!AID){
                       <td><a target="_blank" href="<?=base_url()?>userprofile/<?=encode($userData['fld_id']);?>" >
                         <?=$userData['fld_fname'].' '.$userData['fld_mname'].' '.$userData['fld_lname']?>
                         </a></td>
-                      <td><?php 
-					  	$serviceList = getSMEServiceTag($userData['fld_id']);
-						$serviceTagName = '';
-						$r = 0;
-						foreach($serviceList as $serviceData){
-							if($r>=2) continue;
-							$serviceName = getServiceTag($serviceData['fld_serviceTag_id']);
-							$serviceTagName .= $serviceName[0]['fld_serviceName'].', ';
-							$r++;
-						}
-						echo rtrim($serviceTagName,', ');
-						echo count($serviceList) > 2 ? '..':'';
-					  ?></td>
+                      <td>
+						  <?php 
+                            $serviceList = getSMEServiceTag($userData['fld_id']);
+                            $serviceTagName = '';
+                            $r = 0;
+                            foreach($serviceList as $serviceData){
+                                if($r>=2) continue;
+                                $serviceName = getServiceTag($serviceData['fld_serviceTag_id']);
+                                $serviceTagName .= $serviceName[0]['fld_serviceName'].', ';
+                                $r++;
+                            }
+                            echo rtrim($serviceTagName,', ');
+                            echo count($serviceList) > 2 ? '..':'';
+                          ?>
+                      </td>
                       <td><div class="rateyo disableMouse" data-rateyo-rating="<?=$avrageRate?>"></div>
                         <div class="text_css">
                           <?=$avrageRate?>
-                        </div></td>
-                      <td><?php
-                      	$serviceStatus = getSMEServiceTag($userData['fld_id'],'','1');
-						if(count($serviceList) > 0){
-							if(count($serviceStatus) > 0){
-								echo '<span class="label label-danger">Pending Verification</span>';
-							}else{
-								echo '<span class="label label-success">Verified</span>';
-							}
-						}else{
-							echo '<span class="label label-default">No service tag selected</span>';	
-						}
-					  ?></td>
+                        </div>
+                      </td>
+                      <td>
+						  <?php
+                            $serviceStatus = getSMEServiceTag($userData['fld_id'],'','1');
+                            if(count($serviceList) > 0){
+                                if(count($serviceStatus) > 0){
+                                    echo '<span class="label label-danger">Pending Verification</span>';
+                                }else{
+                                    echo '<span class="label label-success">Verified</span>';
+                                }
+                            }else{
+                                echo '<span class="label label-default">No service tag selected</span>';	
+                            }
+                          ?>
+                      </td>
                       <td><div class="btn-group">
                           <?php
                           	if(count($serviceList) > 0){

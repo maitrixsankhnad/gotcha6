@@ -134,8 +134,8 @@ if($id){
                       <div class="x_content">
                         <div class="form-group">
                           <label class="control-label pull-left">Rating</label>
-                          <div class="rateyo pull-left" data-rateyo-rating="<?=$ratingVal > 0 ? : '0'?>"></div>
-                          <input type="hidden" value="<?=$ratingVal > 0 ? : '0'?>" name="rating" class="ratingVal" />
+                          <div class="rateyo pull-left" data-rateyo-rating="<?=$ratingVal > 0 ? $ratingVal : '0'?>"></div>
+                          <input type="hidden" value="<?=$ratingVal > 0 ? $ratingVal : '0'?>" name="rating" class="ratingVal" />
                         </div>
                         <div class="form-group">
                           <label class="control-label">Feedback</label>

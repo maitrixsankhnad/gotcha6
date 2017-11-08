@@ -122,8 +122,8 @@ class Common_model extends CI_Model {
 	{
 		$this->db->where($key,$id);
 		$this->db->update($table,$data);
-		//return true;
-		return $this->db->last_query();die;
+		return true;
+		//return $this->db->last_query();die;
 	}
 	
 	public function saveData($table,$data)

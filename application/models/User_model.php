@@ -83,11 +83,10 @@ class User_model extends CI_Model {
     }
 
     function insert_user_servicetags($uid, $userServicetags) {
-        for ($i = 0; $i < count($userServicetags); $i++) {
-            $sql = "insert into tbl_user_service_tag (fld_uid,fld_serviceTag_id) values('" . $uid . "','" . $userServicetags[$i] . "')";
-            $query = $this->db->query($sql);
-        }
-        return $this->db->insert_id();
+		foreach($userServicetags as $userServiceStor){
+			$sql = "insert into tbl_user_service_tag (fld_uid,fld_serviceTag_id) values('" . $uid . "','" . $userServiceStor . "')";
+			$query = $this->db->query($sql);
+		}
     }
 
     function checkUsertagsId($uid) {
@@ -98,6 +97,12 @@ class User_model extends CI_Model {
 
     function delete_user_servicetags($uid) {
         $sql = "delete  from tbl_user_service_tag where fld_uid= '" . $uid . "'";
+        $query = $this->db->query($sql);
+        return $query;
+    }
+	
+	function deleteCustmUserServic($uid, $services) {
+        $sql = "delete  from tbl_user_service_tag where fld_uid = ".$uid." AND fld_serviceTag_id in(".$services.")";
         $query = $this->db->query($sql);
         return $query;
     }

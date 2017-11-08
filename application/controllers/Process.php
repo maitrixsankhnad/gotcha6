@@ -1038,6 +1038,7 @@ class Process extends CI_Controller {
         if (AID) {
             $uid = decode($this->input->post('uid'));
             $password = $this->input->post('password');
+			$userServicetags = $this->input->post('servicetags');
             $data = array(
                 'fld_fname' => $this->input->post('fname'),
                 'fld_mname' => $this->input->post('mname'),
@@ -1066,14 +1067,22 @@ class Process extends CI_Controller {
             if (!empty($resume)) {
                 $data['fld_resume'] = $this->uploadImg('resume', 'uploads/resume/', '', '', '', 'doc');
             }
-			$this->user_model->delete_user_servicetags($uid);
+			
+			
+			$userServicList = $this->common_model->getAll(array('fld_uid'=>$uid),'','tbl_user_service_tag');
+			$onlyServicList = array_column($userServicList, 'fld_serviceTag_id');
+			
+			$newServiceD = array_diff($onlyServicList, $userServicetags);
+			$newServiceS = array_diff($userServicetags, $onlyServicList);
+			if(count($newServiceD)>0){
+				$this->user_model->deleteCustmUserServic($uid, implode(',', $newServiceD));
+			}
 			if($data['fld_user_type'] == '2'){
 				$userServicetags = $this->input->post('servicetags');
-				$this->user_model->insert_user_servicetags($uid, $userServicetags);
+				$this->user_model->insert_user_servicetags($uid, $newServiceS);
 			}
-			
 
-            echo $result = $this->common_model->updateData("fld_id", $uid, $data, 'tbl_user');
+            $result = $this->common_model->updateData("fld_id", $uid, $data, 'tbl_user');
         }
     }
 	
