@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 //$config['base_url'] = 'http://localhost/gotcha6';
 
-$config['base_url'] = 'http://gotcha6.local/';
+$config['base_url'] = 'http://localhost/gotcha6';
 
 /*
 |--------------------------------------------------------------------------
