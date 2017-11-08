@@ -47,11 +47,18 @@ if(count($trackSme)>0){
           <div class="title_right">
             <div class="col-md-5 col-sm-5 col-xs-12 pull-right top_search">
               <ul class="nav navbar-right panel_toolbox">
+                <?php $incidentData = incident($iid);
+                
+                if (($incidentData[0]['fld_status'] == '0'))
+                { 
+                   echo  "<span class='btn btn-success btn-xs'>Project Complete</span>";
+                }else {
+                ?>  
                 <?php if(($user[0]['fld_user_type'] == '3')) { ?>
                 <li style="padding: 5px; font-size: 16px; font-weight: 700;">Timer: &nbsp;</li>
                 <input type="checkbox" onChange="ChangeIncidentTimeStatus(this,'<?= encode($trackID)?>','<?= encode($trackSMEID)?>')"  data-size="small"  data-toggle="toggle" data-on="In Progress" <?=$isChecked?> data-off="Not Started" >
                 <input type="hidden" value="<?= encode($iid)?>" id="iid" />
-                <?php  } ?>
+                <?php } } ?>
               </ul>
             </div>
           </div>

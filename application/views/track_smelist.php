@@ -85,7 +85,10 @@ if(!$uid){
                         $smeDetail = userInfo($smeDetailsList['fld_sme_id']);
                         $trackData = trackSME($smeDetail[0]['fld_id'], $smeDetailsList['fld_rm_id'], $iid,'1');
                         $totaltime = trackSMETotalTime($smeDetail[0]['fld_id'], $smeDetailsList['fld_rm_id'], $iid);
-                            if(count($trackData)>0){
+                        $incidentData = incident($iid);
+                          
+                        
+                        if(count($trackData)>0){
 								$trackID = $trackData['fld_id'];
 								$trackEndTime = $trackData['fld_end_time'];
 								if(strtotime($trackEndTime) > 0){
@@ -101,7 +104,11 @@ if(!$uid){
                       <td><?=$smeDetail[0]['fld_fname'].' '.$smeDetail[0]['fld_mname'].' '.$smeDetail[0]['fld_lname']?></td>
                       <td><?=$totaltime[0]->TotalTime ? :'Not Started Yet'?></td>
                       
-                      
+                      <?php  if (($incidentData[0]['fld_status'] == '0'))
+                            { 
+                              echo "<td class='toggleFlNone'> <span class='btn btn-success btn-xs'>Project Complete</span> </td>";
+                            }else { ?>
+                                  
                       <td class="toggleFlNone">
                       <?php if($smeDetailsList['fld_status']=='0'){?>
                       <input id="floadN" type="checkbox" onChange="ChangeIncidentTimeStatus(this,'<?=encode($trackID)?>','<?=encode($smeDetailsList['fld_sme_id'])?>')"  data-size="small"  data-toggle="toggle" data-on="In Progress" <?=$isChecked?> data-off="Not Started" >
@@ -111,7 +118,7 @@ if(!$uid){
                       	<span class="label label-danger">Declined by SME</span>
                       <?php }?>
                       </td>
-                      
+                      <?php }?>
                       
                       <td class="text-center">
                       <?php if($smeDetailsList['fld_status']=='0'){?>
