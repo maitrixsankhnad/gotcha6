@@ -162,7 +162,7 @@ switch ($inci[0]->fld_status) {
                         $smeDetail = userInfo($serviceTag['fld_sme_id']);
                        
 		     ?>
-                    	<a href="<?=base_url()?>dashboard/trackSME/<?=encode($smeDetail[0]['fld_id'])?>/<?= encode($serviceTag['fld_rm_id'])?>/<?= encode($serviceTag['fld_sme_id'])?>" class="btn btn-info btn-xs"><?=$smeDetail[0]['fld_fname'].' '.$smeDetail[0]['fld_mname'].' '.$smeDetail[0]['fld_lname'];?></a>
+                    	<a href="<?=base_url()?>dashboard/trackSME/<?=encode($inci[0]->fld_id)?>/<?= encode($serviceTag['fld_rm_id'])?>/<?= encode($serviceTag['fld_sme_id'])?>" class="btn btn-info btn-xs"><?=$smeDetail[0]['fld_fname'].' '.$smeDetail[0]['fld_mname'].' '.$smeDetail[0]['fld_lname'];?></a>
                     <?php } ?>
                   </p>
                   <?php  if($user[0]['fld_user_type'] == '3') {?>
