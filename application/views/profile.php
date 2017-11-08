@@ -302,6 +302,7 @@ $isNotificationPanl = 'true';
                                   <div class="clearfix"></div>
                                   <br>
                                   <?php if ($user_type != 0){?>
+                                  <?php if ($user_type==2){?>
                                   <div class="form-group inlineBlockFull col-md-12">
                                     <div class="col-md-2">
                                       <label class="form-label">Availability</label>
@@ -356,6 +357,7 @@ $isNotificationPanl = 'true';
                                       
                                     </div>
                                   </div>
+                                   <?php } ?>
                                   <div class="clearfix"></div>
                                   <?php if ($user_type==2){?>
                                   <div class="row">
