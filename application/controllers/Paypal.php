@@ -5,9 +5,8 @@ class Paypal extends CI_Controller
 	 function  __construct() {
 		parent::__construct();
 		$this->load->library('paypal_lib');
-		$this->load->model(array('user_model','common_model'));
-                define('UID', userID());
-                define('AID', adminID());
+		define('UID', userID());
+		define('AID', adminID());
 	}
 	
 	function index(){
@@ -33,7 +32,7 @@ class Paypal extends CI_Controller
         
 	function pay($iid){
 		$id = decode($iid);
-                $this->session->set_userdata('paymentProcess',654654);
+        $this->session->set_userdata('paymentProcess',654654);
 		$returnURL = base_url().'paypal/process'; //payment success url
 		$cancelURL = base_url().'paypal/cancel'; //payment cancel url
 		$notifyURL = base_url().'paypal/ipn'; //ipn url

@@ -53,7 +53,9 @@ if(!AID){
                       <th>Paypal Id </th>
                       <th>Created At</th>
                       <th>Status</th>
+                      <?php if($admin[0]['fld_role'] == '0'){?>
                       <th>Action</th>
+                      <?php } ?>
                     </tr>
                   </thead>
                   <tbody class="boxInputFull">
@@ -77,9 +79,11 @@ if(!AID){
                       <td><?=$rmData[0]['fld_paypal'];?></td>
                       <td><?=date('dS M Y | H:i A',strtotime($inciListAll['fld_createdDt']))?></td>
                       <td><?=$status = '<span class="label label-success statusIn">Completed</span>';?></td>
+                      <?php if($admin[0]['fld_role'] == '0'){?>
                       <td><div class="btn-group">
                           <?=$paybutton; ?>
                         </div></td>
+                      <?php } ?>
                     </tr>
                     <?php } ?>
                   </tbody>
