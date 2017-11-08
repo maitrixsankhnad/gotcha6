@@ -36,7 +36,12 @@ switch ($inci[0]->fld_status) {
         case 4:
 		$actionButton = '<li></li>';
 	        $status = '<span class="label label-danger">Declined</span>';
-		$notificationMsg = 'This Incident has been declined by assigned Resource Manager. Please assign a another <a class="color-white" href="'.base_url().'dashboard/new_incident/'.encode($inci[0]->fld_id).'#step-4"> New Resource Manager</a>.';
+                if(($user[0]['fld_user_type'] == '0'))  {
+                  $notificationMsg = 'This Incident has been declined by assigned Resource Manager. Please assign a another <a class="color-white" href="'.base_url().'dashboard/new_incident/'.encode($inci[0]->fld_id).'#step-4"> New Resource Manager</a>.';  
+                }else{
+                    $notificationMsg = 'This Incident has been declined by you.' ;
+                }
+		
 		$notificationClass = 'danger';
                 break;
         
