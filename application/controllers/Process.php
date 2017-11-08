@@ -1189,7 +1189,7 @@ class Process extends CI_Controller {
         if($profile) {
 			$data['fld_avtar'] = $this->uploadImg('profile', 'uploads/profile/', 'thumbs', $height = 240, $width = 360);
 		}
-		if($profile) {
+		if($password) {
 			$data['fld_password'] = md5($password);
 		}
 		if($aid){
@@ -1345,5 +1345,8 @@ class Process extends CI_Controller {
 			array_push($iid,$incList[0]['fld_id']);
 		}
 		echo json_encode(array('title' => $title, 'iid' => $iid));
-    }	
+    }
+	public function updateReadAllNoti($isAdmin='') {
+		$this->user_model->updateNotReadP(UID,$isAdmin);
+    }
 }

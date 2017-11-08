@@ -1,3 +1,14 @@
+function updateNotReadAll(isAdmin){
+	if($('.badge').html()){
+		$.ajax({
+			url: base_url+'process/updateReadAllNoti/'+isAdmin,
+			type: 'POST',
+			success: function(data){
+				$('.badge').remove();
+			}
+		 });	
+	}
+}
 function findIncidentList(val){
 	$('#preloader').fadeIn();
 	var userType = $('select.userLisingL:selected').data('type');

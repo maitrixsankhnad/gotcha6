@@ -218,8 +218,26 @@ class User_model extends CI_Model {
         $sql = "SELECT AVG(`fld_rating`) AS `avrageRating` FROM `tbl_user_service_tag` WHERE fld_uid = '" . $id . "' AND fld_certification_date >= NOW()";
         $query = $this->db->query($sql);
         return $query->result_array();
-        ;
     }
+	
+	function fatchNotfiCount($UID, $isAdmin = '') {
+		if($isAdmin != ''){
+        	$sql = "SELECT COUNT(fld_id) as notiCnt FROM `tbl_recent_activity` WHERE fld_status_admin = '0' AND fld_isAdmin = '0'";
+		}else{
+			$sql = "SELECT COUNT(fld_id) as notiCnt FROM `tbl_recent_activity` WHERE fld_status_user = '0' AND fld_target_id = ".$UID;
+		}
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
+	function updateNotReadP($UID, $isAdmin = '') {
+		if($isAdmin != ''){
+        	$sql = "UPDATE `tbl_recent_activity` SET `fld_status_admin` = '1' WHERE  `fld_status_admin` = '0' AND fld_isAdmin = '0'";
+		}else{
+			$sql = "UPDATE `tbl_recent_activity` SET `fld_status_user` = '1' WHERE  `fld_status_user` = '0' AND fld_target_id = ".$UID;
+		}
+        $query = $this->db->query($sql);
+    }
+
 
     /* Get the ServiceName by the userid */
 

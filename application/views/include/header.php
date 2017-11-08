@@ -5,6 +5,13 @@
 	}
 	$activityList = getActivity($notifLimt,UID);
 	$notificURL = base_url().'dashboard/profile';
+	
+	$allNotFCount = getNotifiCount(UID);
+	if($allNotFCount[0]['notiCnt'] > 0){
+		$allNotFCount = '<span class="badge bg-green">'.$allNotFCount[0]['notiCnt'].'</span>';
+	}else{
+		$allNotFCount = '';
+	}
 ?>
 <div id="preloader">
   <div class="spinner">
@@ -34,10 +41,10 @@
 		}else{
 			$profilePic = $user[0]['fld_picture'];
 		}
-		$arrRecent = get_recent_activity_of_user($user[0]['fld_id']); ?>
-        <li role="presentation" class="dropdown"> <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false"> <i class="fa fa-envelope-o"></i> <span class="badge bg-green">
-          <?=count($arrRecent);?>
-          </span> </a>
+		?>
+        <li onclick="updateNotReadAll('')"  role="presentation" class="dropdown"> <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false"> <i class="fa fa-envelope-o"></i>
+          <?=$allNotFCount?>
+          </a>
           <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
             <?php include('notification.php');?>
           </ul>

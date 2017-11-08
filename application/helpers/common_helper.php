@@ -450,5 +450,13 @@ if(! function_exists('getCountryName')){
 	return $CI->common_model->getCountryName($cCodeName);
 	}
 }
+if(! function_exists('getNotifiCount')){
+	function getNotifiCount($UID, $isAdmin='')
+	{
+        $CI = & get_instance();
+		return $CI->user_model->fatchNotfiCount($UID, $isAdmin);
+	}
+}
+ 
 
 ?>
