@@ -69,46 +69,64 @@ if(!AID){
 							$status = '<span class="label label-danger">Dissatisfied</span>';
 						}
 						$incidentData = incident($ratingData['fld_incident_id']);
-						$ratedTO = userInfo($ratingData['fld_uid']);
-						$ratedBy = userInfo($ratingData['fld_rating_ID']);
+						$ratedBy = userInfo($ratingData['fld_uid']);
+						$ratedTo = userInfo($ratingData['fld_rating_ID']);
+						
 					?>
                     <tr>
-                      <td><a href="<?=base_url()?>superadmin/incident_preview/<?=encode($incidentData[0]['fld_id'])?>" target="_blank">
-                        <?=trimData($incidentData[0]['fld_inci_title'], 30, true)?>
-                        </a></td>
+                      <td>
+                      	<a href="<?=base_url()?>superadmin/incident_preview/<?=encode($incidentData[0]['fld_id'])?>" target="_blank">
+                        	<?=trimData($incidentData[0]['fld_inci_title'], 30, true)?>
+                        </a>
+                      </td>
+                      
+                      <td>
                       <?php if($ratingData['fld_isAdmin']=='1'){?>
-                      <td><a data-toggle="tooltip" data-original-title="<?=$ratedBy[0]['fld_fname'].' '.$ratedBy[0]['fld_lname']?>" href="<?=base_url()?>userprofile/<?=encode($ratedBy[0]['fld_id'])?>">
-                        <?=$ratedBy[0]['fld_username']?>
-                        </a></td>
+                              <a data-toggle="tooltip" data-original-title="<?=$ratedBy[0]['fld_fname'].' '.$ratedBy[0]['fld_lname']?>" href="<?=base_url()?>userprofile/<?=encode($ratedBy[0]['fld_id'])?>">
+                                <?=$ratedBy[0]['fld_username']?>
+                                </a>
                       <?php }else{
 						  $ratedBy = adminInfo($ratingData['fld_uid']);
 						  if(count($ratedBy) > 0){
 						  ?>
-                      <td><a data-toggle="tooltip" data-original-title="<?=$ratedBy[0]['fld_fname'].' '.$ratedBy[0]['fld_lname']?>" href="<?=base_url()?>superadmin/admin_users/edit/<?=encode($ratedBy[0]['fld_id'])?>">
-                        <?=$ratedBy[0]['fld_username']?> (<?=$ratedBy[0]['fld_role'] == 0? 'Super':''?> Admin)
-                        </a></td>
+                              <a data-toggle="tooltip" data-original-title="<?=$ratedBy[0]['fld_fname'].' '.$ratedBy[0]['fld_lname']?>" href="<?=base_url()?>superadmin/admin_users/edit/<?=encode($ratedBy[0]['fld_id'])?>">
+                                <?=$ratedBy[0]['fld_username']?> (<?=$ratedBy[0]['fld_role'] == 0? 'Super':''?> Admin)
+                                </a>
                       <?php }else{echo 'Admin';}}?>
-                      <td><a data-toggle="tooltip" data-original-title="<?=$ratedTO[0]['fld_fname'].' '.$ratedTO[0]['fld_lname']?>" href="<?=base_url()?>userprofile/<?=encode($ratedBy[0]['fld_id'])?>">
-                        <?=$ratedTO[0]['fld_username']?>
-                        </a></td>
+                      </td>
+                      
+                      <td>
+                      	
+                      	<a data-toggle="tooltip" data-original-title="<?=$ratedTo[0]['fld_fname'].' '.$ratedTo[0]['fld_lname']?>" href="<?=base_url()?>userprofile/<?=encode($ratedTo[0]['fld_id'])?>">
+                        
+                        <?=$ratedTo[0]['fld_username']?>
+                        </a>
+                      </td>
+                      
                       <td><?=trimData($ratingData['fld_feedback'], 50, true)?></td>
-                      <td><div class="rateyo disableMouse" data-rateyo-rating="<?=$ratingData['fld_rating']?>"></div>
+                      <td>
+                      	<div class="rateyo disableMouse" data-rateyo-rating="<?=$ratingData['fld_rating']?>"></div>
                         <div class="text_css">
                           <?=$ratingData['fld_rating']?>
-                        </div></td>
+                        </div>
+                      </td>
                       <td><?=$status?></td>
-                      <td><div class="text_css">
+                      <td>
+                      	<div class="text_css">
                           <?=strtotime($ratingData['fld_created_date'])?>
                         </div>
-                        <?=date('dS M Y',strtotime($ratingData['fld_created_date']))?></td>
-                      <td><div class="btn-group">
+                        <?=date('dS M Y',strtotime($ratingData['fld_created_date']))?>
+                      </td>
+                      <td>
+                      	<div class="btn-group">
                           <?php if($admin[0]['fld_role'] == '0'){?>
                           <button class="btn btn-sm btn-primary" onClick="gotoPage('<?=base_url()?>review/edit/<?=encode($ratingData['fld_id'])?>')" type="button" data-placement="top" data-toggle="tooltip" data-original-title="View / Edit"><i class="fa fa-pencil"></i></button>
                           <button class="btn btn-sm btn-default" onClick="deleteCommon(this,'<?=encode($ratingData['fld_id'])?>','rating')" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
                           <?php }else{?>
                           <button class="btn btn-sm btn-primary" onClick="gotoPage('<?=base_url()?>review/preview/<?=encode($ratingData['fld_id'])?>')" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Preview"><i class="fa fa-pencil"></i></button>
                           <?php } ?>
-                        </div></td>
+                        </div>
+                       </td>
                     </tr>
                     <?php } ?>
                   </tbody>
