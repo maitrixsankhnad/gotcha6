@@ -415,16 +415,18 @@ $isNotificationPanl = 'true';
                                 $i = 0;
                                   foreach($userTag as $uTag) {
                                       $i += 1;
-									  $id = 'section'.$i;
+				$id = 'section'.$i;
                                 ?>
                               <tr id="section<?=$i;?>">
                                 <td class="disableMouse"><select class="selectpicker" data-size="8" name="servicetags" data-width="100%" data-live-search="true" data-actions-box="true">
                                     <?php 
+                                       
                                         foreach ($serviceTag as $tag){
                                             
                                             $isSerlectedTag = $uTag['fld_serviceTag_id']== $tag['fld_id'] ? 'selected':'';
                                             echo '<option '.$isSerlectedTag.' data-subtext="'.$tag['fld_manufacturer'].'" value="'.$tag['fld_id'].'">'.$tag['fld_serviceName'].'</option>';
                                         }
+                                        
                                         ?>
                                   </select></td>
                                 <td class="disableMouse"><div class="selfDiscBox">
@@ -443,7 +445,9 @@ $isNotificationPanl = 'true';
                                 <td class="disableMouse"><div class="col-md-12 form-group">
                                     <input type="text" class="form-control certificationDate has-feedback-left" value="<?=date("d/m/Y",strtotime($uTag['fld_certification_date']))?>" name="certification_date" />
                                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span> </div></td>
-                                <td><a href="javascript:;" onClick="removeTRsection(this)" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Remove</a>
+                                <td>
+                                    <button class="btn btn-sm btn-danger" onClick="deleteCommon(this,'<?=encode($uTag['fld_id'])?>','userServTag')"  type="button"><i class="fa fa-trash-o"></i> Delete</button>
+                                    
                                   <button type="button"  onClick="editTRsection('<?="section".$i?>')"class="btn btn-primary btn-xs changetxt"><i class="fa fa-floppy-o" aria-hidden="true"></i> Edit</button>
                                   
                                   <!--                                    <button type="submit" style="display:none;" class="btn btn-primary btn-xs"><i class="fa fa-floppy-o" aria-hidden="true"></i> Update</button>--></td>
