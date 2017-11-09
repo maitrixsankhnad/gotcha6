@@ -86,7 +86,8 @@ switch ($inci[0]->fld_status) {
               <ul class="navbar-right">
                 <li class="boxCoverEnblDIsn">
                  <?php if(($user[0]['fld_user_type'] == '3') && ($inci[0]->fld_status != '0') && ($inci[0]->fld_status != '1') && ($inci[0]->fld_status != '3') && ($inci[0]->fld_status != '4')){?>
-                  <input type="checkbox" onChange="changeIncidentTime(this,'<?= encode($inci[0]->fld_id)?>','<?= $inci[0]->fld_status?>')" data-toggle="toggle" data-on="Work in progress" <?=$inci[0]->fld_status != 5 ? '':'checked'?> data-off="Start Master">
+                  <span class="confirmBeforeIncident"></span>
+                  <input type="checkbox" class="startStopIncidentBtn" data-toggle="toggle" data-on="Work in progress" <?=$inci[0]->fld_status != 5 ? '':'checked'?> data-off="Start Master">
                   <?php } ?>
                 </li>
                 <?php 
@@ -156,13 +157,19 @@ switch ($inci[0]->fld_status) {
                     <?php } ?>
                   </p>
                 </div>
-                <?php if(($user[0]['fld_user_type'] != '0') && ($user[0]['fld_user_type'] != '2')){?>
+                <?php if(($user[0]['fld_user_type'] != '0') && ($user[0]['fld_user_type'] != '2')){
+				
+						$arr = array();
+                        $arr = assignedSME($inci[0]->fld_id);
+						if(count($arr) > 0){
+				?>
+                
+                
+                
                 <div class="form-group col-xs-12  col-sm-12 col-md-4">
                   <label>Assigned SME  </label>
                   <p class="value-text">
                     <?php 
-                        $arr = array();
-                        $arr = assignedSME($inci[0]->fld_id);
                         foreach($arr as $serviceTag){
                         $smeDetail = userInfo($serviceTag['fld_sme_id']);
                        
@@ -171,10 +178,10 @@ switch ($inci[0]->fld_status) {
                     <?php } ?>
                   </p>
                   <?php  if($user[0]['fld_user_type'] == '3') {?>
-                  <a href="<?=base_url()?>dashboard/trackSMEList/<?=encode($inci[0]->fld_id)?>"> <span  class="btn btn-success pull-left btn-xs"> View All Assigned SME</span><a>
+                  <a href="<?=base_url()?>dashboard/trackSMEList/<?=encode($inci[0]->fld_id)?>"> <span  class="btn btn-success pull-left btn-xs"> View All Assigned SME</span></a>
                   <?php } ?>
                 </div>
-                <?php } ?>
+                <?php }} ?>
               </div>
               <!--End: Incidents --> 
               
@@ -230,7 +237,7 @@ switch ($inci[0]->fld_status) {
             <!--End: x Content --> 
             
           </div>
-          <?php if(($user[0]['fld_user_type']==0 || $user[0]['fld_user_type']==3) && ($inci[0]->fld_status != '1' && $inci[0]->fld_status != '3' && $inci[0]->fld_status != '0' && $inci[0]->fld_status != '4')  ) 
+          <?php if(($user[0]['fld_user_type']==0 || $user[0]['fld_user_type']==3) && ($inci[0]->fld_status != '1' && $inci[0]->fld_status != '3' && $inci[0]->fld_status != '4')  ) 
           
            { ?>
           <div class="x_panel" id="messageDiv" >

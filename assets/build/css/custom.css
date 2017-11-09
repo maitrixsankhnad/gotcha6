@@ -4872,4 +4872,16 @@ a.homebox {
     border-color: rgb(238, 238, 238);
     border-image: initial;
     transition: all 0s ease-in 0.1s;
-}  
+}
+.confirmBeforeIncident {
+  bottom: 5px;
+  left: 0;
+  position: absolute;
+  right: 5px;
+  top: 0;
+  z-index: 1;
+  cursor:pointer;
+}
+.posR{
+	position:relative;	
+}
