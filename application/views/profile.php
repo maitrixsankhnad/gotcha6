@@ -417,6 +417,7 @@ $isNotificationPanl = 'true';
                                 <th>Action</th>
                               </tr>
                             </thead>
+                            <input type="hidden" value=" <?php echo $uid ;?>" id="uId"/>
                             <tbody class="boxInputFull">
                               <?php
                                 $i = 0;
@@ -425,7 +426,7 @@ $isNotificationPanl = 'true';
 				$id = 'section'.$i;
                                 ?>
                               <tr id="section<?=$i;?>">
-                                <td class="disableMouse"><select class="selectpicker" data-size="8" name="servicetags" data-width="100%" data-live-search="true" data-actions-box="true">
+                                  <td class="disableMouse"><select class="selectpicker" disabled data-size="8" name="servicetags" data-width="100%" data-live-search="true" data-actions-box="true">
                                     <?php 
                                        
                                         foreach ($serviceTag as $tag){
@@ -438,7 +439,7 @@ $isNotificationPanl = 'true';
                                   </select></td>
                                 <td class="disableMouse"><div class="selfDiscBox">
                                     <div class="stars stars-example-fontawesome-o<?=$i?>">
-                                      <select class="selfRatingOption<?=$i?>" name="rating" data-current-rating="<?=$uTag['fld_rating']?>" autocomplete="off">
+                                      <select class="strRatrnr selfRatingOption<?=$i?>" name="rating" data-current-rating="<?=$uTag['fld_rating']?>" autocomplete="off">
                                         <option value=""></option>
                                         <option <?=$uTag['fld_rating'] == 1 ? 'selected' : '' ?> value="1">1</option>
                                         <option <?=$uTag['fld_rating'] == 2 ? 'selected' : '' ?> value="2">2</option>
@@ -446,6 +447,7 @@ $isNotificationPanl = 'true';
                                         <option>4</option>
                                         <option>5</option>
                                       </select>
+                                        <input type="hidden" class="bkpRatVal" value="<?=$uTag['fld_rating']?>" />
                                     </div>
                                   </div></td>
                                 <td class="disableMouse"><input class="form-control" placeholder="Certification Number" value="<?=$uTag['fld_certification_no']?>" name="certification_no" type="text"></td>
