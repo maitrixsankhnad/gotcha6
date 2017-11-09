@@ -6358,24 +6358,29 @@ $(document).on("submit", "#submitSMELIST", function (e) {
 function editTRsection(id){
 	//alert($('#'+id+ ' '+'td'+' '+'.selfDiscBoxselect:selected'));
 	$('#'+id+ ' '+'td').removeClass("disableMouse");
-	$('#'+id+ ' '+'td'+ ' ' +'button.changetxt').text('Update');
-	var inputServicetags = $('#'+id+ ' '+'td'+' '+'.selectpicker').val();
-    var inputRating = $('#'+id+ ' '+'td'+' '+'.selfDiscBoxselect:selected').val();
-    var inputCertificate_num = $('#'+id+ ' '+'td'+' '+'input[name=certification_no]').val();
-    var inputCertificate_date = $('#'+id+ ' '+'td'+' '+'input[name=certification_date]').val();
-    //console.log(inputRating);
-    var inputData = {servicetags:inputServicetags, rating:inputRating, certificate_num:inputCertificate_num, certificate_date:inputCertificate_date};
-    //console.log(inputData);
-    //alert(inputData);
-	$('#preloader').fadeIn();
+	if($('#'+id+ ' '+'td'+ ' ' +'button.changetxt').text() != 'Update'){
+            $('#'+id+ ' '+'td'+ ' ' +'button.changetxt').text('Update');
+            return false
+        }
+        var inputServicetags = $('#'+id+ ' '+'td'+' '+'.selectpicker').val();
+        var inputRating = $('#'+id).find('.strRatrnr').val();
+        var bkpRatVal = $('#'+id).find('.bkpRatVal').val();
+        inputRating = inputRating ? inputRating : bkpRatVal;
+        var inputCertificate_num = $('#'+id+ ' '+'td'+' '+'input[name=certification_no]').val();
+        var inputCertificate_date = $('#'+id+ ' '+'td'+' '+'input[name=certification_date]').val();
+        var uid = $('#uId').val();
+        
+        
+        var inputData = {uid:uid,servicetags:inputServicetags, rating:inputRating, certificate_num:inputCertificate_num, certificate_date:inputCertificate_date};
+       
+	//$('#preloader').fadeIn();
 	$.ajax({
         url: base_url + 'process/manageCertificate',
         dataType: 'json',
         type: 'POST',
         data: inputData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
+       
+        success: function (data) {
             $('#preloader').fadeOut();
             swal({
                 title: 'Information Updated!',

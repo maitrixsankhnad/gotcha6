@@ -649,8 +649,23 @@ class Process extends CI_Controller {
     /* Manage Certificate */
 
     public function manageCertificate() {
-        $data = $this->input->post();
-        print_r($data['inputCertificate_num']);
+       
+        $uid = decode($this->input->post('uid'));
+        $servicetags = $this->input->post('servicetags');
+        $rating = $this->input->post('rating');
+        $certificate_num = $this->input->post('certificate_num');
+        $certificatedate = $this->input->post('certificate_date');
+        $certificationDate = date('Y-m-d', strtotime(str_replace('/', '-', $certificatedate)));
+            $data = array(
+                'fld_uid' => $uid,
+                'fld_serviceTag_id' => $servicetags,
+                'fld_rating' => $rating,
+                'fld_certification_no' => $certificate_num,
+                'fld_certification_date' => $certificationDate,
+                 );
+            
+              $this->common_model->updateData(array('fld_serviceTag_id' => $servicetags, 'fld_uid' => $uid), '', $data, 'tbl_user_service_tag');
+             echo json_encode(array('id' => 'done'));
     }
 
     // Get RM Information 
