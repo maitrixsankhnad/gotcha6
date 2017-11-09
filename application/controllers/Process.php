@@ -288,15 +288,28 @@ class Process extends CI_Controller {
 
             $userServicetags = $this->input->post('servicetags');
 
-            if (isset($userServicetags)) {
-                $servicestagsId = $this->user_model->checkUsertagsId($uid);
-                if (count($servicestagsId) > 0) {
-                    $this->user_model->delete_user_servicetags($uid);
-                    $this->user_model->insert_user_servicetags($uid, $userServicetags);
-                } else {
-                    $this->user_model->insert_user_servicetags($uid, $userServicetags);
-                }
-            }
+//            if (isset($userServicetags)) {
+//                $servicestagsId = $this->user_model->checkUsertagsId($uid);
+//                if (count($servicestagsId) > 0) {
+//                    $this->user_model->delete_user_servicetags($uid);
+//                    $this->user_model->insert_user_servicetags($uid, $userServicetags);
+//                } else {
+//                    $this->user_model->insert_user_servicetags($uid, $userServicetags);
+//                }
+//            }
+            
+            $userServicList = $this->common_model->getAll(array('fld_uid'=>$uid),'','tbl_user_service_tag');
+			$onlyServicList = array_column($userServicList, 'fld_serviceTag_id');
+			
+			$newServiceD = array_diff($onlyServicList, $userServicetags);
+			$newServiceS = array_diff($userServicetags, $onlyServicList);
+			if(count($newServiceD)>0){
+				$this->user_model->deleteCustmUserServic($uid, implode(',', $newServiceD));
+			}
+			if($dataval['fld_user_type'] == '2'){
+				$userServicetags = $this->input->post('servicetags');
+				$this->user_model->insert_user_servicetags($uid, $newServiceS);
+			}
         }
 
         $id = $this->user_model->update_Sme_User($uid, $dataval);
