@@ -1120,26 +1120,21 @@ class Process extends CI_Controller {
     }
 	
     
-    public function materTimeUpdt($id) {
+    public function materTimeUpdt($id){
         $id = decode($id);
         $fld_status = $this->input->post('status');
       
-        if($fld_status == '5')
-        {
-            $data = array(
-                'fld_status' => 0
-            );
-        $tbleName = 'tbl_incident';
-        $process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
+        if($fld_status == '5'){
+			$data = array('fld_status' => 0 );
+			$data['fld_incident_end_time'] = date("Y-m-d H:i:s", time());
+			$tbleName = 'tbl_incident';
+			$process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
         }else{
-        
-            $data = array(
-                'fld_status' => 5
-            );
-        $tbleName = 'tbl_incident';
-        $process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
-        }
-        
+			$data = array('fld_status' => 5);
+			$data['fld_incident_start_time'] = date("Y-m-d H:i:s", time());
+			$tbleName = 'tbl_incident';
+			$process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
+        }        
         echo json_encode(array('id' => $process));
     }
     

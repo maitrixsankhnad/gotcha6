@@ -6871,72 +6871,68 @@ $(document).on("submit", "#inctTicket", function (e) {
 //	 
 //}
 
-function changeIncidentTime(selfObj,id, fld_status){
-    
-    if($(selfObj).is(':checked')){
-		var fld_status = '0';
-	}else{
+$(document).on('click', '.confirmBeforeIncident', function () {
+	if($('.startStopIncidentBtn').is(':checked')){
 		var fld_status = '5';
-	}
-        if(fld_status =="5"){
-                var msg = 'You incident timer and billing will Stop if you enable Stop master'
-		
+		var msg = 'You incident timer and billing will Stop if you enable Stop master';
+		var pMsg = 'This incident is still in progress';
 	}else{
+		var fld_status = '0';
 		var msg = 'You incident timer and billing will start if you enable start master'
+		var pMsg = 'This incident is not started yet';
 	}
-        var inputData = {id:id, status:fld_status};
-        swal({
-            	title: "Are you sure?",
+	var id = $('.inctVal').val();
+	var inputData = {id:id, status:fld_status};
+	swal({
+		title: "Are you sure?",
 		text: msg,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
 		confirmButtonText: "Yes, I am sure!",
 		cancelButtonText: "No, cancel it!"
-    }).then(function () {
-        $.ajax({
-                    url: base_url+'Process/materTimeUpdt/'+encodeURIComponent(id),
-                    type: 'POST',
-                    data : inputData,
-                    success: function(data){
-                            $('#preloader').fadeOut();
-                             if(fld_status == "5"){
-                                    var title = 'Stopped!'
-                                    var finalMsg = 'Your incident has been stopped'
+	}).then(function () {
+		$('.startStopIncidentBtn').prop('checked', true).change()
+		$.ajax({
+			url: base_url+'Process/materTimeUpdt/'+encodeURIComponent(id),
+			type: 'POST',
+			data : inputData,
+			success: function(data){
+					$('#preloader').fadeOut();
+					 if(fld_status == "5"){
+							var title = 'Stopped!'
+							var finalMsg = 'Your incident has been stopped'
 
-                            }else{
-                                    var title = 'Started!'
-                                    var finalMsg = 'Your incident has been started'
-                            }
-                            swal(
-                            {
-                              title: title,
-                              text: finalMsg,
-                              timer: 3000,
-                              onOpen: function () {
-                                    swal.showLoading()
-                              }
-                            }).then(
-                              function () {},
-                              function (dismiss) {
-                                    if (dismiss === 'timer') {
-                                      window.location.href= ''+base_url + 'dashboard/incident_preview/'+encodeURIComponent(id)+'';
-                                    }
-                              }
-                            )
-                    location.reload(true);
-                    }
-		});
+					}else{
+							var title = 'Started!'
+							var finalMsg = 'Your incident has been started'
+					}
+					swal(
+					{
+					  title: title,
+					  text: finalMsg,
+					  timer: 3000,
+					  onOpen: function () {
+							swal.showLoading()
+					  }
+					}).then(
+					  function () {},
+					  function (dismiss) {
+							if (dismiss === 'timer') {
+							  window.location.href= ''+base_url + 'dashboard/incident_preview/'+encodeURIComponent(id)+'';
+							}
+					  }
+					)
+				location.reload(true);
+			}
+	});
 
-    }, function (dismiss) {
-        if (dismiss === 'cancel') {
-            swal("Pending", "This incident is not started yet", "error");
-            location.reload(true);
+	}, function (dismiss) {
+		if (dismiss === 'cancel') {
+			swal("Pending", pMsg, "error");
 		}
-    });	
-	
-	 
-}
+	});
+});
 
 
 $(document).on("submit", "#inctMessge", function (e) {

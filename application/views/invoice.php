@@ -6,6 +6,71 @@ if(!$uid){
 	redirect(base_url());
 	exit;
 }
+
+		
+switch ($incident[0]['fld_plan_type']) {
+	case '0':		
+		$totlMoney = $timeSpan * $incident[0]['fld_plan_amount'];
+		break;
+	case '1':
+		$timeSpan = $timeSpan/24;
+		$afterDec = explode('.',$timeSpan);
+		$totalDays = $afterDec[0];
+		$afterDec[1] = substr($afterDec[1], 0, 2);
+		if(count($afterDec) > 1){
+			if($afterDec[1] > 24){
+				$totalDays += 1;
+			}
+		}
+		$totlMoney = $totalDays * $incident[0]['fld_plan_amount'];
+		break;
+	case '2':
+		$timeSpan = $timeSpan/24;
+		$timeSpan = $timeSpan/30;
+		$afterDec = explode('.',$timeSpan);
+		$totalDays = $afterDec[0];
+		$afterDec[1] = substr($afterDec[1], 0, 2);
+		if(count($afterDec) > 1){
+			if($afterDec[1] > 1 && $afterDec[1] <= 30){
+				$totalDays += 1;
+				
+			}
+			if($afterDec[1] > 31 && $afterDec[1] <= 60){
+				$totalDays += 2;
+				
+			}
+			if($afterDec[1] > 60){
+				$totalDays += 3;
+			}
+		}
+		$totlMoney = $totalDays * $incident[0]['fld_plan_amount'];
+		break;
+	case '3':
+		$timeSpan = $timeSpan/24;
+		$timeSpan = $timeSpan/30;
+		$timeSpan = $timeSpan/12;
+		$afterDec = explode('.',$timeSpan);
+		$totalDays = $afterDec[0];
+		$afterDec[1] = substr($afterDec[1], 0, 2);
+		if(count($afterDec) > 1){
+			if($afterDec[1] > 1 && $afterDec[1] <= 12){
+				$totalDays += 1;
+				
+			}
+			if($afterDec[1] > 13 && $afterDec[1] <= 24){
+				$totalDays += 2;
+				
+			}
+			if($afterDec[1] > 25){
+				$totalDays += 3;
+			}
+		}
+		$totlMoney = $totalDays * $incident[0]['fld_plan_amount'];
+		break;
+	default:
+		exit;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +114,7 @@ if(!$uid){
 <div class="col-md-6 col-md-offset-3 ">
   <div class="msgConterer">
     <div class="texhara">Payment!</div>
-    <p>Pleasure to work with you. You have to pay the amount of $<?=$incident[0]['fld_plan_amount']?> for the Incident (<a target="_blank" href="<?=base_url()?>dashboard/incident_preview/<?=encode($incident[0]['fld_id'])?>"><?=$incident[0]['fld_inci_title']?></a>) which is sucessfully closed. Choose any of the following option to pay the amount of $<?=$incident[0]['fld_plan_amount']?></p>
+    <p>Pleasure to work with you. You have to pay the amount of $<?=$totlMoney?> for the Incident (<a target="_blank" href="<?=base_url()?>dashboard/incident_preview/<?=encode($incident[0]['fld_id'])?>"><?=$incident[0]['fld_inci_title']?></a>) which is sucessfully closed. Choose any of the following option to pay the amount of $<?=$totlMoney?></p>
   </div>
   <div class="formBoxRating">
     <form id="ratingFeedback">
