@@ -14,6 +14,7 @@ class Stripe_payment extends CI_Controller
         parent::__construct();
         $this->load->model(array('user_model','common_model'));
         define('UID', userID());
+		define('AID', adminID());
     }
 
     public function index()
@@ -100,4 +101,22 @@ class Stripe_payment extends CI_Controller
 	    $data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
 		$this->load->view('paypal/success', $data);
     }
+	
+	public function byAdmin(){
+		$iid = decode($this->input->get('iid'));
+		$rid = decode($this->input->get('rid'));
+		$paynow = $this->input->get('paynow');
+		$usertype = $this->input->get('usertype');
+		if($iid){
+			$data['user'] = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $rid),'','tbl_user');
+			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $iid),'','tbl_incident');
+			if(count($data['product'])>0){
+				$this->load->view('strip', $data);
+			}else{
+				echo 'Congratulations!! You have already paid your due amount. Go back and login';	
+			}
+		}
+		
+			
+	}
 }

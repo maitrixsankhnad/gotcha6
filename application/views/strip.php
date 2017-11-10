@@ -1,12 +1,13 @@
 <?php
 $this->load->view('commonFunction');
 
-if(!UID){
+if(!UID && !AID){
 	redirect(base_url());
 	exit;
 }
 $getBlance = getBalanceDueAmt($product[0]['fld_id'], TRUE, TRUE);
 $getBlance = (explode('~',$getBlance));
+
 switch ($product[0]['fld_service_level']) {
 	case '0':
 		$servLevl = 'Incident Manager';
@@ -37,6 +38,11 @@ switch ($product[0]['fld_plan_type']) {
 		break;
 	default:
 		exit;
+}
+if(isset($_GET['usertype'])){
+	if($_GET['usertype'] == 1){
+		$servLevl = 'SME';
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -136,8 +142,6 @@ switch ($product[0]['fld_plan_type']) {
       <div class="alert alert-danger errorMeser">
           <span></span>
         </div>
-
-
       <table width="60%" class="boxTarsrlk">
         <tr>
           <td>Card Number</td>
@@ -159,7 +163,7 @@ switch ($product[0]['fld_plan_type']) {
         </tr>
         <tr>
           <td>Amount</td>
-          <td colspan="3"><input type="text" class="form-control" value="<?=$getBlance[1]?>" disabled required></td>
+          <td colspan="3"><input type="text" class="form-control" value="" required></td>
         </tr>
       </table>
       <div class="text-center"><br><br>

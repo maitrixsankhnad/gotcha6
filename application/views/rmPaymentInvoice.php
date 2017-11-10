@@ -159,7 +159,7 @@ switch ($product[0]['fld_plan_type']) {
             <div class="clearfix"></div>
             <?php if($user[0]['fld_paypal'] != ''){?>
             <button type="button" class="btn btn-default" onClick="payMethodRMSME('1')">Paypal Payment</button>
-            <?php } else if($user[0]['fld_stripe'] != ''){?>
+            <?php } if($user[0]['fld_stripe'] != ''){?>
             <button type="button" class="btn btn-default" onClick="payMethodRMSME('2')">Stripe Payment</button>
             <?php } ?>
       </div>

@@ -105,7 +105,7 @@ class Superadmin extends CI_Controller {
 			if($payType == '1'){
 				header("location:".base_url()."paypal/paybyADMIN/".$this->input->get('iid')."/".$this->input->get('rid')."/".$paynow."/".$usertype."");
 			}else if($payType == '2'){
-				header("location:".base_url()."paypal/paybyADMIN/".$this->input->get('iid')."/".$this->input->get('rid')."/".$paynow."/".$usertype."");
+				header("location:".base_url()."stripe_payment/byAdmin?iid=".$this->input->get('iid')."&rid=".$this->input->get('rid')."&paynow=".$paynow."&usertype=".$usertype."");
 			}
 		}
 		if($id){
