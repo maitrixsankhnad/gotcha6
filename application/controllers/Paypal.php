@@ -15,14 +15,18 @@ class Paypal extends CI_Controller
 			$data['iid'] = $this->input->get('iid');
 			$data['user'] = $this->common_model->getAll(array("fld_isDeleted" => 0,"fld_status" => 0, "fld_id" => UID),'','tbl_user');
 			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0,"fld_isPaid" => 1, "fld_id" => $id),'','tbl_incident');
-			$this->load->view('paypal/index', $data);
+			if(count($data['product'])>0){
+				$this->load->view('paypal/index', $data);
+			}else{
+				echo 'Congratulations!! You have already paid your due amount. Go back and login';	
+			}
 		}
 	}
 	
-        function rmPayment(){
+    function rmPayment(){
 		$id = decode($this->input->get('iid'));
                
-                if($id){
+        if($id){
 			$data['iid'] = $this->input->get('iid');
 			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $id),'','tbl_incident');
 			$this->load->view('paypal/rm_payment', $data);
@@ -38,6 +42,8 @@ class Paypal extends CI_Controller
 		$notifyURL = base_url().'paypal/ipn'; //ipn url
 		$product = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $id),'','tbl_incident');
 		$userID = UID;
+		$getBlance = getBalanceDueAmt($id, TRUE, TRUE);
+		$getBlance = (explode('~',$getBlance));
 		$logo = base_url().'assets/images/logo.png';		
 		$this->paypal_lib->add_field('return', $returnURL);
 		$this->paypal_lib->add_field('cancel_return', $cancelURL);
@@ -45,7 +51,7 @@ class Paypal extends CI_Controller
 		$this->paypal_lib->add_field('item_name', $product[0]['fld_plan_name']);
 		$this->paypal_lib->add_field('custom', $iid);
 		$this->paypal_lib->add_field('item_number',  str_pad($product[0]['fld_id'], 8, '0', STR_PAD_LEFT));
-		$this->paypal_lib->add_field('amount', str_replace( ',', '', $product[0]['fld_plan_amount']));
+		$this->paypal_lib->add_field('amount', str_replace( ',', '', $getBlance[1]));
 		$this->paypal_lib->image($logo);		
 		$this->paypal_lib->paypal_auto_form();
 	}
@@ -67,13 +73,17 @@ class Paypal extends CI_Controller
 			$payID = $this->common_model->saveData("tbl_payments",$data);
 			$this->common_model->updateData("fld_id",$iid,array('fld_isPaid'=>'0'),'tbl_incident');
 		}
-		header("location:".base_url()."paypal/success/".encode($payID)."");		
+		if($payID !=''){
+			header("location:".base_url()."paypal/success/".encode($payID)."");
+		}else{
+			echo 'Sucessfully Paid!!';	
+		}
 	 }
 	 
 	 function success($tid=''){
 		$data['tid'] = $tid;
 		$id = decode($tid);
-	        $data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
+	    $data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
 		$this->load->view('paypal/success', $data);
 	 }
 	 
@@ -104,9 +114,9 @@ class Paypal extends CI_Controller
     }
     
     function payAdmin($iid){
-	        $id = decode($iid);
-                $amount = $this->input->post('amount');
-                $this->session->set_userdata('paymentProcess',654654);
+		$id = decode($iid);
+		$amount = $this->input->post('amount');
+		$this->session->set_userdata('paymentProcess',654654);
 		$returnURL = base_url().'paypal/processAdmin'; //payment success url
 		$cancelURL = base_url().'paypal/cancel'; //payment cancel url
 		$notifyURL = base_url().'paypal/ipn'; //ipn url
@@ -179,10 +189,10 @@ class Paypal extends CI_Controller
 	}
         
        function paySMEAdmin($iid, $smeid){
-	        $id = decode($iid);
-                $smeid = decode($smeid);
-                $amount = $this->input->post('amount');
-                $this->session->set_userdata('paymentProcess',654654);
+		$id = decode($iid);
+		$smeid = decode($smeid);
+		$amount = $this->input->post('amount');
+		$this->session->set_userdata('paymentProcess',654654);
 		$returnURL = base_url().'paypal/processSMEAdmin'; //payment success url
 		$cancelURL = base_url().'paypal/cancel'; //payment cancel url
 		$notifyURL = base_url().'paypal/ipn'; //ipn url

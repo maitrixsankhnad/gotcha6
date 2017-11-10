@@ -457,6 +457,95 @@ if(! function_exists('getNotifiCount')){
 		return $CI->user_model->fatchNotfiCount($UID, $isAdmin);
 	}
 }
+
+if(! function_exists('getBalanceDueAmt')){
+	function getBalanceDueAmt($iid, $time='', $amount='')
+	{
+        $CI = & get_instance();
+		$incData = $CI->common_model->getPartial('*','tbl_incident',array('fld_id'=>$iid ,'fld_isDeleted'=>'0'));
+		$datetime1 = strtotime($incData[0]['fld_incident_start_time']);
+		$datetime2 = strtotime($incData[0]['fld_incident_end_time']);
+		$interval  = abs($datetime2 - $datetime1);
+		$minutes   = round($interval / 60);
+		$Hrls = round($minutes / 60);	
+		$timeSpan = $Hrls > 0 ? $Hrls : 1;
+		$planType = $incData[0]['fld_plan_type'];
+		
+		switch ($planType) {
+			case '0':		
+				$totalDays = $timeSpan;
+				$totlMoney = $timeSpan * $incData[0]['fld_plan_amount'];
+				break;
+			case '1':
+				$timeSpan = $timeSpan/24;
+				$afterDec = explode('.',$timeSpan);
+				$totalDays = $afterDec[0];
+				$afterDec[1] = substr($afterDec[1], 0, 2);
+				if(count($afterDec) > 1){
+					if($afterDec[1] > 24){
+						$totalDays += 1;
+					}
+				}
+				$totlMoney = $totalDays * $incData[0]['fld_plan_amount'];
+				break;
+			case '2':
+				$timeSpan = $timeSpan/24;
+				$timeSpan = $timeSpan/30;
+				$afterDec = explode('.',$timeSpan);
+				$totalDays = $afterDec[0];
+				$afterDec[1] = substr($afterDec[1], 0, 2);
+				if(count($afterDec) > 1){
+					if($afterDec[1] > 1 && $afterDec[1] <= 30){
+						$totalDays += 1;
+						
+					}
+					if($afterDec[1] > 31 && $afterDec[1] <= 60){
+						$totalDays += 2;
+						
+					}
+					if($afterDec[1] > 60){
+						$totalDays += 3;
+					}
+				}
+				$totlMoney = $totalDays * $incData[0]['fld_plan_amount'];
+				break;
+			case '3':
+				$timeSpan = $timeSpan/24;
+				$timeSpan = $timeSpan/30;
+				$timeSpan = $timeSpan/12;
+				$afterDec = explode('.',$timeSpan);
+				$totalDays = $afterDec[0];
+				$afterDec[1] = substr($afterDec[1], 0, 2);
+				if(count($afterDec) > 1){
+					if($afterDec[1] > 1 && $afterDec[1] <= 12){
+						$totalDays += 1;
+						
+					}
+					if($afterDec[1] > 13 && $afterDec[1] <= 24){
+						$totalDays += 2;
+						
+					}
+					if($afterDec[1] > 25){
+						$totalDays += 3;
+					}
+				}
+				$totlMoney = $totalDays * $incData[0]['fld_plan_amount'];
+				break;
+			default:
+				exit;
+		}
+		
+		if($time !='' && $amount !=''){
+			return $totalDays.'~'.$totlMoney;
+		}
+		if($time !=''){
+			return $totalDays;
+		}
+		if($amount !=''){
+			return $totlMoney;
+		}		
+	}
+}
  
  
 

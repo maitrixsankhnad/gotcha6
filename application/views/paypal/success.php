@@ -46,30 +46,31 @@ if(!UID){
 <div class="col-md-6 col-md-offset-3 ">
   <div class="msgConterer">
     <div class="texhara">Payment Successful!</div>
-    <p>Thank you for the prompt payment on your <?=LOGO_NAME?> account. Your payment of $<?=$payment[0]['fld_total']?> clears the remaining balance. We appreciate being able to serve you as your incident requrement.</p>
+    <p>Thank you for the prompt payment on your
+      <?=LOGO_NAME?>
+      account. Your payment of $
+      <?=$payment[0]['fld_total']?>
+      clears the remaining balance. We appreciate being able to serve you as your incident requrement.</p>
   </div>
   <div class="formBoxRating">
     <form id="ratingFeedback">
-      <div>
-        <span><strong>Plan : </strong>
-            <?php
+      <div> <span><strong>Plan : </strong>
+        <?php
             $incidtndInfo = incident($payment[0]['fld_incident_id']);
 			echo $incidtndInfo[0]['fld_plan_name'];
-			?>
+		?>
         </span><br/>
         <span><strong>TXN ID : </strong>
-            <?=$payment[0]['fld_payment_id']; ?>
+        <?=$payment[0]['fld_payment_id']; ?>
         </span><br/>
-        <span><strong>Amount Paid : </strong>
-            $<?=$payment[0]['fld_total'].' '.$payment[0]['fld_currency']; ?>
+        <span><strong>Amount Paid : </strong> $
+        <?=$payment[0]['fld_total'].' '.$payment[0]['fld_currency']; ?>
         </span><br/>
         <span><strong>Payment Status : </strong>
-            <?=$payment[0]['fld_payment_status']; ?>
+        <?=$payment[0]['fld_payment_status']; ?>
         </span><br/>
-        <div class="text-center">
-            <a href="<?=base_url();?>dashboard" class="btn btn-default">Back to Dashboard</a>
-      	</div>
-    </div>
+        <div class="text-center"> <a href="<?=base_url();?>dashboard" class="btn btn-default">Back to Dashboard</a> </div>
+      </div>
     </form>
   </div>
 </div>
@@ -77,6 +78,3 @@ if(!UID){
 <?php $this->load->view('front_include/script');?>
 </body>
 </html>
-
-
-
