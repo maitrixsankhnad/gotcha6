@@ -6772,6 +6772,9 @@ function deleteCommon(selfObj,id,type)
 						swal("Deleted!", "The record has been deleted.", "success");
 						$(selfObj).closest('tr').remove();
 					}
+                                        if($('.notiFD').val()){
+                                            $(selfObj).closest('li').remove();
+                                        }
 					
 				}
 			 });

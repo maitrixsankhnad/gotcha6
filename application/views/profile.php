@@ -76,6 +76,7 @@ $isNotificationPanl = 'true';
                 </div>
                 <div class="col-md-9 col-sm-9 col-xs-12">
                   <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                      <input type="hidden" class="notiFD" value="1">
                     <ul class="nav nav-tabs bar_tabs tabTopFlow" role="tablist">
                       <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Recent Activity</a> </li>
                       <!--                      <li role="presentation"><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Projects Worked on</a> </li>-->
