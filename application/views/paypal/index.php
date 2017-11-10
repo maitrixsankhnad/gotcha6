@@ -5,6 +5,39 @@ if(!UID){
 	redirect(base_url());
 	exit;
 }
+$getBlance = getBalanceDueAmt($product[0]['fld_id'], TRUE, TRUE);
+$getBlance = (explode('~',$getBlance));
+switch ($product[0]['fld_service_level']) {
+	case '0':
+		$servLevl = 'Incident Manager';
+		break;
+	case '1':
+		$servLevl = 'Project Manager';
+		break;
+	case '2':
+		$servLevl = 'IT/Director';
+		break;
+}
+switch ($product[0]['fld_plan_type']) {
+	case '0':		
+		$lblPlan = 'Hourly';
+		$lblPlan1 = 'hours(s)';
+		break;
+	case '1':
+		$lblPlan = 'Daily';
+		$lblPlan1 = 'day(s)';
+		break;
+	case '2':
+		$lblPlan = 'Monthly';
+		$lblPlan1 = 'month(s)';
+		break;
+	case '3':
+		$lblPlan = 'Yearly';
+		$lblPlan1 = 'year(s)';
+		break;
+	default:
+		exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,19 +86,48 @@ if(!UID){
   <div class="formBoxRating">
     <form>
       <div class="col-md-6">
-          <label>Incident Title: </label> <?=$product[0]['fld_inci_title']?>
-          <br>
-          <label>Incident ID:</label> <?=str_pad($product[0]['fld_id'], 8, '0', STR_PAD_LEFT);?>
+        <label>Billing Name:</label>
+        <?=$user[0]['fld_fname'].' '.$user[0]['fld_mname'].' '.$user[0]['fld_lname']?>
       </div>
       <div class="col-md-6">
-          <label>Amount: </label> <?=$product[0]['fld_plan_amount']?>
-          <br>
-          <label>Billing Name:</label> <?=$user[0]['fld_fname'].' '.$user[0]['fld_mname'].' '.$user[0]['fld_lname']?>
+        <label>Billing Email: </label>
+        <?=$user[0]['fld_email']?>
+      </div>
+      <div class="col-md-6">
+        <label>Invoice no.: </label>
+        <?=str_pad($product[0]['fld_id'], 8, '0', STR_PAD_LEFT);?>
+        <br>
+        <label>Package taken: </label>
+        <?=$product[0]['fld_plan_name']?>
+      </div>
+      <div class="col-md-6">
+        <label>Incident title:</label>
+        <a target="_blank" href="<?=base_url()?>dashboard/incident_preview/<?=encode($product[0]['fld_id'])?>"><?=$product[0]['fld_inci_title']?></a>
+        <br>
+        <label>Package type:</label>
+        <?=$lblPlan?>
+        basis </div>
+      <div class="col-md-6">
+        <label>Package cost: </label>
+        <?=$product[0]['fld_plan_amount']?>
+      </div>
+      <div class="col-md-6">
+        <label>Service lavel:</label>
+        <?=$servLevl?>
       </div>
       <div class="clearfix"></div>
-      <div class="text-center">
-        <a href="<?=base_url()?>paypal/pay/<?=$iid?>" class="btn btn-default">Pay Now</a>
+      <hr />
+      <div class="col-md-6">
+        <label>Total Working: </label>
+        <?=$getBlance[0]?>
+        <?=$lblPlan1?>
       </div>
+      <div class="col-md-6">
+        <label>Due Ammount:</label> $<?=number_format($getBlance[1], 0, '.', ',')?>
+      </div>
+      <div class="clearfix"></div>
+      <hr />
+      <div class="text-center"> <a href="<?=base_url()?>paypal/pay/<?=$iid?>" class="btn btn-default">Pay Now</a> </div>
     </form>
   </div>
 </div>
