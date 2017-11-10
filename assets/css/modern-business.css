@@ -359,3 +359,6 @@ footer {
  -webkit-transform: translate(-50%,-50%);
  transform: translate(-50%,-50%);
 }
+.stripPayFrm{
+	display:none;	
+}

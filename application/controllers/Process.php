@@ -1290,18 +1290,20 @@ class Process extends CI_Controller {
         foreach ($inciSME as $inciSMEList) {
                 $inciSMEData = userInfo($inciSMEList['fld_sme_id']);
                 $totaltime = trackSMETotalTime($inciSMEList['fld_sme_id'], $inciSMEList['fld_rm_id'], $iid);
+				$smeIDE = encode($inciSMEList['fld_sme_id']);
                 if(($inciSMEList['fld_isPaid'] == '0')){
                         $paybutton = "<span class='btn btn-sm btn-primary'>Paid</span>"; 
                 }else{
-                        $paybutton = '<a class="btn btn-sm btn-primary" href="'. base_url().'paypal/smePayment?iid='.$incID.'|'.$inciSMEList['fld_sme_id'].'"><i class="fa fa-eye"></i> Payment</a>'; 
+                        $paybutton = '<a class="btn btn-sm btn-primary" href="'. base_url().'superadmin/rmPaymentInvoice?iid='.$incID.'&rid='.$smeIDE.'&usertype=1&rmid='.$inciSMEList['fld_rm_id'].'"><i class="fa fa-eye"></i> Payment</a>'; 
                 }
-                    $smePaymentData =getPaymentSMEIncident($iid,$inciSMEList['fld_sme_id']);
+                
+				$smePaymentData =getPaymentSMEIncident($iid,$inciSMEList['fld_sme_id']);
                      
-                      if(!empty($smePaymentData[0]['fld_total'])){
-                                $amount = $smePaymentData[0]['fld_total'] . '<small> '.$smePaymentData[0]['fld_currency'].'</small>';
-                       }else{
-                             $amount = "<span class='btn btn-sm btn-primary'>Not Paid</span>";
-                } 
+				if(!empty($smePaymentData[0]['fld_total'])){
+					$amount = $smePaymentData[0]['fld_total'] . '<small> '.$smePaymentData[0]['fld_currency'].'</small>';
+				}else{
+					$amount = '<span class="label label-danger">Not Paid</span>';
+				} 
                 $adminData .= '<tr class=""> 
                                 <td>' . $inciSMEData[0]['fld_fname'] . ' ' . $inciSMEData[0]['fld_mname'] . ' ' . $inciSMEData[0]['fld_lname'] . '</td>
                                 <td>' . $inciSMEData[0]['fld_paypal'] . '</td>

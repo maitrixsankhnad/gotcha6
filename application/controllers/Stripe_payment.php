@@ -18,7 +18,18 @@ class Stripe_payment extends CI_Controller
 
     public function index()
     {
-        $this->load->view('strip');
+		$id = decode($this->input->get('iid'));
+		if($id){
+			$data['iid'] = $this->input->get('iid');
+			$data['user'] = $this->common_model->getAll(array("fld_isDeleted" => 0,"fld_status" => 0, "fld_id" => UID),'','tbl_user');
+			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0,"fld_isPaid" => 1, "fld_id" => $id),'','tbl_incident');
+			if(count($data['product'])>0){
+				$this->load->view('strip', $data);
+			}else{
+				echo 'Congratulations!! You have already paid your due amount. Go back and login';	
+			}
+		}
+		
     }
 
 
@@ -27,9 +38,11 @@ class Stripe_payment extends CI_Controller
 		try {
 			Stripe::setApiKey('sk_test_joA604sBfMeBKuif483lUNyB');
 			$incidentID = decode($this->input->post('iid'));
-			$incidentInfo = $this->common_model->getAll(array("fld_id" => $incidentID, "fld_isDeleted" => '0' ),'','tbl_incident');			
+			$incidentInfo = $this->common_model->getAll(array("fld_id" => $incidentID, "fld_isDeleted" => '0' ),'','tbl_incident');		
+			$getBlance = getBalanceDueAmt($incidentID, TRUE, TRUE);
+			$getBlance = (explode('~',$getBlance));	
 			$charge = Stripe_Charge::create(array(
-				"amount" => str_replace( ',', '', $incidentInfo[0]['fld_plan_amount']),
+				"amount" => str_replace( ',', '', $getBlance[1]),
 				"currency" => "USD",
 				"card" => $this->input->post('access_token'),
 				"description" => "Stripe Payment"

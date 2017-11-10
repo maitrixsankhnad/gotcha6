@@ -67,7 +67,7 @@ if(!AID){
                     if(($rmincidentData[0]['fld_isPaid'] == '0')){
                             $paybutton = "<span class='btn btn-sm btn-primary'>Paid</span>"; 
                     }else{
-                            $paybutton = '<a class="btn btn-sm btn-primary" href="'.base_url().'paypal/rmPayment?iid='.encode($inciListAll['fld_id']).'"><i class="fa fa-eye"></i> Payment</a>'; 
+                            $paybutton = '<a class="btn btn-sm btn-primary" href="'.base_url().'superadmin/rmPaymentInvoice?iid='.encode($inciListAll['fld_id']).'&rid='.encode($rmincidentData[0]['fld_rm_id']).'"><i class="fa fa-eye"></i> Payment</a>'; 
                         }
                     ?>
                     <tr>

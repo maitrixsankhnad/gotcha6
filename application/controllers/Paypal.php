@@ -22,18 +22,7 @@ class Paypal extends CI_Controller
 			}
 		}
 	}
-	
-    function rmPayment(){
-		$id = decode($this->input->get('iid'));
-               
-        if($id){
-			$data['iid'] = $this->input->get('iid');
-			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $id),'','tbl_incident');
-			$this->load->view('paypal/rm_payment', $data);
-		}
-	}
-        
-        
+	    
 	function pay($iid){
 		$id = decode($iid);
         $this->session->set_userdata('paymentProcess',654654);
@@ -56,7 +45,7 @@ class Paypal extends CI_Controller
 		$this->paypal_lib->paypal_auto_form();
 	}
 	
-	 function process(){
+	function process(){
 		$iid = decode($this->input->get('cm'));
 		$data = array(
 			'fld_uid' => UID,
@@ -78,20 +67,20 @@ class Paypal extends CI_Controller
 		}else{
 			echo 'Sucessfully Paid!!';	
 		}
-	 }
-	 
-	 function success($tid=''){
+	}
+	
+	function success($tid=''){
 		$data['tid'] = $tid;
 		$id = decode($tid);
-	    $data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
+		$data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
 		$this->load->view('paypal/success', $data);
-	 }
-	 
-	 function cancel(){
-                $this->load->view('paypal/cancel');
-	 }
-	 
-	 function ipn(){
+	}
+	
+	function cancel(){
+		$this->load->view('paypal/cancel');
+	}
+	
+	function ipn(){
 		//paypal return transaction details array
 		$paypalInfo	= $this->input->post();
 
@@ -113,132 +102,67 @@ class Paypal extends CI_Controller
 		}
     }
     
-    function payAdmin($iid){
-		$id = decode($iid);
-		$amount = $this->input->post('amount');
-		$this->session->set_userdata('paymentProcess',654654);
-		$returnURL = base_url().'paypal/processAdmin'; //payment success url
+	function paybyADMIN($iid, $rid, $amount, $userType){
+		$inciID = decode($iid);
+        $userID = decode($rid);		
+		
+        $this->session->set_userdata('paymentProcess',654654);
+		$returnURL = base_url().'paypal/processPayment'; //payment success url
 		$cancelURL = base_url().'paypal/cancel'; //payment cancel url
 		$notifyURL = base_url().'paypal/ipn'; //ipn url
-		$product = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $id),'','tbl_incident');
-		$rmincidentData    = getAssignedRMID($product[0]['fld_id']);
-                $rmid   =   $rmincidentData[0]['fld_rm_id'];
-                $auserID = AID; 
+		$product = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $inciID),'','tbl_incident');
 		$logo = base_url().'assets/images/logo.png';		
 		$this->paypal_lib->add_field('return', $returnURL);
 		$this->paypal_lib->add_field('cancel_return', $cancelURL);
 		$this->paypal_lib->add_field('notify_url', $notifyURL);
-		$this->paypal_lib->add_field('item_name', $product[0]['fld_inci_title']);
-		$this->paypal_lib->add_field('custom',  $id.'|'.$rmid );
-                $this->paypal_lib->add_field('item_number',  str_pad($product[0]['fld_id'], 8, '0', STR_PAD_LEFT));
-		$this->paypal_lib->add_field('amount', str_replace( ',', '', $amount));
+		$this->paypal_lib->add_field('item_name', $product[0]['fld_plan_name']);
+		$this->paypal_lib->add_field('custom', $inciID.'[~]'.$rid.'[~]'.AID.'[~]'.$userType);
+		$this->paypal_lib->add_field('item_number',  str_pad($product[0]['fld_id'], 8, '0', STR_PAD_LEFT));
+		$this->paypal_lib->add_field('amount', $amount);
+		
 		$this->paypal_lib->image($logo);		
 		$this->paypal_lib->paypal_auto_form();
 	}
-        
-     function processAdmin(){
-            //  $iid = decode($this->input->get('cm'));
-               $allIds = explode('|', $this->input->get('cm'));
-               $iid = $allIds[0]; 
-               $rmid = $allIds[1]; 
-                if ($rmid){
-                    $fld_user_type = 0;
-                }else{
-                    $fld_user_type =1;
-                }
+	
+	function processPayment(){
+		$returnVal = $this->input->get('cm');
+		$returnVal = explode('[~]',$returnVal);
+		$this->session->set_userdata('paymentProcess',654654);
+		$iid = $returnVal[0];
+		$paidTo = decode($returnVal[1]);
+		$paidBy = $returnVal[2];
+		$userType = $returnVal[3];
+		
 		$data = array(
-			'fld_auid' => AID,
-                        'fld_uid' => $rmid,
-                        'fld_user_type'=>$fld_user_type, 
+			'fld_auid' => $paidBy,
+			'fld_uid' => $paidTo,
+			'fld_user_type' => $userType,
+			'fld_currency' => $this->input->get('cc'),
 			'fld_incident_id' => $iid,
 			'fld_payment_id' => $this->input->get('tx'),
 			'fld_payment_status' => $this->input->get('st'),
 			'fld_total' => $this->input->get('amt'),
-			'fld_currency' => $this->input->get('cc'),
 			'fld_description' => 'PayPal Payment',
 			'fld_createdDt' => date("Y-m-d H:i:s", time())
 		);
-                if(isset($_SESSION['paymentProcess'])){
+		
+		if(isset($_SESSION['paymentProcess'])){
 			unset($_SESSION['paymentProcess']);
 			$payID = $this->common_model->saveData("tbl_admin_payments",$data);
-			//$this->common_model->updateData("fld_id",$iid,array('fld_isPaid'=>'0'),'tbl_incident_rm');
-		        $this ->common_model->updateRmpaid($iid, $rmid);
-                        
-                }
-		header("location:".base_url()."paypal/successPayment/".encode($payID)."");		
-	 }   
-         
-         function successPayment($tid=''){
-		$data['tid'] = $tid;
-		$id = decode($tid);
-	        $data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_admin_payments');
-		$this->load->view('paypal/success_admin', $data);
-	 }
-         
-        function smePayment(){
-		//$id = decode($this->input->get('iid'));
-                 $allIds = explode('|', $this->input->get('iid'));
-                 $id = decode($allIds[0]); 
-                 $smeid = $allIds[1];
-                if($id){
-			$data['iid'] = $this->input->get('iid');
-                        $data['smeid'] = $smeid;
-			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $id),'','tbl_incident');
-			$this->load->view('paypal/sme_payment', $data);
+		}
+		if($payID !=''){
+			header("location:".base_url()."paypal/successPayment/".encode($payID)."");
+		}else{
+			echo 'Sucessfully Paid!!';	
 		}
 	}
-        
-       function paySMEAdmin($iid, $smeid){
-		$id = decode($iid);
-		$smeid = decode($smeid);
-		$amount = $this->input->post('amount');
-		$this->session->set_userdata('paymentProcess',654654);
-		$returnURL = base_url().'paypal/processSMEAdmin'; //payment success url
-		$cancelURL = base_url().'paypal/cancel'; //payment cancel url
-		$notifyURL = base_url().'paypal/ipn'; //ipn url
-		$product = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $id),'','tbl_incident');
-		$auserID = AID; 
-		$logo = base_url().'assets/images/logo.png';		
-		$this->paypal_lib->add_field('return', $returnURL);
-		$this->paypal_lib->add_field('cancel_return', $cancelURL);
-		$this->paypal_lib->add_field('notify_url', $notifyURL);
-		$this->paypal_lib->add_field('item_name', $product[0]['fld_inci_title']);
-		$this->paypal_lib->add_field('custom',  $id.'|'.$smeid );
-                $this->paypal_lib->add_field('item_number',  str_pad($product[0]['fld_id'], 8, '0', STR_PAD_LEFT));
-		$this->paypal_lib->add_field('amount', str_replace( ',', '', $amount));
-		$this->paypal_lib->image($logo);		
-		$this->paypal_lib->paypal_auto_form();
-	}
-        
-        function processSMEAdmin(){
-            //  $iid = decode($this->input->get('cm'));
-               $allIds = explode('|', $this->input->get('cm'));
-               $iid = $allIds[0]; 
-               $smeid = $allIds[1]; 
-                if ($smeid){
-                    $fld_user_type = 1;
-                }else{
-                    $fld_user_type =0;
-                }
-		$data = array(
-			'fld_auid' => AID,
-                        'fld_uid' => $smeid,
-                        'fld_user_type'=>$fld_user_type, 
-			'fld_incident_id' => $iid,
-			'fld_payment_id' => $this->input->get('tx'),
-			'fld_payment_status' => $this->input->get('st'),
-			'fld_total' => $this->input->get('amt'),
-			'fld_currency' => $this->input->get('cc'),
-			'fld_description' => 'PayPal Payment',
-			'fld_createdDt' => date("Y-m-d H:i:s", time())
-		);
-                if(isset($_SESSION['paymentProcess'])){
-			unset($_SESSION['paymentProcess']);
-			$payID = $this->common_model->saveData("tbl_admin_payments",$data);
-			//$this->common_model->updateData("fld_id",$iid,array('fld_isPaid'=>'0'),'tbl_incident');
-		        $this ->common_model->updateSMEPaid($iid, $smeid);
-                        
-                }
-		header("location:".base_url()."paypal/successPayment/".encode($payID)."");		
-	}  
+	
+    function successPayment($tid=''){
+		$data['tid'] = $tid;
+		$id = decode($tid);
+	    $data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_admin_payments');
+		$data['product'] = $this->common_model->getAll(array("fld_id" => $data['payment'][0]['fld_incident_id']),'','tbl_incident');
+		$data['user'] = $this->common_model->getAll(array("fld_id" => $data['payment'][0]['fld_uid']),'','tbl_user');
+		$this->load->view('paypal/success_admin', $data);
+	 }
 }

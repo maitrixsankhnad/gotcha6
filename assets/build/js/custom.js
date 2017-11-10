@@ -7000,18 +7000,17 @@ function ChangeIncidentTimeStatus(selfObj,fld_id,fld_sme_id){
 
 
 function getIncidentSMEList(selfObj,id){
-        var id = $(selfObj).data('iid');
-	    $('#preloader').fadeIn();
-		$.ajax({
-			url: base_url+'Process/incidentsmeListModel/'+id,
-			type: 'POST',
-			success: function(data){
-				$('#defaultModelSite').html(data).modal();
-				$('#preloader').fadeOut();
-				$('#datatable-responsive').DataTable();
-				
-			}
-		});
+	var id = $(selfObj).data('iid');
+	$('#preloader').fadeIn();
+	$.ajax({
+		url: base_url+'Process/incidentsmeListModel/'+id,
+		type: 'POST',
+		success: function(data){
+			$('#defaultModelSite').html(data).modal();
+			$('#preloader').fadeOut();
+			$('#datatable-responsive').DataTable();			
+		}
+	});
 }
 
 

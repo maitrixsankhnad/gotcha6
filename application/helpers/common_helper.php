@@ -467,14 +467,14 @@ if(! function_exists('getBalanceDueAmt')){
 		$datetime2 = strtotime($incData[0]['fld_incident_end_time']);
 		$interval  = abs($datetime2 - $datetime1);
 		$minutes   = round($interval / 60);
-		$Hrls = round($minutes / 60);	
+		$Hrls = round($minutes / 60);
 		$timeSpan = $Hrls > 0 ? $Hrls : 1;
 		$planType = $incData[0]['fld_plan_type'];
 		
 		switch ($planType) {
 			case '0':		
 				$totalDays = $timeSpan;
-				$totlMoney = $timeSpan * $incData[0]['fld_plan_amount'];
+				$totlMoney = $timeSpan * str_replace( ',', '', $incData[0]['fld_plan_amount']);
 				break;
 			case '1':
 				$timeSpan = $timeSpan/24;
@@ -486,7 +486,7 @@ if(! function_exists('getBalanceDueAmt')){
 						$totalDays += 1;
 					}
 				}
-				$totlMoney = $totalDays * $incData[0]['fld_plan_amount'];
+				$totlMoney = $totalDays * str_replace( ',', '', $incData[0]['fld_plan_amount']);
 				break;
 			case '2':
 				$timeSpan = $timeSpan/24;
@@ -507,7 +507,7 @@ if(! function_exists('getBalanceDueAmt')){
 						$totalDays += 3;
 					}
 				}
-				$totlMoney = $totalDays * $incData[0]['fld_plan_amount'];
+				$totlMoney = $totalDays * str_replace( ',', '', $incData[0]['fld_plan_amount']);
 				break;
 			case '3':
 				$timeSpan = $timeSpan/24;
@@ -529,7 +529,7 @@ if(! function_exists('getBalanceDueAmt')){
 						$totalDays += 3;
 					}
 				}
-				$totlMoney = $totalDays * $incData[0]['fld_plan_amount'];
+				$totlMoney = $totalDays * str_replace( ',', '', $incData[0]['fld_plan_amount']);
 				break;
 			default:
 				exit;

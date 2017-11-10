@@ -95,6 +95,28 @@ class Superadmin extends CI_Controller {
       $adminData['inci'] = $this->common_model->getAll(array("fld_isDeleted" => '0', 'fld_status'=> '0'),array("fld_id","desc"),'tbl_incident');
       $this->load->view('rm_payments_list',$adminData);
     }
+	public function rmPaymentInvoice(){
+		$id = decode($this->input->get('iid'));
+        $rid = decode($this->input->get('rid'));
+		$payType = $this->input->get('payType');
+		$paynow = $this->input->get('paynow');
+		$usertype = $this->input->get('usertype');
+		if($paynow){
+			if($payType == '1'){
+				header("location:".base_url()."paypal/paybyADMIN/".$this->input->get('iid')."/".$this->input->get('rid')."/".$paynow."/".$usertype."");
+			}else if($payType == '2'){
+				header("location:".base_url()."paypal/paybyADMIN/".$this->input->get('iid')."/".$this->input->get('rid')."/".$paynow."/".$usertype."");
+			}
+		}
+		if($id){
+			$data['iid'] = $this->input->get('iid');
+			$data['rid'] = $this->input->get('rid');
+			$data['user'] = $this->common_model->getAll(array("fld_isDeleted" => 0,"fld_status" => 0, "fld_id" => $rid),'','tbl_user');
+			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $id),'','tbl_incident');
+			$data['utype'] = $usertype;
+			$this->load->view('rmPaymentInvoice',$data);
+		}
+    }
     
     public function smePaymentsList(){
       $adminData['admin'] = $this->fullAdminData();

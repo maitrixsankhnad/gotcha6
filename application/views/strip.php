@@ -1,8 +1,42 @@
 <?php
-include_once('commonFunction.php');
+$this->load->view('commonFunction');
+
 if(!UID){
 	redirect(base_url());
 	exit;
+}
+$getBlance = getBalanceDueAmt($product[0]['fld_id'], TRUE, TRUE);
+$getBlance = (explode('~',$getBlance));
+switch ($product[0]['fld_service_level']) {
+	case '0':
+		$servLevl = 'Incident Manager';
+		break;
+	case '1':
+		$servLevl = 'Project Manager';
+		break;
+	case '2':
+		$servLevl = 'IT/Director';
+		break;
+}
+switch ($product[0]['fld_plan_type']) {
+	case '0':		
+		$lblPlan = 'Hourly';
+		$lblPlan1 = 'hours(s)';
+		break;
+	case '1':
+		$lblPlan = 'Daily';
+		$lblPlan1 = 'day(s)';
+		break;
+	case '2':
+		$lblPlan = 'Monthly';
+		$lblPlan1 = 'month(s)';
+		break;
+	case '3':
+		$lblPlan = 'Yearly';
+		$lblPlan1 = 'year(s)';
+		break;
+	default:
+		exit;
 }
 ?>
 <!DOCTYPE html>
@@ -50,7 +84,53 @@ if(!UID){
     <p>Fill the following details to pay using the Stripe Merchant</p>
   </div>
   <div class="formBoxRating">
-    <form action="/your-charge-code" method="POST" id="payment-form" class="form-inline">
+    <form class="basicPayInfo">
+      <div class="col-md-6">
+        <label>Billing Name:</label>
+        <?=$user[0]['fld_fname'].' '.$user[0]['fld_mname'].' '.$user[0]['fld_lname']?>
+      </div>
+      <div class="col-md-6">
+        <label>Billing Email: </label>
+        <?=$user[0]['fld_email']?>
+      </div>
+      <div class="col-md-6">
+        <label>Invoice no.: </label>
+        <?=str_pad($product[0]['fld_id'], 8, '0', STR_PAD_LEFT);?>
+        <br>
+        <label>Package taken: </label>
+        <?=$product[0]['fld_plan_name']?>
+      </div>
+      <div class="col-md-6">
+        <label>Incident title:</label>
+        <a target="_blank" href="<?=base_url()?>dashboard/incident_preview/<?=encode($product[0]['fld_id'])?>"><?=$product[0]['fld_inci_title']?></a>
+        <br>
+        <label>Package type:</label>
+        <?=$lblPlan?>
+        basis </div>
+      <div class="col-md-6">
+        <label>Package cost: </label>
+        <?=$product[0]['fld_plan_amount']?>
+      </div>
+      <div class="col-md-6">
+        <label>Service lavel:</label>
+        <?=$servLevl?>
+      </div>
+      <div class="clearfix"></div>
+      <hr />
+      <div class="col-md-6">
+        <label>Total Working: </label>
+        <?=$getBlance[0]?>
+        <?=$lblPlan1?>
+      </div>
+      <div class="col-md-6">
+        <label>Due Ammount:</label> $<?=number_format($getBlance[1], 0, '.', ',')?>
+      </div>
+      <div class="clearfix"></div>
+      <hr />
+      <div class="text-center"> <button type="button" onClick="switchStripPay('1')" class="btn btn-default">Pay Now</button> </div>
+    </form>
+  
+    <form method="POST" id="payment-form" class="form-inline stripPayFrm">
       <span class="payment-errors"></span>
       
       <div class="alert alert-danger errorMeser">
@@ -74,16 +154,17 @@ if(!UID){
           <td colspan="3"><input type="text" size="4" class="form-control" data-stripe="cvc" required></td>
         </tr>
         <tr>
-          <td>Billing Zip</td>
+          <td>Billing Email</td>
           <td colspan="3"><input type="text" size="6" class="form-control" data-stripe="address_zip" required></td>
         </tr>
         <tr>
           <td>Amount</td>
-          <td colspan="3"><input type="text" class="form-control" disabled required></td>
+          <td colspan="3"><input type="text" class="form-control" value="<?=$getBlance[1]?>" disabled required></td>
         </tr>
       </table>
       <div class="text-center"><br><br>
         <input type="submit" class="submit btn btn-primary" value="Submit Payment">
+        <input type="button" onClick="switchStripPay('')" class="btn btn-default" value="Back">
       </div>      
     </form>
     <div class="clearfix"></div>

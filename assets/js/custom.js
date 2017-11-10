@@ -379,3 +379,19 @@ $(document).on("submit", "#resetPassword", function(e) {
 		error: function() {}
 	});
 });
+
+function payMethodRMSME(pt){
+	$('input[name=payType]').val(pt);
+	$('#rmPaymentFrm').submit();
+}
+function switchStripPay(sT){
+	if(sT == '1'){
+		$(".basicPayInfo").slideUp( 'slow', function(){ 
+			$(".stripPayFrm").slideDown();
+		});
+	}else{
+		$(".stripPayFrm").slideUp( 'slow', function(){ 
+			$(".basicPayInfo").slideDown();
+		});
+	}
+}
