@@ -29,7 +29,10 @@ $isNotificationPanl = 'true';
                   <div class="x_title">
                       <h2>All Notification <small>Recent Activity</small></h2>
                       <div class="clearfix"></div>
+                      <button  class="btn btn-sm btn-primary notifydelete" onclick="clearAllNotifyActivity(this, '1')" type="button" data-original-title="Clear All"/>Clear All</button>
+                
                   </div>
+                  
                   <div class="x_content">
 
                       <div class="col-md-12 col-sm-12 col-xs-12">
@@ -45,7 +48,7 @@ $isNotificationPanl = 'true';
                                               echo $nActivityLog;
                                               ?>
                                           <?php } else { ?>
-                                              <li> <span class="message">No Record Found</span> </li>
+                                              <li> <span class="message">No record found</span> </li>
                                               <?php } ?>
                                       </ul>
                                       <!-- end recent activity --> 

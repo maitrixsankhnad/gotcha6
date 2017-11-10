@@ -238,6 +238,14 @@ class User_model extends CI_Model {
         $query = $this->db->query($sql);
     }
 
+    function deleteAllNotify($UID, $isAdmin = '') {
+		if($isAdmin != ''){
+        	$sql = "UPDATE `tbl_recent_activity` SET `fld_status_admin` = '2' WHERE  `fld_status_admin` = '1' OR   `fld_status_admin` = '0'  AND fld_isAdmin = '0'";
+		}else{
+			echo $sql = "UPDATE `tbl_recent_activity` SET `fld_status_user` = '2' WHERE  `fld_status_user` = '1'  OR   `fld_status_user` = '0' AND fld_target_id = ".$UID;
+		}
+        $query = $this->db->query($sql);
+    }
 
     /* Get the ServiceName by the userid */
 

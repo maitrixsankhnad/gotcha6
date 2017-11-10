@@ -1377,4 +1377,9 @@ class Process extends CI_Controller {
 	public function updateReadAllNoti($isAdmin='') {
 		$this->user_model->updateNotReadP(UID,$isAdmin);
     }
+    
+    public function deleteAllNotify($isAdmin='') {
+		$this->user_model->deleteAllNotify(UID,$isAdmin);
+    }
+    
 }

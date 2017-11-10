@@ -9,6 +9,38 @@ function updateNotReadAll(isAdmin){
 		 });	
 	}
 }
+
+function clearAllNotifyActivity(selfObj,isAdmin){
+	    swal({
+		title: "Are you sure?",
+		text: "Deleted All Activity !!",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Yes, I am sure!",
+		cancelButtonText: "No, cancel it!"
+              }).then(function () {
+            $.ajax({
+                        url: base_url+'process/deleteAllNotify/'+isAdmin,
+                        type: 'POST',
+                        success: function(data){
+
+                            swal("Deleted!", "The record has been deleted.", "success");
+                                     $('.messages li').remove();
+                                     $('.messages').html('<li>No record found</li>');
+
+                        }
+    });
+
+    }, function (dismiss) {
+        if (dismiss === 'cancel') {
+            swal("Cancelled", "This record is in safe :)", "error");
+		}
+    });	
+	
+}
+
+
 function findIncidentList(val){
 	$('#preloader').fadeIn();
 	var userType = $('select.userLisingL:selected').data('type');

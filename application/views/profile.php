@@ -86,15 +86,18 @@ $isNotificationPanl = 'true';
                       <?php } ?>
                     </ul>
                     <div class="tab-content">
+                        
                       <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
                         <!-- start recent activity -->
+                        <button  class="btn btn-sm btn-primary notifydelete" onclick="clearAllNotifyActivity(this, '')" type="button" data-original-title="Clear All"/>Clear All</button>
+                      <div class="clearfix"></div>
                         <ul class="messages">
                           <?php 
 						  	if(count($activityList) > 0){
 						  		echo $nActivityLog;
 						  ?>
                           <?php }else{ ?>
-                        	<li> <span class="message">No Record Found</span> </li>
+                        	<li> <span class="message">No record found</span> </li>
                           <?php } ?>
                         </ul>
                         <!-- end recent activity --> 
