@@ -4885,3 +4885,6 @@ a.homebox {
 .posR{
 	position:relative;	
 }
+.notifydelete{
+   float: right;
+}

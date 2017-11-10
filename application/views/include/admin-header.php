@@ -1,5 +1,5 @@
 <?php 
-	$notificURL = base_url().'notifications';
+	$notificURL = base_url().'superadmin/notifications';
 	$notifLimt = '8';
 	if(isset($isNotificationPanl)){		
 		$notifLimt = '';

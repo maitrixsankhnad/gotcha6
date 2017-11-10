@@ -203,5 +203,13 @@ class Superadmin extends CI_Controller {
 			$this->load->view('contact_preview',$adminData);
 		}
     }
+    
+    public function notifications() {
+       
+        $adminData['admin'] = $this->fullAdminData();
+	$this->load->view('all_notifications',$adminData);
+    }
+    
+    
 }
 
