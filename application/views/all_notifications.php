@@ -25,48 +25,40 @@ $isNotificationPanl = 'true';
       <div class="">
         <div class="row">
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
-              <div class="x_title">
-                <h2>All Notification <small>Recent Activity</small></h2>
-                <div class="clearfix"></div>
-              </div>
-              <div class="x_content">
-                
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                  <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                      <input type="hidden" class="notiFD" value="1">
-<!--                    <ul class="nav nav-tabs bar_tabs tabTopFlow" role="tablist">
-                      
-                      <div class="x_title">
-                      <h2>Recent Activity</h2>
+              <div class="x_panel">
+                  <div class="x_title">
+                      <h2>All Notification <small>Recent Activity</small></h2>
                       <div class="clearfix"></div>
-                    </div>
-                                            <li role="presentation"><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Projects Worked on</a> </li>
-                      
-                    </ul>-->
-                    <div class="tab-content">
-                      <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
-                        <!-- start recent activity -->
-                        <ul class="messages">
-                        <?php 
-                                if(count($activityList) > 0){
-                                        echo $nActivityLog;
-		        ?>
-                          <?php }else{ ?>
-                        	<li> <span class="message">No Record Found</span> </li>
-                          <?php } ?>
-                        </ul>
-                        <!-- end recent activity --> 
-                        
-                      </div>
-                      
-                      
-                      
-                    </div>
                   </div>
-                </div>
+                  <div class="x_content">
+
+                      <div class="col-md-12 col-sm-12 col-xs-12">
+                          <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                              <input type="hidden" class="notiFD" value="1">
+
+                              <div class="tab-content">
+                                  <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
+                                      <!-- start recent activity -->
+                                      <ul class="messages">
+                                          <?php
+                                          if (count($activityList) > 0) {
+                                              echo $nActivityLog;
+                                              ?>
+                                          <?php } else { ?>
+                                              <li> <span class="message">No Record Found</span> </li>
+                                              <?php } ?>
+                                      </ul>
+                                      <!-- end recent activity --> 
+
+                                  </div>
+
+
+
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
