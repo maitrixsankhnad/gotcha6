@@ -123,7 +123,7 @@ switch ($product[0]['fld_plan_type']) {
         <?=$lblPlan1?>
       </div>
       <div class="col-md-6">
-        <label>Due Ammount:</label> $<?=number_format($getBlance[1], 0, '.', ',')?>
+        <label>Due Amount:</label> $<?=number_format($getBlance[1], 0, '.', ',')?>
       </div>
       <div class="clearfix"></div>
       <hr />

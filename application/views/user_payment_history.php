@@ -75,9 +75,8 @@ if(!$uid){
                       <td><?=$paymentData['fld_payment_id']?></td>
                       <td><?=$paymentData['fld_total']?> <small><?=$paymentData['fld_currency']?></small></td>
                       <td><a href="<?=base_url()?>dashboard/incident_preview/<?=encode($incidentData[0]->fld_id); ?>" target="_blank">
-                        <?=truncate($incidentData[0]->fld_inci_title,20)?>
-                        </a></td>
-                      
+                        <?=truncate($incidentData[0]->fld_inci_title,20)?></a>
+                      </td>
                       <td><?=$paymentData['fld_description']?></td>                      
                       <td><span class="btn btn-success btn-xs"><?=$paymentData['fld_payment_status']?><span></span></span></td>
                       <td><?=date('dS M Y | H:i A',strtotime($paymentData['fld_createdDt']))?></td>
@@ -85,7 +84,7 @@ if(!$uid){
                               <a  class="btn btn-sm btn-primary"  href="<?=base_url()?>dashboard/invoice/<?=encode($paymentData['fld_id'])?>" target="_blank"><i class="fa fa-eye"></i> Invoice</a>
 <!--                          <a class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-trash-o"></i></a>-->
                         </div>
-                        </td>
+                      </td>
                     </tr>
                     <?php } ?>
                   </tbody>

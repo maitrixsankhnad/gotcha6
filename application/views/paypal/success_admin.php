@@ -65,7 +65,7 @@ if(!AID){
       </div>
       <div class="col-md-6">
         <label>Incident title:</label>
-        <a target="_blank" href="<?=base_url()?>dashboard/incident_preview/<?=encode($product[0]['fld_id'])?>"><?=$product[0]['fld_inci_title']?></a>
+        <a target="_blank" href="<?=base_url()?>superadmin/incident_preview/<?=encode($product[0]['fld_id'])?>"><?=$product[0]['fld_inci_title']?></a>
         <br>
         <label>Payment Method:</label> <?=$payment[0]['fld_description']?>
       </div>
@@ -77,7 +77,7 @@ if(!AID){
       <div class="clearfix"></div>
       <hr />
       <div class="col-md-12">
-        <h2>Paid Ammount: <strong>$<?=$payment[0]['fld_total']?></strong></h2>
+        <h2>Paid Amount: <strong>$<?=$payment[0]['fld_total']?></strong></h2>
       </div>
       <div class="clearfix"></div>
       <hr />

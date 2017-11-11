@@ -43,7 +43,7 @@ if(!$uid){
             $userData = userInfo($invoice[0]['fld_uid']);
             $incidentData = get_assigned_incident_data($invoice[0]['fld_incident_id']);
             
-    ?> 
+            ?> 
                 <h2>Invoice: <?=str_pad($invoice[0]['fld_incident_id'],10,0,STR_PAD_LEFT)?></h2>
                 <div class="clearfix"></div>
               </div>
@@ -61,43 +61,43 @@ if(!$uid){
                   </div>
                   <!-- info row -->
                   <div class="row invoice-info">
-                    <div class="col-sm-4 invoice-col"> To
-                      <address>
-                      <strong><?=$userData[0]['fld_fname']?>
-                          <?=$userData[0]['fld_mname']?>
-                           <?=$userData[0]['fld_lname'];?>
-                       </strong> <br>
-                     
-                     
-                      Email: <?=$userData[0]['fld_email']; ?>
-                     
-                      </address>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-4 invoice-col"> From
-                      <address>
-                      <strong>Admin</strong> <br>
-                      <?php  
-                      $adminAddress = getDefault();
-                      $countryData = getCountryName($adminAddress[0]['fld_country']);
-                    
-                      if (!empty($adminAddress)) { ?> 
-                      <?=$adminAddress[0]['fld_address1']; ?> <br>
-                      <?=$adminAddress[0]['fld_address2']; ?><br>
-                      <?=$adminAddress[0]['fld_city']; ?>  <?=$countryData[0]['fld_CountryName']?>  <?=$adminAddress[0]['fld_zip']; ?><br>
-                      Phone: <?=$adminAddress[0]['fld_phone']; ?><br>
-                      Email: <?=$adminAddress[0]['fld_email']; ?>
-                       <?php }?>
-                      </address>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-4 invoice-col"> <b>Invoice : <?=str_pad($invoice[0]['fld_incident_id'],10,0,STR_PAD_LEFT)?></b> <br>
-                      <br>
-                      <b>Payment ID:</b> <?=$invoice[0]['fld_payment_id']?><br>
-                      <b>Payment Status:</b> <?=$invoice[0]['fld_payment_status']?> <br>
-<!--                      <b>Account:</b> 968-34567 -->
-                    </div>
-                    <!-- /.col --> 
+                      <div class="col-sm-4 invoice-col"> To
+                          <address>
+                              <strong><?= $userData[0]['fld_fname'] ?>
+                                  <?= $userData[0]['fld_mname'] ?>
+                                  <?= $userData[0]['fld_lname']; ?>
+                              </strong> <br>
+
+                              Email: <?= $userData[0]['fld_email']; ?>
+
+                          </address>
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-sm-4 invoice-col"> From
+                          <address>
+                              <strong>Admin</strong> <br>
+                              <?php
+                              $adminAddress = getDefault();
+                              $countryData = getCountryName($adminAddress[0]['fld_country']);
+
+                              if (!empty($adminAddress)) {
+                                  ?> 
+                                  <?= $adminAddress[0]['fld_address1']; ?> <br>
+                                  <?= $adminAddress[0]['fld_address2']; ?><br>
+                                  <?= $adminAddress[0]['fld_city']; ?>  <?= $countryData[0]['fld_CountryName'] ?>  <?= $adminAddress[0]['fld_zip']; ?><br>
+                                  Phone: <?= $adminAddress[0]['fld_phone']; ?><br>
+                                  Email: <?= $adminAddress[0]['fld_email']; ?>
+<?php } ?>
+                          </address>
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-sm-4 invoice-col"> <b>Invoice : <?= str_pad($invoice[0]['fld_incident_id'], 10, 0, STR_PAD_LEFT) ?></b> <br>
+                          <br>
+                          <b>Payment ID:</b> <?= $invoice[0]['fld_payment_id'] ?><br>
+                          <b>Payment Status:</b> <?= $invoice[0]['fld_payment_status'] ?> <br>
+                          <!--                      <b>Account:</b> 968-34567 -->
+                      </div>
+                      <!-- /.col --> 
                   </div>
                   <!-- /.row --> 
                   <!-- Table row -->
@@ -129,19 +129,19 @@ if(!$uid){
                   </div>
                   <!-- /.row -->
                   <div class="row"> 
-                    <!-- accepted payments column -->
-                    <div class="col-xs-6">
-                      <p class="lead">Payment Methods:</p>
-                      <img src="<?=base_url()?>assets/images/visa.png" alt="Visa"> <img src="<?=base_url()?>assets/images/mastercard.png" alt="Mastercard"> <img src="<?=base_url()?>assets/images/american-express.png" alt="American Express"> <img src="<?=base_url()?>assets/images/paypal.png" alt="Paypal">
-                      <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;"><?=$invoice[0]['fld_description']?> </p>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-xs-6">
-<!--                      <p class="lead">Amount Due 2/22/2014</p>-->
-                      <div class="table-responsive">
-                        <table class="table">
-                          <tbody>
-                            <tr>
+                      <!-- accepted payments column -->
+                      <div class="col-xs-6">
+                          <p class="lead">Payment Methods:</p>
+                          <img src="<?= base_url() ?>assets/images/visa.png" alt="Visa"> <img src="<?= base_url() ?>assets/images/mastercard.png" alt="Mastercard"> <img src="<?= base_url() ?>assets/images/american-express.png" alt="American Express"> <img src="<?= base_url() ?>assets/images/paypal.png" alt="Paypal">
+                          <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;"><?= $invoice[0]['fld_description'] ?> </p>
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-xs-6">
+  <!--                      <p class="lead">Amount Due 2/22/2014</p>-->
+                          <div class="table-responsive">
+                              <table class="table">
+                                  <tbody>
+                                      <tr>
 
 <!--                            <tr>
                               <th>Tax (9.3%)</th>
@@ -151,15 +151,15 @@ if(!$uid){
                               <th>Shipping:</th>
                               <td>$0.00</td>
                             </tr>-->
-                            <tr>
-                              <th>Total:</th>
-                              <td><?=$invoice[0]['fld_total']?> <small><?=$invoice[0]['fld_currency']?></small></td>
-                            </tr>
-                          </tbody>
-                        </table>
+                                      <tr>
+                                          <th>Total:</th>
+                                          <td><?= $invoice[0]['fld_total'] ?> <small><?= $invoice[0]['fld_currency'] ?></small></td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
                       </div>
-                    </div>
-                    <!-- /.col --> 
+                      <!-- /.col --> 
                   </div>
                   <!-- /.row --> 
                   <!-- this row will not appear when printing -->

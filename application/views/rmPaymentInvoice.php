@@ -81,7 +81,7 @@ switch ($product[0]['fld_plan_type']) {
 <div class="col-md-6 col-md-offset-3 ">
   <div class="msgConterer">
     <div class="texhara">Payment!</div>
-    <p>Customer has paid the amount of $<?=number_format($getBlance[1], 0, '.', ',')?> for the Incident (<a target="_blank" href="<?=base_url()?>dashboard/incident_preview/<?=encode($product[0]['fld_id'])?>"><?=$product[0]['fld_inci_title']?></a>) which is sucessfully completed. Choose any of the following payment method to pay the amount</p>
+    <p>Customer has paid the amount of $<?=number_format($getBlance[1], 0, '.', ',')?> for the Incident (<a target="_blank" href="<?=base_url()?>superadmin/incident_preview/<?=encode($product[0]['fld_id'])?>"><?=$product[0]['fld_inci_title']?></a>) which is sucessfully completed. Choose any of the following payment method to pay the amount</p>
   </div>
   <div class="formBoxRating">
   <form id="rmPaymentFrm" method="get">
@@ -107,7 +107,7 @@ switch ($product[0]['fld_plan_type']) {
       </div>
       <div class="col-md-6">
         <label>Incident title:</label>
-        <a target="_blank" href="<?=base_url()?>dashboard/incident_preview/<?=encode($product[0]['fld_id'])?>"><?=$product[0]['fld_inci_title']?></a>
+        <a target="_blank" href="<?=base_url()?>superadmin/incident_preview/<?=encode($product[0]['fld_id'])?>"><?=$product[0]['fld_inci_title']?></a>
         <br>
         <label>Package type:</label>
         <?=$lblPlan?>
@@ -130,7 +130,7 @@ switch ($product[0]['fld_plan_type']) {
       </div>
       
       <div class="col-md-6">
-        <label>Amount paied by customer:</label> $ <?=number_format($getBlance[1], 0, '.', ',')?>
+        <label>Amount paid by customer:</label> $ <?=number_format($getBlance[1], 0, '.', ',')?>
       </div>
       
       <?php 
