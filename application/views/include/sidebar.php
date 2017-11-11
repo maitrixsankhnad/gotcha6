@@ -48,12 +48,20 @@
                 <?php if($user[0]['fld_user_type'] == 3){?>
                     <li><a href="<?=base_url()?>dashboard/update_incident">Incidents Update</a></li>
                 <?php }?>
+                   
                 <?php //if($user[0]['fld_user_type'] == 2){?>
 <!--                    <li><a href="<?=base_url()?>dashboard/assigned_incident">Assigned Incident</a></li>-->
                 <?php //}?>                
               <!--li><a href="<?=base_url()?>dashboard/plans">Plans</a></li-->
             </ul>
           </li>
+          <li><a><i class="lnr lnr-cart"></i> Payment History <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                       
+                      <li><a href="<?=base_url()?>dashboard/payments">Payments History</a></li>
+                       
+                    </ul>
+                </li> 
           <li><a><i class="lnr lnr-cog"></i> Settings <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
               <li><a href='<?=$isRegistration ? current_url() : base_url().'dashboard/profile'?>'>

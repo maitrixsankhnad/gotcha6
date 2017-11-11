@@ -336,5 +336,26 @@ class Dashboard extends CI_Controller {
         $userData['smeDetails'] = $this->common_model->getAll(array("fld_isDeleted" => '0',"fld_incident_id" => $id),'','tbl_incident_sme','all','','fld_rm_id',array(UID));
         $this->load->view('track_smelist', $userData);
     }
+    
+    public function payments(){    	
+        $userData['user'] = $this->fullUserData();
+        if ($userData['user'][0]['fld_user_type'] == '0') {
+       	    $userData['payment'] = $this->common_model->getAll(array("fld_uid" => UID),'','tbl_payments');
+        }else {
+            $userData['payment'] = $this->common_model->getAll(array("fld_uid" => UID),'','tbl_admin_payments');  
+        }
+        $this->load->view('user_payment_history',$userData);
+    }
+    
+    public function invoice($pid){
+        $pid = decode($pid);
+        $userData['user'] = $this->fullUserData();
+        if ($userData['user'][0]['fld_user_type'] == '0') {
+           $userData['invoice'] = $this->common_model->getAll(array('fld_id'=>$pid),'','tbl_payments');
+        }else{
+           $userData['invoice'] = $this->common_model->getAll(array('fld_id'=>$pid),'', 'tbl_admin_payments');   
+        }
+        $this->load->view('user_payment_invoice',$userData);
+    }
 
 }
