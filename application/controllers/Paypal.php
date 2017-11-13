@@ -67,15 +67,44 @@ class Paypal extends CI_Controller
 		}else{
 			echo 'Sucessfully Paid!!';	
 		}
+                 
 	}
 	
+       
+    
 	function success($tid=''){
 		$data['tid'] = $tid;
 		$id = decode($tid);
 		$data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
-		$this->load->view('paypal/success', $data);
+                $this->load->view('paypal/success', $data);
+                $iid = $data['payment'][0]['fld_incident_id'];
+                $paymentId  = $data['payment'][0]['fld_payment_id'];
+                $paymentAmount = $data['payment'][0]['fld_total'];
+                $paymentDate = $data['payment'][0]['fld_createdDt'];
+                $this->sendPaymentMail($id , $iid, $paymentId ,$paymentAmount, $paymentDate);
 	}
 	
+        public function sendPaymentMail($id ,$iid,$paymentId,$paymentAmount, $paymentDate) {
+        if ($iid) {            
+            $userData = userInfo(UID);
+	    $this->load->helper('email_helper');
+            
+            $data['case'] = 'payment';
+            
+            $data['amount'] =  $paymentAmount;
+            $data['TransactionId'] = $paymentId;
+            $data['fld_createdDt'] = $paymentDate;
+            $data['payId']         = $id;
+            $data['incidentid'] = $iid;
+            $data['name']       = $userData[0]['fld_fname'];
+            
+            $emailConfig['subject'] = 'Incident Payment - ' . LOGO_NAME;
+            $emailConfig['to_email'] = $userData[0]['fld_email'];
+           
+            sendEmail($data, $emailConfig);          
+        }
+    }
+    
 	function cancel(){
 		$this->load->view('paypal/cancel');
 	}

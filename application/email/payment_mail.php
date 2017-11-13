@@ -1,5 +1,9 @@
 <?php
-$message = '
+ $paymentDate =date('dS M Y | H:i A', strtotime($data['fld_createdDt']));
+ $incidentData = get_assigned_incident_data($data['incidentid']);
+         
+           $iTtitle    =  $incidentData[0]->fld_inci_title;;
+ $message = '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
@@ -133,7 +137,7 @@ $message = '
 							
 							<div style="line-height: 30px;">
 	        					<multiline>
-	        						Hello guest !
+	        						Hello '.$data['name'].' !
 	        					</multiline>
 							</div>
         				</td>
@@ -153,12 +157,12 @@ $message = '
 				        					<multiline>
 				        						THANK YOU FOR YOUR PAYMENT!! 
                                                                                         <br>
-                                                                                        Your payment has been completed successfully for <span style="color: #1c2029;"> 3000$</span>  dated on - 654654654
+                                                                                        Your payment has been completed successfully for <span style="color: #1c2029;"> $'. $data['amount'] .'</span>  dated on - '.$paymentDate.'
                                                                                   
                                                                                         <br>
-                                                                                    Transaction Id :  <span style="color: #1c2029;"> 4HX04617JY4184738</span>
+                                                                                    Transaction Id :  <span style="color: #1c2029;"> '.$data['TransactionId'].'</span>
                                                                                         <br>
-                                                                                    Incident Title:  <span style="color: #1c2029;"> Cisco Switches Netwroking</span>
+                                                                                    Incident Title:  <span style="color: #1c2029;"> <a href="'.base_url().'dashboard/incident_preview/'.encode($data['incidentid']).'" target=_blank>('.$iTtitle.')</a> </span>
                                                                                       
 
 				        					</multiline>
@@ -184,7 +188,7 @@ $message = '
 	                					<!-- ======= main section button ======= -->
 	                					
 		                    			<div style="line-height: 24px;">
-			                    			<a href="" style="color: #ffffff; text-decoration: none;"><singleline>Check Invoice details</singleline></a> 
+			                    			<a href="'.base_url().'dashboard/invoice/ '.encode($data['payId']).'" style="color: #ffffff; text-decoration: none;"><singleline> Check Invoice details</a></singleline></a> 
 		                    			</div>
 		                    		</td>
 		                    		

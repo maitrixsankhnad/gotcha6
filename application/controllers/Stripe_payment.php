@@ -129,9 +129,35 @@ class Stripe_payment extends CI_Controller
 		}else{
 			$data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
 			$this->load->view('paypal/success', $data);
+                        $iid = $data['payment'][0]['fld_incident_id'];
+                        $paymentId  = $data['payment'][0]['fld_payment_id'];
+                        $paymentAmount = $data['payment'][0]['fld_total'];
+                        $paymentDate = $data['payment'][0]['fld_createdDt'];
+                        $this->sendPaymentMail($id , $iid, $paymentId ,$paymentAmount, $paymentDate);
 		}
     }
 	
+    
+    public function sendPaymentMail($id ,$iid,$paymentId,$paymentAmount, $paymentDate) {
+        if ($iid) {            
+            $userData = userInfo(UID);
+	    $this->load->helper('email_helper');
+            
+            $data['case'] = 'payment';
+            
+            $data['amount'] =  $paymentAmount;
+            $data['TransactionId'] = $paymentId;
+            $data['fld_createdDt'] = $paymentDate;
+            $data['payId']         = $id;
+            $data['incidentid'] = $iid;
+            $data['name']       = $userData[0]['fld_fname'];
+            
+            $emailConfig['subject'] = 'Incident Payment - ' . LOGO_NAME;
+            $emailConfig['to_email'] = $userData[0]['fld_email'];
+           
+            sendEmail($data, $emailConfig);          
+        }
+    }
 	public function byAdmin(){
 		$iid = decode($this->input->get('iid'));
 		$rid = decode($this->input->get('rid'));

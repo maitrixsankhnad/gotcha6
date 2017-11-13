@@ -34,8 +34,11 @@ if (!function_exists('sendEmail')) {
             case 'new_incident':
                 include(APPPATH . 'email/new_incident.php');
                 break;
-			case 'incident_Accpt_Decline':
+	    case 'incident_Accpt_Decline':
                 include(APPPATH . 'email/incident_Accpt_Decline.php');
+                break;
+            case 'payment':
+                include(APPPATH . 'email/payment_mail.php');
                 break;
             case 2:
                 $case;
