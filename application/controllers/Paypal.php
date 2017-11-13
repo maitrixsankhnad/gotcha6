@@ -149,9 +149,15 @@ class Paypal extends CI_Controller
 		if(isset($_SESSION['paymentProcess'])){
 			unset($_SESSION['paymentProcess']);
 			$payID = $this->common_model->saveData("tbl_admin_payments",$data);
-			$tblIncUser = $usertype == '0' ? 'tbl_incident_rm':'tbl_incident_sme';
+			//$tblIncUser = $usertype == '0' ? 'tbl_incident_rm':'tbl_incident_sme';
 			//$this->common_model->updateData("fld_incident_id",$incidentID,array('fld_isPaid'=>'0'),$tblIncUser);
-		}
+                        if($userType == '0'){
+                         $this ->common_model->updateRmpaid($iid, $paidTo);   
+                        }else {
+                            $this ->common_model->updateSMEPaid($iid, $paidTo); 
+                        }
+                       
+                }
 		if($payID !=''){
 			header("location:".base_url()."paypal/successPayment/".encode($payID)."");
 		}else{

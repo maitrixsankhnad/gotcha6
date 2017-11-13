@@ -74,8 +74,13 @@ class Stripe_payment extends CI_Controller
 				$data['fld_user_type'] = $usertype;
 				$data['fld_uid'] = $userIDP;
 				$payID = $this->common_model->saveData("tbl_admin_payments",$data);
-				$tblIncUser = $usertype == '0' ? 'tbl_incident_rm':'tbl_incident_sme';
+				//$tblIncUser = $usertype == '0' ? 'tbl_incident_rm':'tbl_incident_sme';
 				//$this->common_model->updateData("fld_incident_id",$incidentID,array('fld_isPaid'=>'0'),$tblIncUser);
+                                if($usertype == '0'){
+                                    $this ->common_model->updateRmpaid($incidentID, $userIDP);   
+                                   }else {
+                                       $this ->common_model->updateSMEPaid($incidentID, $userIDP); 
+                                }
 			}else{
 				$payID = $this->common_model->saveData("tbl_payments",$data);
 				$this->common_model->updateData("fld_id",$incidentID,array('fld_isPaid'=>'0'),'tbl_incident');
