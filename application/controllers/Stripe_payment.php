@@ -24,6 +24,7 @@ class Stripe_payment extends CI_Controller
 			$data['iid'] = $this->input->get('iid');
 			$data['user'] = $this->common_model->getAll(array("fld_isDeleted" => 0,"fld_status" => 0, "fld_id" => UID),'','tbl_user');
 			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0,"fld_isPaid" => 1, "fld_id" => $id),'','tbl_incident');
+			$data['usertype'] = 0;
 			if(count($data['product'])>0){
 				$this->load->view('strip', $data);
 			}else{
@@ -39,11 +40,19 @@ class Stripe_payment extends CI_Controller
 		try {
 			Stripe::setApiKey('sk_test_joA604sBfMeBKuif483lUNyB');
 			$incidentID = decode($this->input->post('iid'));
+			$userIDP = decode($this->input->post('uid'));
+			$usertype = $this->input->post('usertype');
 			$incidentInfo = $this->common_model->getAll(array("fld_id" => $incidentID, "fld_isDeleted" => '0' ),'','tbl_incident');		
-			$getBlance = getBalanceDueAmt($incidentID, TRUE, TRUE);
-			$getBlance = (explode('~',$getBlance));	
+			if(AID){
+				$amtPaymnt = $this->input->post('amt');
+			}else{
+				$getBlance = getBalanceDueAmt($incidentID, TRUE, TRUE);
+				$getBlance = (explode('~',$getBlance));	
+				$amtPaymnt = $getBlance[1];	
+			}
+			
 			$charge = Stripe_Charge::create(array(
-				"amount" => str_replace( ',', '', $getBlance[1]),
+				"amount" => str_replace( ',', '', $amtPaymnt),
 				"currency" => "USD",
 				"card" => $this->input->post('access_token'),
 				"description" => "Stripe Payment"
@@ -51,17 +60,26 @@ class Stripe_payment extends CI_Controller
 			// this line will be reached if no error was thrown above
 			$data = array(
 				'fld_uid' => UID,
+				'fld_currency' => strtoupper($charge->currency),
 				'fld_incident_id' => $incidentID,
 				'fld_payment_id' => $charge->id,
 				'fld_payment_status' => 'Completed',
-				'fld_total' => $charge->amount,
-				'fld_currency' => strtoupper($charge->currency),
+				'fld_total' => $charge->amount,					
 				'fld_description' => $charge->description,
 				'fld_createdDt' => date('Y-m-d H:i:s')
 			);
-			
-			$payID = $this->common_model->saveData("tbl_payments",$data);
-			$this->common_model->updateData("fld_id",$incidentID,array('fld_isPaid'=>'0'),'tbl_incident');
+			if(AID){
+				$data['fld_auid'] = AID;
+				$data['fld_uid'] = $userIDP;
+				$data['fld_user_type'] = $usertype;
+				$data['fld_uid'] = $userIDP;
+				$payID = $this->common_model->saveData("tbl_admin_payments",$data);
+				$tblIncUser = $usertype == '0' ? 'tbl_incident_rm':'tbl_incident_sme';
+				//$this->common_model->updateData("fld_incident_id",$incidentID,array('fld_isPaid'=>'0'),$tblIncUser);
+			}else{
+				$payID = $this->common_model->saveData("tbl_payments",$data);
+				$this->common_model->updateData("fld_id",$incidentID,array('fld_isPaid'=>'0'),'tbl_incident');
+			}
 			if ($payID) {
 				echo json_encode(array('status' => 200, 'success' => 'Payment successfully completed.','tid' =>encode($payID)));
 				exit();
@@ -98,8 +116,15 @@ class Stripe_payment extends CI_Controller
     public function success($tid=''){
         $data['tid'] = $tid;
 		$id = decode($tid);
-	    $data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
-		$this->load->view('paypal/success', $data);
+		if(AID){
+			$data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_admin_payments');
+			$data['product'] = $this->common_model->getAll(array("fld_id" => $data['payment'][0]['fld_incident_id']),'','tbl_incident');
+			$data['user'] = $this->common_model->getAll(array("fld_id" => $data['payment'][0]['fld_uid']),'','tbl_user');
+			$this->load->view('paypal/success_admin', $data);
+		}else{
+			$data['payment'] = $this->common_model->getAll(array("fld_id" => $id),'','tbl_payments');
+			$this->load->view('paypal/success', $data);
+		}
     }
 	
 	public function byAdmin(){
@@ -110,6 +135,8 @@ class Stripe_payment extends CI_Controller
 		if($iid){
 			$data['user'] = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $rid),'','tbl_user');
 			$data['product'] = $this->common_model->getAll(array("fld_isDeleted" => 0, "fld_id" => $iid),'','tbl_incident');
+			$data['paynow'] = $paynow;
+			$data['usertype'] = $usertype;
 			if(count($data['product'])>0){
 				$this->load->view('strip', $data);
 			}else{

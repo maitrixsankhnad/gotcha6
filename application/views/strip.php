@@ -39,10 +39,8 @@ switch ($product[0]['fld_plan_type']) {
 	default:
 		exit;
 }
-if(isset($_GET['usertype'])){
-	if($_GET['usertype'] == 1){
-		$servLevl = 'SME';
-	}
+if($usertype == '1'){
+	$servLevl = 'SME';
 }
 ?>
 <!DOCTYPE html>
@@ -69,11 +67,7 @@ if(isset($_GET['usertype'])){
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
           <li> <a class="backRating" href="<?=base_url()?>">Back</a> </li>
-          <?php if(isset($_SESSION['UID'])): ?>
           <li> <a href="<?=base_url()?>process/logout">Log Out</a> </li>
-          <?php else : ?>
-          <li> <a href="<?=base_url()?>login">Login</a> </li>
-          <?php endif; ?>
           </li>
         </ul>
       </div>
@@ -129,7 +123,11 @@ if(isset($_GET['usertype'])){
         <?=$lblPlan1?>
       </div>
       <div class="col-md-6">
+        <?php if(AID){?>
+        <label>Payable Amount:</label> $<?=$paynow?>
+        <?php } else {?>
         <label>Due Amount:</label> $<?=number_format($getBlance[1], 0, '.', ',')?>
+        <?php } ?>
       </div>
       <div class="clearfix"></div>
       <hr />
@@ -137,6 +135,9 @@ if(isset($_GET['usertype'])){
     </form>
   
     <form method="POST" id="payment-form" class="form-inline stripPayFrm">
+    	<?php if(AID){ ?>
+    	<input type="hidden" class="userID" value="<?=$this->input->get('rid')?>" />
+		<?php } ?>
       <span class="payment-errors"></span>
       
       <div class="alert alert-danger errorMeser">
@@ -163,7 +164,7 @@ if(isset($_GET['usertype'])){
         </tr>
         <tr>
           <td>Amount</td>
-          <td colspan="3"><input type="text" class="form-control" value="" required></td>
+          <td colspan="3"><input type="text" class="form-control amountS" value="<?=UID ? $getBlance[1] : $paynow?>" <?=UID ? 'disabled' : ''?> required></td>
         </tr>
       </table>
       <div class="text-center"><br><br>
@@ -216,7 +217,7 @@ if(isset($_GET['usertype'])){
         } else {
             $.ajax({
                 url: '<?=base_url('stripe_payment/process');?>',
-                data: {access_token: response.id, iid: '<?=$this->input->get('iid');?>'},
+                data: {access_token: response.id, iid: '<?=$this->input->get('iid');?>',amt: $('.amountS').val(),uid: $('.userID').val(),usertype:<?=$usertype?> },
                 type: 'POST',
                 dataType: 'JSON',
                 success: function(response){
