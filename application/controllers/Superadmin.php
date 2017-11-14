@@ -77,11 +77,16 @@ class Superadmin extends CI_Controller {
     /* Incident Preview */
     public function incident_preview($id='')
     {
+        $data = $this->fullAdminData();
+        if($data){
         $id = decode($id);
-        $adminData['admin'] = $this->fullAdminData();
+        $adminData['admin'] = $data;
         $adminData['inci'] = $this->admin_model->getincident($id);
         $adminData['rm_id'] = $this->admin_model->getRmId($id);
         $this->load->view('admin_incident_preview',$adminData);
+        }else{
+         redirect(base_url().'superadmin/login');	
+	}
     }
 	
 	public function all_self_assessment(){    	

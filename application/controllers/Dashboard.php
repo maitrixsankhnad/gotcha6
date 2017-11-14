@@ -253,9 +253,10 @@ class Dashboard extends CI_Controller {
     /* Incident Preview */
 
     public function incident_preview($id = '') {
-
+        $data = $this->fullUserData();
+        if ($data) {
         $id = decode($id);
-        $userData['user'] = $this->fullUserData();
+        $userData['user'] = $data;
         $userData['inci'] = $this->user_model->getincident($id);
         $userData['rm_id'] = $this->user_model->getRmInformation($id);
         // get incident message threads
@@ -266,6 +267,9 @@ class Dashboard extends CI_Controller {
         } else {
             echo 'Sorry No Record Found';
         }
+        }else{
+           redirect(base_url());  
+         }
     }
 
     /* Decline incident */
