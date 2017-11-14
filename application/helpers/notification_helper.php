@@ -40,6 +40,14 @@ if(! function_exists('setNotification')){
 				$message  = $data['isDecliened'] ? 'Incident Declined -'.$data['incTitle']:'Incident Accepted -'.$data['incTitle'];
 				
                 break;
+            
+                case 'incidentStartComplete':
+				$userID   = UID;
+				$targetID = $data['tid'];
+				$suportID = $data['sid'];
+				$message  = $data['isStart'] ? 'Incident Start -'.$data['incTitle']:'Incident Completed -'.$data['incTitle'];
+				
+                break;
             default:
                 exit;
         }

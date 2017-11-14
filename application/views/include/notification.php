@@ -55,7 +55,18 @@ foreach($activityList as $activityData){
 			$nHeading  = 'Incident Status';
 			$nMessage  = $activityData->fld_message;
 			break;  
-                        
+                
+                case 'incidentStartComplete':
+                if($aid){
+                        $innerUrl = "superadmin";
+                    }else{
+                         $innerUrl = "dashboard";
+                    }
+	        $nURL = base_url().''.$innerUrl.'/incident_preview/'.encode($nSuptID);
+		$nImage = base_url().'uploads/notification/default.png';
+                $nHeading  = 'Incident Status ';
+                $nMessage  = $activityData->fld_message;
+                break;
 		default:
 			exit;
 	}

@@ -1129,12 +1129,22 @@ class Process extends CI_Controller {
 			$data['fld_incident_end_time'] = date("Y-m-d H:i:s", time());
 			$tbleName = 'tbl_incident';
 			$process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
+                        $isStart = '';
         }else{
 			$data = array('fld_status' => 5);
 			$data['fld_incident_start_time'] = date("Y-m-d H:i:s", time());
 			$tbleName = 'tbl_incident';
 			$process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
-        }        
+                        $isStart = 'start';
+        } 
+                
+                $incidentInfo = get_assigned_incident_data($id);
+                $activityData['uid'] = UID;
+                $activityData['tid'] = $incidentInfo[0]->fld_uid;
+                $activityData['sid'] =  $id;
+                $activityData['incTitle'] = $incidentInfo[0]->fld_inci_title;
+                $activityData['isStart'] = $isStart;
+                setActivity('incidentStartComplete', $activityData);
         echo json_encode(array('id' => $process));
     }
     
