@@ -41,6 +41,13 @@ if(! function_exists('setNotification')){
 				
                 break;
             
+                case 'SMEincidentAcptDecl':
+				$userID   = UID;
+				$targetID = $data['tid'];
+				$suportID = $data['sid'];
+				$message  = $data['isSMEDeclined'] ? 'Incident Declined By SME -'.$data['incTitle']:'Incident Accepted By SME-'.$data['incTitle'];
+				
+                break;
                 case 'incidentStartComplete':
 				$userID   = UID;
 				$targetID = $data['tid'];

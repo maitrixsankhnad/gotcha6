@@ -107,7 +107,7 @@ if(!AID){
                        }   
                     ?>
                     <tr>
-                      <td><a href="<?=base_url()?>dashboard/incident_preview/<?=encode($rmInci[0]['fld_id']); ?>" target="_blank">
+                      <td><a href="<?=base_url()?>superadmin/incident_preview/<?=encode($rmInci[0]['fld_id']); ?>" target="_blank">
                         <?=truncate($rmInci[0]['fld_inci_title'],50)?></a></td>
                       
                       <td><?=date('dS M Y | H:i A',strtotime($rmInci[0]['fld_createdDt']))?></td>

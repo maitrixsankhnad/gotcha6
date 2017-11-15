@@ -821,12 +821,24 @@ class Process extends CI_Controller {
                 if (decode($param) == '2') {
                     $data['fld_isDeleted'] = 1;
                     $data['fld_status'] = 2;
+                    $isSMEDeclined = 'Declined';
                     $this->common_model->updateData(array('fld_incident_id' => $id, 'fld_sme_id' => UID), '', $data, 'tbl_incident_sme');
                 } else if (decode($param) == '0') {
                     $data['fld_status'] = 0;
                     $this->common_model->updateData(array('fld_incident_id' => $id, 'fld_sme_id' => UID), '', $data, 'tbl_incident_sme');
+                     $isSMEDeclined = '';
                     echo json_encode(array('id' => '1'));
                 }
+                $incidentInfo = get_assigned_incident_data($id);
+                $rmData       = getAssignedRMID($id);
+                //print_r($rmData);
+                $activityData['uid'] = UID;
+                $activityData['tid'] = $rmData[0]['fld_rm_id'];
+                $activityData['sid'] =  $id;
+                $activityData['incTitle'] = $incidentInfo[0]->fld_inci_title;
+                $activityData['isSMEDeclined'] = $isSMEDeclined;
+                setActivity('SMEincidentAcptDecl', $activityData);
+                
                 exit;
             default:
                 exit;
