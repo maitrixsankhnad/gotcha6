@@ -6,8 +6,6 @@ class CustomProcess extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('admin_model');
-		$this->load->model('common_model');
 	}
 	public function userPreview($uid){
 		$uid = decode($uid);
@@ -128,6 +126,8 @@ class CustomProcess extends CI_Controller {
 		$smeList = $this->common_model->getPartial('fld_uid','tbl_user_service_tag',array(),array(),'','fld_uid','fld_serviceTag_id',$onlyServiceID);
 		if(count($smeList)>0){
 			$allSMEID = array_column($smeList, 'fld_uid');
+			$selectedSMEID = $this->common_model->getAll(array('fld_incident_id'=>$iid, 'fld_isDeleted'=>'0'),'','tbl_incident_sme');
+			$selectedSMEID = array_column($selectedSMEID, 'fld_sme_id');
 			$smeDetail = $this->common_model->getAll(array('fld_approved'=>'0', 'fld_isDeleted'=>'0', 'fld_status'=>'0'),'','tbl_user','all','','fld_id',$allSMEID);
 		}else{
 			$smeDetail = array();	
@@ -159,13 +159,14 @@ class CustomProcess extends CI_Controller {
 					$statusClass = $smeDetailFULL['fld_activity'] == '0'? 'success' : 'default';
 					$statusSME = $smeDetailFULL['fld_activity'] == '0'? 'Online' : 'Offline';
 					$smeID = "'".encode($smeDetailFULL['fld_id'])."'";
+					$isSelected = in_array($smeDetailFULL['fld_id'], $selectedSMEID) ? 'checked':'';
 					$profileImg = base_url().'uploads/profile/thumbs/'.$smeDetailFULL['fld_picture'];
                                         $selectSMEData = getSelectedInciSME($iid);
                                         // echo $selectSMEData[0]['fld_sme_id'];  
                                         $usetData .= '<tr class="">
 						  <td class="text-center"><div class="radio">
 							  <label>
-								<input type="checkbox" class="flat smeListCh"  name="sme_id[]"  value="'.encode($smeDetailFULL['fld_id']).'" >
+								<input '.$isSelected.' type="checkbox" class="flat smeListCh"  name="sme_id[]"  value="'.encode($smeDetailFULL['fld_id']).'" >
 							  </label>
 							</div></td>
 						  <td><img width="50" src="'.$profileImg.'" />
