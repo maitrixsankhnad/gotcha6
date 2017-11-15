@@ -4888,3 +4888,37 @@ a.homebox {
 .notifydelete{
    float: right;
 }
+.userAddSlorR{
+  background-color: #1abb9c;
+  color: #fff;
+  display: inline-block;
+  height: 50px;
+  padding: 19px;
+  width: 50px;
+}
+
+.userAddSlorR:hover, .userAddSlorR:focus{
+	background-color:#169F85;
+	color:#fff;
+}
+.endSarlr [class*='selM']{
+	position:relative;
+}
+.strSarlr .dlttimeSlror {
+	display:none;
+}
+.endSarlr .dlttimeSlror {
+	background-color: #f01a24;
+	border-radius: 50%;
+	color: #fff;
+	cursor: pointer;
+	height: 20px;
+	padding: 3px 0 0 5px;
+	position: absolute;
+	right: -14px;
+	top: 8px;
+	width: 20px;
+}
+.endSarlr .dlttimeSlror:hover {
+	background-color:#A71515;
+}

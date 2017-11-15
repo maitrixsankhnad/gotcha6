@@ -1,8 +1,7 @@
 <?php 
 include_once('commonFunction.php');
 $this->load->view('userchat');
-$uid = $this->session->userdata('UID');
-if(!$uid){
+if(!UID){
 	redirect(base_url());
 	exit;
 }
@@ -76,7 +75,7 @@ $isNotificationPanl = 'true';
                 </div>
                 <div class="col-md-9 col-sm-9 col-xs-12">
                   <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                      <input type="hidden" class="notiFD" value="1">
+                    <input type="hidden" class="notiFD" value="1">
                     <ul class="nav nav-tabs bar_tabs tabTopFlow" role="tablist">
                       <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Recent Activity</a> </li>
                       <!--                      <li role="presentation"><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Projects Worked on</a> </li>-->
@@ -86,18 +85,19 @@ $isNotificationPanl = 'true';
                       <?php } ?>
                     </ul>
                     <div class="tab-content">
-                        
                       <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
                         <!-- start recent activity -->
-                        <button  class="btn btn-sm btn-primary notifydelete" onclick="clearAllNotifyActivity(this, '')" type="button" data-original-title="Clear All"/>Clear All</button>
-                      <div class="clearfix"></div>
+                        <button  class="btn btn-sm btn-primary notifydelete" onclick="clearAllNotifyActivity(this, '')" type="button" data-original-title="Clear All"/>
+                        Clear All
+                        </button>
+                        <div class="clearfix"></div>
                         <ul class="messages">
                           <?php 
 						  	if(count($activityList) > 0){
 						  		echo $nActivityLog;
 						  ?>
                           <?php }else{ ?>
-                        	<li> <span class="message">No record found</span> </li>
+                          <li> <span class="message">No record found</span> </li>
                           <?php } ?>
                         </ul>
                         <!-- end recent activity --> 
@@ -262,7 +262,7 @@ $isNotificationPanl = 'true';
                                     <div class="form-group col-lg-4">
                                       <label>Linkedin Link</label>
                                       <div class="boxIconInput">
-                                        <input type="text" name="fld_microsoft" class="form-control" value="<?=$user[0]['fld_microsoft']; ?>">
+                                        <input type="text" name="fld_linkedin" class="form-control" value="<?=$user[0]['fld_linkedin']; ?>">
                                         <span class="fa fa-linkedin iconRight" aria-hidden="true"></span></div>
                                     </div>
                                     <div class="form-group col-lg-4">
@@ -311,77 +311,31 @@ $isNotificationPanl = 'true';
                                     <div class="col-md-2">
                                       <label class="form-label">Availability</label>
                                       <br>
-                                      <a onClick="appendNewHour()" href="javascript:void(0);"><i class="fa fa-plus" aria-hidden="true"></i> Add More Time Slot</a> </div>
-                                    <div class="col-md-10 ">
-                                      <div class="row boxReadernr">
-                                          <?php $timeslot = scheduleSlot($user[0]['fld_id']);
-                                             if(!empty($timeslot)){                           
-                                            foreach($timeslot as $timeslotData){
-                                                 $startHour = date('h', strtotime($timeslotData['fld_start_time'])); 
-                                                 $startMinute = date('i', strtotime($timeslotData['fld_start_time'])); 
-                                                
-                                                 $endHour = date('h', strtotime($timeslotData['fld_end_time'])); 
-                                               
-                                                 $endMinute = date('i', strtotime($timeslotData['fld_end_time']));  
-                                        
-                                         // print_r($timeslot);
-                                          
-                                             ?>  <?php  }} ?>  
-                                        <div class="form-group col-md-6">
-                                          <label>Start Time</label>
-                                          <div class="row">
-                                            <div class="col-xs-6">
-                                              <select title="Hours" name="starthours[]"  id ="hrstart" class="hrsP" data-size="5" data-width="100%" data-live-search="true">
-                                              </select>
-                                            </div>
-                                            <div class="col-xs-6">
-                                              <select title="Minuts"   name="startminutes[]" class="mintsP" data-size="5" data-width="100%" data-live-search="true">
-                                              </select>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="form-group col-lg-6">
-                                          <label>End Time</label>
-                                          <div class="row">
-                                            <div class="col-xs-6">
-                                              <select title="Hours"  name="endhours[]" class="hrsP" data-size="5" data-width="100%" data-live-search="true">
-                                              </select>
-                                            </div>
-                                            <div class="col-xs-6">
-                                              <select title="Minuts"  name="endminutes[]" class="mintsP" data-size="5" data-width="100%" data-live-search="true">
-                                              </select>
-                                            </div>
-                                          </div>
-                                        </div>
-                                          
-                                      
-                                        <div style="margin-bottom:10px;" class="clearfix"></div>
+                                      <a onClick="addnewTimeSlotDropdown()" data-toggle="tooltip" title="Add more time slot" class="userAddSlorR" href="javascript:void(0);"><i class="fa fa-plus" aria-hidden="true"></i></a></div>
+                                    <div class="col-md-10">
+                                      <div class="row boxFinArR">
+                                        <div class="col-sm-6 strSarlr"><label>Start Time</label></div>
+                                        <div class="col-sm-6 endSarlr"><label>End Time</label></div>
                                       </div>
-                                      <div class="row setBoxNewHor"> </div>
-                                      
                                     </div>
                                   </div>
-                                   <?php } ?>
+                                  <?php } ?>
                                   <div class="clearfix"></div>
                                   <?php if ($user_type==2){?>
                                   <div class="row">
                                     <div class="form-group inlineBlockFull col-md-12">
                                       <label class="form-label col-md-2 col-xs-3">Service Tags</label>
                                       <div class="col-md-10 col-xs-9">
-                                       
                                         <select name="servicetags[]"  class="form-control selectpicker" title="Select Services" data-live-search="true" multiple data-size="8">
-                                            <?php
-
-                                                if($user[0]['fld_user_type'] == '2'){
-                                                        $userServiceTag = get_user_service_tag_name($user[0]['fld_id']);
-                                                }
-                                                $userTagList = array_column($userServiceTag, 'fld_serviceTag_id');
-                                                foreach($serviceTag as $serviceTagData){
-                                                        $isService = in_array($serviceTagData['fld_id'], $userTagList) ? 'selected':'';
-                                                        echo '<option '.$isService.' value="'.$serviceTagData['fld_id'].'" >'.$serviceTagData['fld_serviceName'].'</option>';
-                                                }
+                                          <?php
+											$userServiceTag = get_user_service_tag_name($user[0]['fld_id']);
+											$userTagList = array_column($userServiceTag, 'fld_serviceTag_id');
+											foreach($serviceTag as $serviceTagData){
+												$isService = in_array($serviceTagData['fld_id'], $userTagList) ? 'selected':'';
+												echo '<option '.$isService.' value="'.$serviceTagData['fld_id'].'" >'.$serviceTagData['fld_serviceName'].'</option>';
+											}
                                         ?>
-                                          </select>
+                                        </select>
                                       </div>
                                     </div>
                                   </div>
@@ -391,8 +345,7 @@ $isNotificationPanl = 'true';
                                     <div class="form-group col-md-12">
                                       <label class="form-label col-md-2 col-xs-3" for="comment">Market yourself: Tell Us About You</label>
                                       <div class="col-md-10 col-xs-9">
-                                        <textarea class="form-control" rows="5" name="fld_about" id="comment"> <?=$user[0]['fld_about']; ?>
-</textarea>
+                                        <textarea class="form-control" rows="5" name="fld_about" id="comment"><?=trim($user[0]['fld_about']); ?></textarea>
                                       </div>
                                     </div>
                                   </div>
@@ -430,7 +383,7 @@ $isNotificationPanl = 'true';
 				$id = 'section'.$i;
                                 ?>
                               <tr id="section<?=$i;?>">
-                                  <td class="disableMouse"><select class="selectpicker" disabled data-size="8" name="servicetags" data-width="100%" data-live-search="true" data-actions-box="true">
+                                <td class="disableMouse"><select class="selectpicker" disabled data-size="8" name="servicetags" data-width="100%" data-live-search="true" data-actions-box="true">
                                     <?php 
                                        
                                         foreach ($serviceTag as $tag){
@@ -451,16 +404,14 @@ $isNotificationPanl = 'true';
                                         <option>4</option>
                                         <option>5</option>
                                       </select>
-                                        <input type="hidden" class="bkpRatVal" value="<?=$uTag['fld_rating']?>" />
+                                      <input type="hidden" class="bkpRatVal" value="<?=$uTag['fld_rating']?>" />
                                     </div>
                                   </div></td>
                                 <td class="disableMouse"><input class="form-control" placeholder="Certification Number" value="<?=$uTag['fld_certification_no']?>" name="certification_no" type="text"></td>
                                 <td class="disableMouse"><div class="col-md-12 form-group">
                                     <input type="text" class="form-control certificationDate has-feedback-left" value="<?=date("d/m/Y",strtotime($uTag['fld_certification_date']))?>" name="certification_date" />
                                     <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span> </div></td>
-                                <td>
-                                    <button class="btn btn-sm btn-danger" onClick="deleteCommon(this,'<?=encode($uTag['fld_id'])?>','userServTag')"  type="button"><i class="fa fa-trash-o"></i> Delete</button>
-                                    
+                                <td><button class="btn btn-sm btn-danger" onClick="deleteCommon(this,'<?=encode($uTag['fld_id'])?>','userServTag')"  type="button"><i class="fa fa-trash-o"></i> Delete</button>
                                   <button type="button"  onClick="editTRsection('<?="section".$i?>')"class="btn btn-primary btn-xs changetxt"><i class="fa fa-floppy-o" aria-hidden="true"></i> Edit</button>
                                   
                                   <!--                                    <button type="submit" style="display:none;" class="btn btn-primary btn-xs"><i class="fa fa-floppy-o" aria-hidden="true"></i> Update</button>--></td>
@@ -496,19 +447,7 @@ $isNotificationPanl = 'true';
 <!-- Custom Theme Scripts --> 
 <script src="<?=base_url() ?>assets/build/js/custom.js"></script> 
 <script src="<?=base_url() ?>assets/js/jquery.barrating.min.js"></script> 
-<script>
-timeSlot=0; 
-	boxHourMint=$('.boxReadernr').html(); 
-       // var temp = "10";
-       // alert(temp);
-	$(function (){
-		getHoursMinuts();
-               
-                
-		$('.inlineBlockFull select.mintsP, .inlineBlockFull select.hrsP').selectpicker();
-//                $("#hrstart > [value=" + temp + "]").attr("selected", "selected");
-	});
-</script> 
+ 
 <script>
     $(function (){
         function ratingEnable(target) {
@@ -543,8 +482,25 @@ timeSlot=0;
         for(var i = 1; i<= $('.boxInputFull tr').length; i++){
             ratingEnable(i);
         }
-
-
+		<?php
+			foreach($timeslots as $timeslotsData){
+				
+				$stToHRS = explode(':',$timeslotsData['fld_start_time']);
+				$endToHRS = explode(':',$timeslotsData['fld_end_time']);
+				
+		?>
+			var tSID = addnewTimeSlotDropdown();
+			$('.strSarlr .selH'+tSID+' select').selectpicker('val', '<?=$stToHRS[0]?>');
+			$('.strSarlr .selM'+tSID+' select').selectpicker('val', '<?=$stToHRS[1]?>');
+			$('.endSarlr .selH'+tSID+' select').selectpicker('val', '<?=$endToHRS[0]?>');
+			$('.endSarlr .selM'+tSID+' select').selectpicker('val', '<?=$endToHRS[1]?>');
+			
+		<?php
+			}
+			if(count($timeslots) <=0){
+		?>
+			addnewTimeSlotDropdown();
+		<?php } ?>
     });
 </script>
 </body>

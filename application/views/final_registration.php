@@ -49,14 +49,14 @@
             <ul class="nav side-menu">
               <li><a href="<?=base_url()?>dashboard/complete_registration/<?=$user_type==2 ? 'sme' : 'rm'; ?>"> <i class="fa fa-unlock"></i> Complete Profile</a></li>
               <?php
-                            if($user_type == 2){
-                                if($user[0]['fld_username']){?>
+				if($user_type == 2){
+					if($user[0]['fld_username']){?>
               <li><a href="<?=base_url()?>dashboard/self_assessment"> <i class="fa fa-unlock"></i> Self Assesement</a></li>
               <?php }else{ ?>
               <li><a onClick="alertToCompleteForm()" href="javascript:;"> <i class="fa fa-lock"></i> Self Assesement</a></li>
               <?php }
-                            }
-                            ?>
+				}
+				?>
             </ul>
           </div>
         </div>
@@ -101,7 +101,7 @@
                 <div class="form-group col-sm-12 text-center">
                   <label for="uploadImage" class="control-label uploadImagePreview"> 
                   	<img width="150px" class="previewImgSrc" src="<?=$profilePic?>" />
-                    <span class="uploadInstruction">Profile Picture</span> 
+                    <span class="uploadInstruction" style="padding-top:40%">Profile Picture</span> 
                     <span class="uploadOverLay"></span> 
                   </label>
                   <input type="file" class="uploadImageInput" id="uploadImage" accept=".gif,.jpg,.jpeg,.JPG,.JPEG,.png," name="fld_picture" size="20" value="<?=$user[0]['fld_picture']; ?>">
@@ -182,42 +182,16 @@
               <div class="clearfix"></div>
               <br>
               <?php } ?>
-              <div class="form-group col-md-2 inlineBlockFull">
+              <div class="form-group inlineBlockFull col-md-12">
                 <div class="col-md-2">
                   <label class="form-label">Availability</label>
                   <br>
-                  <a onClick="appendNewHour()" href="javascript:;"><i class="fa fa-plus" aria-hidden="true"></i> Add More Time Slot</a> </div>
-                <div class="col-md-10 ">
-                  <div class="row boxReadernr">
-                    <div class="form-group col-md-3">
-                      <label>Start Time</label>
-                      <div class="row">
-                        <div class="col-xs-6">
-                          <select title="Hours" name="starthours[]" class="hrsP" data-size="5" data-width="100%" data-live-search="true">
-                          </select>
-                        </div>
-                        <div class="col-xs-6">
-                          <select title="Minuts" name="startminutes[]" class="mintsP" data-size="5" data-width="100%" data-live-search="true">
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-group col-lg-3">
-                      <label>End Time</label>
-                      <div class="row">
-                        <div class="col-xs-6">
-                          <select title="Hours" name="endhours[]" class="hrsP" data-size="5" data-width="100%" data-live-search="true">
-                          </select>
-                        </div>
-                        <div class="col-xs-6">
-                          <select title="Minuts" name="endminutes[]" class="mintsP" data-size="5" data-width="100%" data-live-search="true">
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div style="margin-bottom:10px;" class="clearfix"></div>
+                  <a onClick="addnewTimeSlotDropdown()" data-toggle="tooltip" title="Add more time slot" class="userAddSlorR" href="javascript:void(0);"><i class="fa fa-plus" aria-hidden="true"></i></a></div>
+                <div class="col-md-8">
+                  <div class="row boxFinArR">
+                    <div class="col-sm-6 strSarlr"><label>Start Time</label></div>
+                    <div class="col-sm-6 endSarlr"><label>End Time</label></div>
                   </div>
-                  <div class="row setBoxNewHor"> </div>
                 </div>
               </div>
               <div class="clearfix"></div>
@@ -227,10 +201,13 @@
                 <div class="col-md-8 col-sm-8 col-xs-9">
                   <select class="selectpicker" name="servicetags[]" data-width="100%" data-live-search="true" data-actions-box="true" multiple data-selected-text-format="count > 3" required>
                     <?php
-                                                foreach ($serviceTag as $tag){
-                                                    echo '<option data-subtext="' . $tag['fld_manufacturer'] . '" value="' . $tag['fld_id'] . '">' . $tag['fld_serviceName'] . '</option>';
-                                                }
-                                                ?>
+						$userServiceTag = get_user_service_tag_name($user[0]['fld_id']);
+						$userTagList = array_column($userServiceTag, 'fld_serviceTag_id');
+						foreach ($serviceTag as $tag){
+							$isService = in_array($tag['fld_id'], $userTagList) ? 'selected':'';
+							echo '<option '.$isService.' data-subtext="' . $tag['fld_manufacturer'] . '" value="' . $tag['fld_id'] . '">' . $tag['fld_serviceName'] . '</option>';
+						}
+					?>
                   </select>
                 </div>
               </div>
@@ -239,8 +216,7 @@
               <div class="form-group col-md-12">
                 <label class="form-label col-md-2 col-sm-2 col-xs-3" for="comment">Market yourself: Tell Us About You</label>
                 <div class="col-md-8 col-sm-8 col-xs-9">
-                  <textarea class="form-control" rows="5" name="fld_about" id="comment" required> <?=$user[0]['fld_about']; ?>
-</textarea>
+                  <textarea class="form-control" rows="5" name="fld_about" id="comment" required><?=trim($user[0]['fld_about']); ?></textarea>
                 </div>
               </div>
               <br>
@@ -260,14 +236,27 @@
 <script src="<?=base_url() ?>assets/js/validate.min.js"></script> 
 <script src="<?=base_url() ?>assets/build/js/custom.js"></script> 
 <script>
-    timeSlot=0;
-    boxHourMint=$('.boxReadernr').html();
-    //alert(boxHourMint);
-    $(function (){
-        getHoursMinuts();
-
-        $('.inlineBlockFull select.mintsP, .inlineBlockFull select.hrsP').selectpicker();
-    });
+    <?php
+		if($user_type == 2){
+		foreach($timeslots as $timeslotsData){
+			
+			$stToHRS = explode(':',$timeslotsData['fld_start_time']);
+			$endToHRS = explode(':',$timeslotsData['fld_end_time']);
+			
+	?>
+		var tSID = addnewTimeSlotDropdown();
+		$('.strSarlr .selH'+tSID+' select').selectpicker('val', '<?=$stToHRS[0]?>');
+		$('.strSarlr .selM'+tSID+' select').selectpicker('val', '<?=$stToHRS[1]?>');
+		$('.endSarlr .selH'+tSID+' select').selectpicker('val', '<?=$endToHRS[0]?>');
+		$('.endSarlr .selM'+tSID+' select').selectpicker('val', '<?=$endToHRS[1]?>');
+		
+	<?php
+		}
+		
+		if(count($timeslots) <=0){
+	?>
+		addnewTimeSlotDropdown();
+	<?php }} ?>
 </script>
 </body>
 </html>

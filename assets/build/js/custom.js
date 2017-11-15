@@ -5915,37 +5915,41 @@ function check_userID_exists(selfObj) {
         }
     });
 }
-function getHoursMinuts(timeSlot) {
-    var hours = '';
+
+function addnewTimeSlotDropdown(){
+	var hours = '';
     var minuts = '';
+	var num = Math.floor(Math.random() * 90000) + 10000;
     for (var h = 0; h <= 23; h++) {
-        hours += '<option value="'+h+'">' + ('0' + h).slice(-2) + '</option>';
+        hours += '<option value="' + ('0' + h).slice(-2) + '">' + ('0' + h).slice(-2) + '</option>';
     }
     for (var m = 0; m <= 60; m++) {
-        minuts += '<option value="'+m+'">' + ('0' + m).slice(-2) + '</option>';
+        minuts += '<option value="' + ('0' + m).slice(-2) + '">' + ('0' + m).slice(-2) + '</option>';
         m += 4;
     }
-    $('.selectBoxt-'+timeSlot+' select.hrsP').html(hours);
-    $('.selectBoxt-'+timeSlot+' select.mintsP').html(minuts);
+	
+	var timeTexHTL = '<div class="row">' +
+		'<div class="col-sm-6 selH'+num+'">' +
+		  '<select title="Hour" name="starthours[]" data-size="5" data-width="100%">' +
+			hours +
+		  '</select>' +
+		'</div>' +
+		'<div class="col-sm-6 selM'+num+'">' +
+		  '<select title="Minut" name="starthours[]" data-size="5" data-width="100%">' +
+			minuts +
+		  '</select>' +
+		'<span data-sltid="'+num+'" class="dlttimeSlror"><i class="fa fa-times"></i></span></div>' +
+	  '</div>';
+	  $('.boxFinArR > div').append(timeTexHTL);
+	  $('.selH'+num+' select, .selM'+num+' select').selectpicker();
+	  return num;
 }
 
+$('.endSarlr').on('click','.dlttimeSlror',function(){
+	$('.selM'+$(this).data("sltid")).remove();
+	$('.selH'+$(this).data("sltid")).remove();
+});
 
-function appendNewHour() {
-	timeSlot++;
-	var se = 'selectBoxt-'+timeSlot;
-	var box_class = 'remove_Box'+timeSlot;
-    $('.setBoxNewHor').append('<div class="selectBoxt-'+timeSlot+'">'+boxHourMint+'</div>').append('<a href="#" class="remove_Box'+timeSlot+'" id="removebox'+timeSlot+'" border="2" onClick="removeBox(\''+se+'\',\''+box_class+'\')">'+'<i class="fa fa-minus" aria-hidden="true"></i>'
-        +'</a>');
-    getHoursMinuts(timeSlot);
-    $('.selectBoxt-'+timeSlot+' select.mintsP, .selectBoxt-'+timeSlot+' select.hrsP').val('');
-}
-
-// remove timeslot 
-function removeBox(varDivID,varBoxclass) {
-    $("."+varDivID).remove();
-    $("."+varBoxclass).remove();
-
-}
 
 $('.certificationDate').daterangepicker({
 	singleDatePicker: true,

@@ -287,17 +287,6 @@ class Process extends CI_Controller {
             }
 
             $userServicetags = $this->input->post('servicetags');
-
-//            if (isset($userServicetags)) {
-//                $servicestagsId = $this->user_model->checkUsertagsId($uid);
-//                if (count($servicestagsId) > 0) {
-//                    $this->user_model->delete_user_servicetags($uid);
-//                    $this->user_model->insert_user_servicetags($uid, $userServicetags);
-//                } else {
-//                    $this->user_model->insert_user_servicetags($uid, $userServicetags);
-//                }
-//            }
-            
             $userServicList = $this->common_model->getAll(array('fld_uid'=>$uid),'','tbl_user_service_tag');
 			$onlyServicList = array_column($userServicList, 'fld_serviceTag_id');
 			
@@ -311,28 +300,28 @@ class Process extends CI_Controller {
 				$this->user_model->insert_user_servicetags($uid, $newServiceS);
 			}
         }
-
         $id = $this->user_model->update_Sme_User($uid, $dataval);
-        $startslots_hours = $this->input->post('starthours');
-        $startslots_minutes = $this->input->post('startminutes');
-        $endlots_hours = $this->input->post('endhours');
-        $endslots_minutes = $this->input->post('endminutes');
-        $startslots_time = array();
-        $endslots_time = array();
-        //echo (count($startslots_hours));
-
-        if (count($startslots_hours) > 0) {
-            for ($i = 0; $i < count($startslots_hours); $i++) {
-                if ($startslots_hours[$i] != 0) {
-                    $startslots_time[] = $startslots_hours[$i] . ':' . $startslots_minutes[$i];
-                }
-                if ($endlots_hours[$i] != 0) {
-                    $endslots_time[] = $endlots_hours[$i] . ':' . $endslots_minutes[$i];
-                }
-            }
-            $this->user_model->delete_user_slottime($uid);
-            $this->user_model->insert_timeslots($uid, $startslots_time, $endslots_time);
-        }
+		
+		
+        $totalHrs = $this->input->post('starthours');
+		$this->user_model->delete_user_slottime($uid);
+		if(count($totalHrs) > 0){
+			$endCont = count($totalHrs)/2;
+			$starthours = array_slice($totalHrs, 0, $endCont);
+			$endhours = array_slice($totalHrs, $endCont);
+			$j=0;
+			for($i=0; $i<($endCont/2); $i++){
+				$stH = array_slice($starthours, $j,2);
+				$endH = array_slice($endhours, $j,2);
+				$j +=2;
+				$startHR = $stH[0]. ':' .$stH[1];
+				$endHR = $endH[0]. ':' .$endH[1];
+				if(($stH[0] || $stH[1]) && ($endH[0] || $endH[1])){
+					$this->user_model->insert_sme_timeslot($uid, $startHR, $endHR);
+				}
+			}
+		}
+		
         if ($this->input->post('fld_user_type') == '3') {
             $serviceLevelType = $this->input->post('expert');
             $this->user_model->updateData("fld_id", UID, array("fld_user_type" => 3, "fld_service_level" => $serviceLevelType), "tbl_user");

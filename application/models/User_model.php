@@ -128,6 +128,10 @@ class User_model extends CI_Model {
             }
         }
     }
+	function insert_sme_timeslot($uid, $startslots_time, $endslots_time) {
+        $sql = "insert into tbl_schedule_slot(fld_uid,fld_start_time,fld_end_time) values('" . $uid . "','" . $startslots_time. "','" . $endslots_time. "')";
+        $query = $this->db->query($sql);
+    }
 
     function delete_user_slottime($uid) {
         $sql = "delete  from tbl_schedule_slot where fld_uid= '" . $uid . "'";

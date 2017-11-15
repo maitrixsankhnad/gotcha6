@@ -82,9 +82,9 @@ class Dashboard extends CI_Controller {
         $userData['user'] = $this->fullUserData();
         $userData['serviceTag'] = $this->user_model->getAllServicestags();
         $userData['country'] = $this->user_model->getcountry();
-        //$userData['timeslots'] = $this->user_model->getTimeSlots();
-        $userData['userTag'] = $this->user_model->checkUsertagsId(UID);
-        $userData['inci'] = $this->user_model->getincident('', UID); // All Incident List
+        $userData['timeslots'] = $this->common_model->getAll(array("fld_uid" => UID), '', 'tbl_schedule_slot');
+		$userData['userTag'] = $this->user_model->checkUsertagsId(UID);
+		$userData['inci'] = $this->user_model->getincident('', UID); // All Incident List
         $this->load->view('profile', $userData);
     }
 
@@ -93,6 +93,7 @@ class Dashboard extends CI_Controller {
         if ($type == 'sme') {
             $userData['user_type'] = 2;
             $userData['serviceTag'] = $this->user_model->getAllServicestags();
+			$userData['timeslots'] = $this->common_model->getAll(array("fld_uid" => UID), '', 'tbl_schedule_slot');
         } else if ($type == 'rm') {
             $userData['user_type'] = 3;
         } else {
