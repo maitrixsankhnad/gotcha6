@@ -40,6 +40,39 @@ function clearAllNotifyActivity(selfObj,isAdmin){
 	
 }
 
+function deleteActivity(selfObj,id){
+    
+	    swal({
+		title: "Are you sure?",
+		text: "Deleted Activity !!",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Yes, I am sure!",
+		cancelButtonText: "No, cancel it!"
+              }).then(function () {
+            $.ajax({
+                        url: base_url+'process/deleteActivity/'+id,
+                        type: 'POST',
+                        success: function(data){
+
+                            swal("Deleted!", "The record has been deleted.", "success");
+                                    
+                                    if($('.notiFD').val()){
+                                            $(selfObj).closest('li').remove();
+                                    }
+
+                        }
+    });
+
+    }, function (dismiss) {
+        if (dismiss === 'cancel') {
+            swal("Cancelled", "This record is in safe :)", "error");
+		}
+    });	
+	
+}
+
 
 function findIncidentList(val){
 	$('#preloader').fadeIn();

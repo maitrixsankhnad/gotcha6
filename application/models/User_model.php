@@ -83,10 +83,10 @@ class User_model extends CI_Model {
     }
 
     function insert_user_servicetags($uid, $userServicetags) {
-		foreach($userServicetags as $userServiceStor){
-			$sql = "insert into tbl_user_service_tag (fld_uid,fld_serviceTag_id) values('" . $uid . "','" . $userServiceStor . "')";
-			$query = $this->db->query($sql);
-		}
+        foreach ($userServicetags as $userServiceStor) {
+            $sql = "insert into tbl_user_service_tag (fld_uid,fld_serviceTag_id) values('" . $uid . "','" . $userServiceStor . "')";
+            $query = $this->db->query($sql);
+        }
     }
 
     function checkUsertagsId($uid) {
@@ -100,9 +100,9 @@ class User_model extends CI_Model {
         $query = $this->db->query($sql);
         return $query;
     }
-	
-	function deleteCustmUserServic($uid, $services) {
-        $sql = "delete  from tbl_user_service_tag where fld_uid = ".$uid." AND fld_serviceTag_id in(".$services.")";
+
+    function deleteCustmUserServic($uid, $services) {
+        $sql = "delete  from tbl_user_service_tag where fld_uid = " . $uid . " AND fld_serviceTag_id in(" . $services . ")";
         $query = $this->db->query($sql);
         return $query;
     }
@@ -183,13 +183,14 @@ class User_model extends CI_Model {
         //echo $this->db->last_query();
         return $query->result();
     }
-    
-    function getincidentData($id = '', $uid = '', $status = '', $fld_isDeleted ='') {
+
+    function getincidentData($id = '', $uid = '', $status = '', $fld_isDeleted = '') {
         $sql = "select * from tbl_incident where fld_id= '" . $id . "' AND fld_status =0 AND fld_isDeleted =0 ";
         $query = $this->db->query($sql);
         //echo $this->db->last_query();
         return $query->result();
     }
+
     /* change the user type status after social login */
 
     function updateSocialUserStatus($id, $status) {
@@ -219,31 +220,41 @@ class User_model extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-	
-	function fatchNotfiCount($UID, $isAdmin = '') {
-		if($isAdmin != ''){
-        	$sql = "SELECT COUNT(fld_id) as notiCnt FROM `tbl_recent_activity` WHERE fld_status_admin = '0' AND fld_isAdmin = '0'";
-		}else{
-			$sql = "SELECT COUNT(fld_id) as notiCnt FROM `tbl_recent_activity` WHERE fld_status_user = '0' AND fld_target_id = ".$UID;
-		}
+
+    function fatchNotfiCount($UID, $isAdmin = '') {
+        if ($isAdmin != '') {
+            $sql = "SELECT COUNT(fld_id) as notiCnt FROM `tbl_recent_activity` WHERE fld_status_admin = '0' AND fld_isAdmin = '0'";
+        } else {
+            $sql = "SELECT COUNT(fld_id) as notiCnt FROM `tbl_recent_activity` WHERE fld_status_user = '0' AND fld_target_id = " . $UID;
+        }
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-	function updateNotReadP($UID, $isAdmin = '') {
-		if($isAdmin != ''){
-        	$sql = "UPDATE `tbl_recent_activity` SET `fld_status_admin` = '1' WHERE  `fld_status_admin` = '0' AND fld_isAdmin = '0'";
-		}else{
-			$sql = "UPDATE `tbl_recent_activity` SET `fld_status_user` = '1' WHERE  `fld_status_user` = '0' AND fld_target_id = ".$UID;
-		}
+
+    function updateNotReadP($UID, $isAdmin = '') {
+        if ($isAdmin != '') {
+            $sql = "UPDATE `tbl_recent_activity` SET `fld_status_admin` = '1' WHERE  `fld_status_admin` = '0' AND fld_isAdmin = '0'";
+        } else {
+            $sql = "UPDATE `tbl_recent_activity` SET `fld_status_user` = '1' WHERE  `fld_status_user` = '0' AND fld_target_id = " . $UID;
+        }
         $query = $this->db->query($sql);
     }
 
     function deleteAllNotify($UID, $isAdmin = '') {
-		if($isAdmin != ''){
-        	$sql = "UPDATE `tbl_recent_activity` SET `fld_status_admin` = '2' WHERE  `fld_status_admin` = '1' OR   `fld_status_admin` = '0'  AND fld_isAdmin = '0'";
-		}else{
-			echo $sql = "UPDATE `tbl_recent_activity` SET `fld_status_user` = '2' WHERE  `fld_status_user` = '1'  OR   `fld_status_user` = '0' AND fld_target_id = ".$UID;
-		}
+        if ($isAdmin != '') {
+            $sql = "UPDATE `tbl_recent_activity` SET `fld_status_admin` = '2' WHERE  `fld_status_admin` = '1' OR   `fld_status_admin` = '0'  AND fld_isAdmin = '0'";
+        } else {
+            echo $sql = "UPDATE `tbl_recent_activity` SET `fld_status_user` = '2' WHERE  `fld_status_user` = '1'  OR   `fld_status_user` = '0' AND fld_target_id = " . $UID;
+        }
+        $query = $this->db->query($sql);
+    }
+
+    function deleteActivity($UID, $id = '') {
+        if ($UID) {
+            echo $sql = "UPDATE `tbl_recent_activity` SET `fld_status_user` = '2' WHERE `fld_id` = '$id' AND `fld_status_user` = '1'  OR   `fld_status_user` = '0'";
+        } else {
+            $sql = "UPDATE `tbl_recent_activity` SET `fld_status_admin` = '2' WHERE `fld_id` = '$id' AND  `fld_status_admin` = '1' OR   `fld_status_admin` = '0'  AND fld_isAdmin = '0'";
+        }
         $query = $this->db->query($sql);
     }
 
@@ -315,7 +326,7 @@ class User_model extends CI_Model {
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-	
+
     /* Insert the data Into The Recent Activity table  */
 
     function insert_into_recent_activity($id, $type, $uid, $rm_id, $subtypeStatus, $status, $message) {
@@ -456,57 +467,57 @@ class User_model extends CI_Model {
         return $insert ? true : false;
     }
 
-    function getIncidentTrackToSME($id  = '',$rmid = '', $smeid = '') {
-        
+    function getIncidentTrackToSME($id = '', $rmid = '', $smeid = '') {
+
         $sql = "select * from tbl_track where `fld_rm_id` IN('$rmid') AND `fld_iid` = '$id' AND  fld_sme_id='" . $smeid . "' ";
         if ($id != '') {
             $sql .= " AND fld_iid = " . $id;
         }
         $sql .= " ORDER BY fld_id DESC";
-       // print_r($sql);
+        // print_r($sql);
         $query = $this->db->query($sql);
         return $query->result_array();
     }
-    
-    public function gettotalActiveIncidentUser($id){
-        $ids = join("','",$id); 
+
+    public function gettotalActiveIncidentUser($id) {
+        $ids = join("','", $id);
         $sql = "SELECT COUNT(fld_id) AS NoOfActiveIncident FROM `tbl_incident` WHERE `fld_id` IN ('$ids') AND `fld_isDeleted` = '0' AND `fld_status` = '5'";
         $query = $this->db->query($sql);
-        
+
         return $query->result();
     }
-    
-    public function gettotalCompleteIncidentUser($id){
-        $ids = join("','",$id); 
-        $sql = "SELECT COUNT(fld_id) AS NoOfCompleteIncident FROM tbl_incident WHERE fld_status =0 AND fld_isDeleted = 0 AND `fld_id` IN ('$ids')"; 
+
+    public function gettotalCompleteIncidentUser($id) {
+        $ids = join("','", $id);
+        $sql = "SELECT COUNT(fld_id) AS NoOfCompleteIncident FROM tbl_incident WHERE fld_status =0 AND fld_isDeleted = 0 AND `fld_id` IN ('$ids')";
         $query = $this->db->query($sql);
         return $query->result();
     }
-    
-     public function gettotalIncidentUser($id){
-        $ids = join("','",$id);   
-        $sql = "SELECT COUNT(fld_id) AS NumberOfIncident FROM tbl_incident WHERE `fld_id` IN ('$ids')"; 
+
+    public function gettotalIncidentUser($id) {
+        $ids = join("','", $id);
+        $sql = "SELECT COUNT(fld_id) AS NumberOfIncident FROM tbl_incident WHERE `fld_id` IN ('$ids')";
         $query = $this->db->query($sql);
         return $query->result();
     }
-    
-    public function gettotalActiveIncidentCustomer($id){
+
+    public function gettotalActiveIncidentCustomer($id) {
         $sql = "SELECT COUNT(fld_id) AS NoOfActiveIncident FROM `tbl_incident` WHERE `fld_uid` ='$id'  AND `fld_isDeleted` = '0' AND `fld_status` = '5'";
         $query = $this->db->query($sql);
         return $query->result();
     }
-    
-    public function gettotalCompleteIncidentCustomer($id){
-        $sql = "SELECT COUNT(fld_id) AS NoOfCompleteIncident FROM tbl_incident WHERE fld_status =0 AND fld_isDeleted = 0 AND `fld_uid` ='$id'"; 
+
+    public function gettotalCompleteIncidentCustomer($id) {
+        $sql = "SELECT COUNT(fld_id) AS NoOfCompleteIncident FROM tbl_incident WHERE fld_status =0 AND fld_isDeleted = 0 AND `fld_uid` ='$id'";
         $query = $this->db->query($sql);
         return $query->result();
     }
-    
-     public function gettotalIncidentCustomer($id){
-        $sql = "SELECT COUNT(fld_id) AS NumberOfIncident FROM tbl_incident WHERE `fld_uid` ='$id'"; 
+
+    public function gettotalIncidentCustomer($id) {
+        $sql = "SELECT COUNT(fld_id) AS NumberOfIncident FROM tbl_incident WHERE `fld_uid` ='$id'";
         $query = $this->db->query($sql);
-       // echo $this->db->last_query();
+        // echo $this->db->last_query();
         return $query->result();
     }
-    
+
 }

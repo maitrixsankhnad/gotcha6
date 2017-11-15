@@ -81,7 +81,7 @@ foreach($activityList as $activityData){
 					  <div class="message_date">
 						<h3 class="date text-error">'.date('dS',strtotime($nCrtDt)).'</h3>
 						<p class="month">'.date('M',strtotime($nCrtDt)).' / '.date('Y',strtotime($nCrtDt)).'</p>
-                                            <button class="btn btn-sm btn-default notifydelete"  type="button" data-placement="top" onclick="deleteCommon(this,\''.encode($nID).'\',\'activitymsgRemove\')" data-toggle="tooltip" data-original-title="Delete" aria-describedby="tooltip394113"><i class="fa fa-trash-o"></i></button>					  
+                                            <button class="btn btn-sm btn-default notifydelete"  type="button" data-placement="top"  onclick="deleteActivity(this,\''.encode($nID).'\')" data-toggle="tooltip" data-original-title="Delete" aria-describedby="tooltip394113"><i class="fa fa-trash-o"></i></button>					  
                                             </div>
 					  <div class="message_wrapper">
 						<h4 class="heading"><a href="'.$nURL.'" >'.$nHeading.'</a></h4>
