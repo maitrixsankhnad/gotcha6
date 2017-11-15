@@ -4888,6 +4888,7 @@ a.homebox {
 .notifydelete{
    float: right;
 }
+<<<<<<< HEAD
 .userAddSlorR{
   background-color: #1abb9c;
   color: #fff;
@@ -4922,3 +4923,8 @@ a.homebox {
 .endSarlr .dlttimeSlror:hover {
 	background-color:#A71515;
 }
+=======
+.boxCoverEnblDIsn{
+    position: relative;
+}
+>>>>>>> 8a9e86c6de0723e200cd53dc9e46312372818afd

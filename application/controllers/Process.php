@@ -50,7 +50,7 @@ class Process extends CI_Controller {
             return $uploadFileName;
         }
     }
-	
+
     public function register() {
 
         $data = array(
@@ -233,11 +233,11 @@ class Process extends CI_Controller {
             'fld_message' => $this->input->post('message'),
             'fld_uid' => UID
         );
-		
+
         $id = $this->common_model->addContact($data);
-		$activityData['uid'] = UID;
-		$activityData['sid'] = $id;		
-		setActivity('createContact', $activityData);
+        $activityData['uid'] = UID;
+        $activityData['sid'] = $id;
+        setActivity('createContact', $activityData);
         echo json_encode(array('id' => $id));
     }
 
@@ -299,6 +299,7 @@ class Process extends CI_Controller {
 				$userServicetags = $this->input->post('servicetags');
 				$this->user_model->insert_user_servicetags($uid, $newServiceS);
 			}
+
         }
         $id = $this->user_model->update_Sme_User($uid, $dataval);
 		
@@ -351,29 +352,30 @@ class Process extends CI_Controller {
         }
         echo json_encode(array('id' => 1));
     }
-	public function updateUserServiceTag() {
+
+    public function updateUserServiceTag() {
         $uid = decode($this->input->post('uid'));
         $servicetags = $this->input->post('servicetags');
         $rating = $this->input->post('rating');
         $certification_no = $this->input->post('certification_no');
         $certification_date = $this->input->post('certification_date');
-		$tempStatus = $this->input->post('status');
-		$status = explode(',', $tempStatus);
-		$this->user_model->delete_selfAssesment($uid);
-		if (count($servicetags) > 0) {
-			$data = array();
+        $tempStatus = $this->input->post('status');
+        $status = explode(',', $tempStatus);
+        $this->user_model->delete_selfAssesment($uid);
+        if (count($servicetags) > 0) {
+            $data = array();
             for ($i = 0; $i < count($servicetags); $i++) {
                 $certificationDate = date('Y-m-d', strtotime(str_replace('/', '-', $certification_date[$i])));
                 $data[] = array(
-					'fld_uid' => $uid,
-					'fld_serviceTag_id' => $servicetags[$i],
-					'fld_rating' => $rating[$i],
-					'fld_certification_no' => $certification_no[$i],
-					'fld_certification_date' => $certificationDate,
-					'fld_status' => $status[$i]
-				);
+                    'fld_uid' => $uid,
+                    'fld_serviceTag_id' => $servicetags[$i],
+                    'fld_rating' => $rating[$i],
+                    'fld_certification_no' => $certification_no[$i],
+                    'fld_certification_date' => $certificationDate,
+                    'fld_status' => $status[$i]
+                );
             }
-			$process = $this->common_model->bulkSaveData('tbl_user_service_tag', $data);
+            $process = $this->common_model->bulkSaveData('tbl_user_service_tag', $data);
         }
         echo json_encode(array('id' => 1));
     }
@@ -383,7 +385,7 @@ class Process extends CI_Controller {
         $process = $this->common_model->updateData("fld_id", $incidentID, array('fld_isRating' => '0'), 'tbl_incident');
         $data = array(
             'fld_uid' => UID,
-			'fld_incident_id' => $incidentID,
+            'fld_incident_id' => $incidentID,
             'fld_is_solved' => $this->input->post('solved'),
             'fld_rating' => $this->input->post('rating'),
             'fld_feedback' => $this->input->post('feedback'),
@@ -397,8 +399,8 @@ class Process extends CI_Controller {
     public function create_incident() {
         $incidentID = decode($this->input->post('incidentID'));
         $rejectRM = $this->input->post('rejectRM');
-		$iTtitle = $this->input->post('title');
-		$rmid = $this->input->post('rm_id');
+        $iTtitle = $this->input->post('title');
+        $rmid = $this->input->post('rm_id');
         $data = array(
             'fld_uid' => UID,
             'fld_inci_title' => $iTtitle,
@@ -437,52 +439,53 @@ class Process extends CI_Controller {
             );
             $this->common_model->saveData("tbl_incident_service", $data);
         }
-        
+
         $this->sendIncidentMail($rmid, $incident_id, $iTtitle, $isUpdate);
-        
+
         $activityData['tid'] = $rmid;
         $activityData['uid'] = UID;
-        $activityData['sid'] =  $incident_id;
+        $activityData['sid'] = $incident_id;
         $activityData['incTitle'] = $iTtitle;
         $activityData['isUpdate'] = $isUpdate;
         setActivity('incidentCreate', $activityData);
         echo $incident_id;
     }
-     
-    public function sendIncidentMail($rmid, $incident_id, $iTtitle, $isUpdate='') {
-        if ($incident_id) {            
+
+    public function sendIncidentMail($rmid, $incident_id, $iTtitle, $isUpdate = '') {
+        if ($incident_id) {
             $rmData = userInfo($rmid);
-	    $this->load->helper('email_helper');
+            $this->load->helper('email_helper');
             $data['case'] = 'new_incident';
             $data['isUpdate'] = $isUpdate;
             $data['incidentData'] = $iTtitle;
             $data['incidentid'] = $incident_id;
-            $emailConfig['subject'] = $isUpdate ? 'Updated Previous Incident':'New Incident Assigned to you - ' . LOGO_NAME;
+            $emailConfig['subject'] = $isUpdate ? 'Updated Previous Incident' : 'New Incident Assigned to you - ' . LOGO_NAME;
             $emailConfig['to_email'] = $rmData[0]['fld_email'];
-            sendEmail($data, $emailConfig);          
+            sendEmail($data, $emailConfig);
         }
     }
-	public function incidentAccptDeclineMail($iid, $isDeclined=''){
-		if ($iid){
-			$incidentInfo = get_assigned_incident_data($iid);
-			if($incidentInfo[0]->fld_email){
-				$toEmail = $incidentInfo[0]->fld_email;
-			}else{
-				$userData = userInfo($incidentInfo[0]->fld_uid);
-				$toEmail = $userData[0]['fld_email'];
-			}
-			//$rmID = getAssignedRMID($iid);            
-			$this->load->helper('email_helper');
+
+    public function incidentAccptDeclineMail($iid, $isDeclined = '') {
+        if ($iid) {
+            $incidentInfo = get_assigned_incident_data($iid);
+            if ($incidentInfo[0]->fld_email) {
+                $toEmail = $incidentInfo[0]->fld_email;
+            } else {
+                $userData = userInfo($incidentInfo[0]->fld_uid);
+                $toEmail = $userData[0]['fld_email'];
+            }
+            //$rmID = getAssignedRMID($iid);            
+            $this->load->helper('email_helper');
             $data['case'] = 'incident_Accpt_Decline';
             $data['isDeclined'] = $isDeclined;
             $data['incidentData'] = $incidentInfo[0]->fld_inci_title;
             $data['incidentid'] = $iid;
-            $emailConfig['subject'] = $isDeclined ? 'Incident Decliened':'Incident Accepted - ' . LOGO_NAME;
+            $emailConfig['subject'] = $isDeclined ? 'Incident Decliened' : 'Incident Accepted - ' . LOGO_NAME;
             $emailConfig['to_email'] = $toEmail;
-            sendEmail($data, $emailConfig);          
-        }	
-	}
-    
+            sendEmail($data, $emailConfig);
+        }
+    }
+
     public function logout() {
         $this->onoff('1');
         unset($_SESSION['AID']);
@@ -601,17 +604,17 @@ class Process extends CI_Controller {
         $rm_email = $this->user_model->getUserEmail($rm[0]['fld_rm_id']);
         $incident_detail = $this->user_model->getincident($data['val']);
         $customer_email = $this->user_model->getUserEmail($incident_detail[0]->fld_uid);
-       
+
 
         /* Insert data into recent activity  */
         $message = 'Incident-' . $incident_detail[0]->fld_inci_title . 'is assigned to' . $sme_accept_email[0]['fld_fname'];
         $this->user_model->insert_into_recent_activity($data['val'], 'incident_accepted_by_sme', $incident_detail[0]->fld_uid, $rm[0]['fld_rm_id'], UID, '0', $message);
         $subject = 'Sme Accept Incident!!';
         $toArray = array($rm_email[0]['fld_email'], $sme_accept_email[0]['fld_email'], $customer_email[0]['fld_email']);
-        
+
         //$this->load->helper('common_helper');
         send_mail($message, $toArray, 'mail_template', $subject);
-       
+
 
         echo json_encode(array('id' => 'done'));
     }
@@ -651,23 +654,23 @@ class Process extends CI_Controller {
     /* Manage Certificate */
 
     public function manageCertificate() {
-       
+
         $uid = decode($this->input->post('uid'));
         $servicetags = $this->input->post('servicetags');
         $rating = $this->input->post('rating');
         $certificate_num = $this->input->post('certificate_num');
         $certificatedate = $this->input->post('certificate_date');
         $certificationDate = date('Y-m-d', strtotime(str_replace('/', '-', $certificatedate)));
-            $data = array(
-                'fld_uid' => $uid,
-                'fld_serviceTag_id' => $servicetags,
-                'fld_rating' => $rating,
-                'fld_certification_no' => $certificate_num,
-                'fld_certification_date' => $certificationDate,
-                 );
-            
-              $this->common_model->updateData(array('fld_serviceTag_id' => $servicetags, 'fld_uid' => $uid), '', $data, 'tbl_user_service_tag');
-             echo json_encode(array('id' => 'done'));
+        $data = array(
+            'fld_uid' => $uid,
+            'fld_serviceTag_id' => $servicetags,
+            'fld_rating' => $rating,
+            'fld_certification_no' => $certificate_num,
+            'fld_certification_date' => $certificationDate,
+        );
+
+        $this->common_model->updateData(array('fld_serviceTag_id' => $servicetags, 'fld_uid' => $uid), '', $data, 'tbl_user_service_tag');
+        echo json_encode(array('id' => 'done'));
     }
 
     // Get RM Information 
@@ -771,49 +774,61 @@ class Process extends CI_Controller {
                 $data['fld_status'] = $param;
                 $tbleName = 'tbl_user';
                 break;
-			case 'userServTag':
+            case 'userServTag':
                 $data['fld_status'] = $param;
                 $tbleName = 'tbl_user_service_tag';
                 break;
-			case 'sAdmin':
+            case 'sAdmin':
                 $data['fld_status'] = $param;
                 $tbleName = 'tbl_admin';
                 break;
-			case 'package':
+            case 'package':
                 $data['fld_status'] = $param;
                 $tbleName = 'tbl_package';
-                break;	
+                break;
             case 'incidentAcptDecl':
                 if (decode($param) == '4') {
                     $data['fld_isDeleted'] = $isDecliened = 1;
                     $this->common_model->updateData(array('fld_incident_id' => $id, 'fld_rm_id' => UID), '', $data, 'tbl_incident_rm');
                     $data = array();
-                }else{
-					$isDecliened = '';	
-				}
+                } else {
+                    $isDecliened = '';
+                }
                 $data['fld_status'] = decode($param);
                 $tbleName = 'tbl_incident';
-		
+
                 $incidentInfo = get_assigned_incident_data($id);
                 $activityData['uid'] = UID;
                 $activityData['tid'] = $incidentInfo[0]->fld_uid;
-                $activityData['sid'] =  $id;
+                $activityData['sid'] = $id;
                 $activityData['incTitle'] = $incidentInfo[0]->fld_inci_title;
                 $activityData['isDecliened'] = $isDecliened;
                 setActivity('incidentAccptDecline', $activityData);
-                $this->incidentAccptDeclineMail($id,$isDecliened);
+                $this->incidentAccptDeclineMail($id, $isDecliened);
                 break;
 
             case 'SMEincidentAcptDecl':
                 if (decode($param) == '2') {
                     $data['fld_isDeleted'] = 1;
                     $data['fld_status'] = 2;
+                    $isSMEDeclined = 'Declined';
                     $this->common_model->updateData(array('fld_incident_id' => $id, 'fld_sme_id' => UID), '', $data, 'tbl_incident_sme');
                 } else if (decode($param) == '0') {
                     $data['fld_status'] = 0;
                     $this->common_model->updateData(array('fld_incident_id' => $id, 'fld_sme_id' => UID), '', $data, 'tbl_incident_sme');
+                     $isSMEDeclined = '';
                     echo json_encode(array('id' => '1'));
                 }
+                $incidentInfo = get_assigned_incident_data($id);
+                $rmData       = getAssignedRMID($id);
+                //print_r($rmData);
+                $activityData['uid'] = UID;
+                $activityData['tid'] = $rmData[0]['fld_rm_id'];
+                $activityData['sid'] =  $id;
+                $activityData['incTitle'] = $incidentInfo[0]->fld_inci_title;
+                $activityData['isSMEDeclined'] = $isSMEDeclined;
+                setActivity('SMEincidentAcptDecl', $activityData);
+                
                 exit;
             default:
                 exit;
@@ -821,6 +836,7 @@ class Process extends CI_Controller {
         $process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
         echo json_encode(array('id' => $process));
     }
+
     public function changeApproval($id, $param, $tblCode) {
         $id = decode($id);
         $data = array(
@@ -848,37 +864,33 @@ class Process extends CI_Controller {
             case 'usersList':
                 $tbleName = 'tbl_user';
                 break;
-			case 'userServTag':
-				$process = $this->common_model->deleteData('tbl_user_service_tag',array('fld_id'=>$id));
-				echo json_encode(array('id' => $process));
-				exit;
-              
-                 case 'activitymsgRemove':
+            case 'userServTag':
+                $process = $this->common_model->deleteData('tbl_user_service_tag', array('fld_id' => $id));
+                echo json_encode(array('id' => $process));
+                exit;
+
             
-             $process = $this->common_model->deleteData('tbl_recent_activity',array('fld_id'=>$id));
-				echo json_encode(array('id' => $process));
-				exit;                
             case 'package':
-             $tbleName = 'tbl_package';  
-             $process = $this->common_model->deleteData('tbl_package',array('fld_id'=>$id));
-				echo json_encode(array('id' => $process));
-				exit;
+                $tbleName = 'tbl_package';
+                $process = $this->common_model->deleteData('tbl_package', array('fld_id' => $id));
+                echo json_encode(array('id' => $process));
+                exit;
             case 'cancelIncident':
                 $tbleName = 'tbl_incident';
                 $data = array(
                     'fld_status' => '3'
                 );
                 break;
-			case 'rating':
+            case 'rating':
                 $tbleName = 'tbl_rating';
                 break;
-			case 'contact':
+            case 'contact':
                 $tbleName = 'tbl_contact';
                 break;
-                
-			case 'sAdmin':
-                $process = $this->common_model->deleteData('tbl_admin',array('fld_id'=>$id));
-				echo json_encode(array('id' => $process));
+
+            case 'sAdmin':
+                $process = $this->common_model->deleteData('tbl_admin', array('fld_id' => $id));
+                echo json_encode(array('id' => $process));
                 exit;
             default:
                 exit;
@@ -926,7 +938,7 @@ class Process extends CI_Controller {
         echo json_encode(array('result' => $result));
     }
 
-    public function updatesuperadminImage($isUser='') {
+    public function updatesuperadminImage($isUser = '') {
         $picture = $_FILES['profile']['name'];
         if ($picture) {
             $config['encrypt_name'] = TRUE;
@@ -936,16 +948,15 @@ class Process extends CI_Controller {
             $this->upload->initialize($config);
             if ($this->upload->do_upload('profile')) {
                 $fileData = $this->upload->data();
-                if($isUser ==''){
-					$tbl = 'tbl_admin';
-					$targetID = AID;
-					$data['fld_avtar'] = $fileData['file_name'];
-				}else{
-					$tbl = 'tbl_user';
-					$targetID = UID;
-					$data['fld_picture'] = $fileData['file_name'];
-				}
-				
+                if ($isUser == '') {
+                    $tbl = 'tbl_admin';
+                    $targetID = AID;
+                    $data['fld_avtar'] = $fileData['file_name'];
+                } else {
+                    $tbl = 'tbl_user';
+                    $targetID = UID;
+                    $data['fld_picture'] = $fileData['file_name'];
+                }
             } else {
                 exit;
             }
@@ -962,63 +973,62 @@ class Process extends CI_Controller {
             );
             $this->load->library('image_lib', $config1); //load library
             $this->image_lib->resize(); //generating thumb		
-			
+
             $process = $this->common_model->updateData("fld_id", $targetID, $data, $tbl);
         }
     }
 
-    
-
     // Add incident Message
-    public function inciMessage() {$iid = decode($this->input->post('id'));
-		$resume = $_FILES['fld_attached']['name'];
-		$status = $this->input->post('status');
-		$smechatid = decode($this->input->post('smechatid'));
-		$attcFler = '';
-		if ($resume) {
-			$config['encrypt_name'] = TRUE;
-			$config['upload_path'] = 'uploads/document/';
-			$config['allowed_types'] = 'pdf|doc|docx|txt';
-			$this->load->library('upload', $config);
-			$this->upload->initialize($config);
-			if ($this->upload->do_upload('fld_attached')) {
-				$fileData = $this->upload->data();
-				$attcFler = $fileData['file_name'];
-			}
-		}                
-		$data = array(
-			'fld_inciid' => $iid,
-			'fld_uid' => UID,
-			'fld_message' => $this->input->post('message'),
-			'fld_attached' => $attcFler,
-			'fld_smeid'=> $smechatid,
-			'fld_status'    => $status,
-			'fld_createdDt' => date("Y-m-d H:i:s", time()),
-		);
-		
-		
-		$id = $this->common_model->saveData("tbl_incident_message", $data);
-		
-		$rmID = getAssignedRMID($iid);
-		$inciData = $this->user_model->getincident($iid);
-		
-		$userData = userInfo(UID);
-		
-		if($userData[0]['fld_user_type'] == '0' || $userData[0]['fld_user_type'] == '2'){
-			$targetID = $rmID[0]['fld_rm_id'];
-		}else{
-			$targetID = $inciData[0]->fld_uid;
-		}
-		if($smechatid && $userData[0]['fld_user_type'] == '3'){
-			$targetID = $smechatid;
-		}
-		$activityData['tid'] = $targetID;
-		$activityData['uid'] = UID;
-		$activityData['sid'] =  $iid;
-		$activityData['incTitle'] = $inciData[0]->fld_inci_title;
-		setActivity('dropMessage', $activityData);
-		echo json_encode(array('id' => $id));
-	}
+    public function inciMessage() {
+        $iid = decode($this->input->post('id'));
+        $resume = $_FILES['fld_attached']['name'];
+        $status = $this->input->post('status');
+        $smechatid = decode($this->input->post('smechatid'));
+        $attcFler = '';
+        if ($resume) {
+            $config['encrypt_name'] = TRUE;
+            $config['upload_path'] = 'uploads/document/';
+            $config['allowed_types'] = 'pdf|doc|docx|txt';
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            if ($this->upload->do_upload('fld_attached')) {
+                $fileData = $this->upload->data();
+                $attcFler = $fileData['file_name'];
+            }
+        }
+        $data = array(
+            'fld_inciid' => $iid,
+            'fld_uid' => UID,
+            'fld_message' => $this->input->post('message'),
+            'fld_attached' => $attcFler,
+            'fld_smeid' => $smechatid,
+            'fld_status' => $status,
+            'fld_createdDt' => date("Y-m-d H:i:s", time()),
+        );
+
+
+        $id = $this->common_model->saveData("tbl_incident_message", $data);
+
+        $rmID = getAssignedRMID($iid);
+        $inciData = $this->user_model->getincident($iid);
+
+        $userData = userInfo(UID);
+
+        if ($userData[0]['fld_user_type'] == '0' || $userData[0]['fld_user_type'] == '2') {
+            $targetID = $rmID[0]['fld_rm_id'];
+        } else {
+            $targetID = $inciData[0]->fld_uid;
+        }
+        if ($smechatid && $userData[0]['fld_user_type'] == '3') {
+            $targetID = $smechatid;
+        }
+        $activityData['tid'] = $targetID;
+        $activityData['uid'] = UID;
+        $activityData['sid'] = $iid;
+        $activityData['incTitle'] = $inciData[0]->fld_inci_title;
+        setActivity('dropMessage', $activityData);
+        echo json_encode(array('id' => $id));
+    }
 
     public function getAllUserTABLE() {
         $pageNo = $this->input->post('id');
@@ -1060,7 +1070,7 @@ class Process extends CI_Controller {
         if (AID) {
             $uid = decode($this->input->post('uid'));
             $password = $this->input->post('password');
-			$userServicetags = $this->input->post('servicetags');
+            $userServicetags = $this->input->post('servicetags');
             $data = array(
                 'fld_fname' => $this->input->post('fname'),
                 'fld_mname' => $this->input->post('mname'),
@@ -1076,7 +1086,7 @@ class Process extends CI_Controller {
                 'fld_username' => $this->input->post('username'),
                 'fld_user_type' => $this->input->post('userType'),
                 'fld_email' => $this->input->post('email'),
-				'fld_service_level' => $this->input->post('serviceLevel')
+                'fld_service_level' => $this->input->post('serviceLevel')
             );
             if ($password != '') {
                 $data['fld_password'] = md5($password);
@@ -1089,68 +1099,66 @@ class Process extends CI_Controller {
             if (!empty($resume)) {
                 $data['fld_resume'] = $this->uploadImg('resume', 'uploads/resume/', '', '', '', 'doc');
             }
-			
-			
-			$userServicList = $this->common_model->getAll(array('fld_uid'=>$uid),'','tbl_user_service_tag');
-			$onlyServicList = array_column($userServicList, 'fld_serviceTag_id');
-			
-			$newServiceD = array_diff($onlyServicList, $userServicetags);
-			$newServiceS = array_diff($userServicetags, $onlyServicList);
-			if(count($newServiceD)>0){
-				$this->user_model->deleteCustmUserServic($uid, implode(',', $newServiceD));
-			}
-			if($data['fld_user_type'] == '2'){
-				$userServicetags = $this->input->post('servicetags');
-				$this->user_model->insert_user_servicetags($uid, $newServiceS);
-			}
+
+
+            $userServicList = $this->common_model->getAll(array('fld_uid' => $uid), '', 'tbl_user_service_tag');
+            $onlyServicList = array_column($userServicList, 'fld_serviceTag_id');
+
+            $newServiceD = array_diff($onlyServicList, $userServicetags);
+            $newServiceS = array_diff($userServicetags, $onlyServicList);
+            if (count($newServiceD) > 0) {
+                $this->user_model->deleteCustmUserServic($uid, implode(',', $newServiceD));
+            }
+            if ($data['fld_user_type'] == '2') {
+                $userServicetags = $this->input->post('servicetags');
+                $this->user_model->insert_user_servicetags($uid, $newServiceS);
+            }
 
             $result = $this->common_model->updateData("fld_id", $uid, $data, 'tbl_user');
         }
     }
-	
-    
-    public function materTimeUpdt($id){
+
+    public function materTimeUpdt($id) {
         $id = decode($id);
         $fld_status = $this->input->post('status');
-      
-        if($fld_status == '5'){
-			$data = array('fld_status' => 0 );
-			$data['fld_incident_end_time'] = date("Y-m-d H:i:s", time());
-			$tbleName = 'tbl_incident';
-			$process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
-                        $isStart = '';
-        }else{
-			$data = array('fld_status' => 5);
-			$data['fld_incident_start_time'] = date("Y-m-d H:i:s", time());
-			$tbleName = 'tbl_incident';
-			$process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
-                        $isStart = 'start';
-        } 
-                
-                $incidentInfo = get_assigned_incident_data($id);
-                $activityData['uid'] = UID;
-                $activityData['tid'] = $incidentInfo[0]->fld_uid;
-                $activityData['sid'] =  $id;
-                $activityData['incTitle'] = $incidentInfo[0]->fld_inci_title;
-                $activityData['isStart'] = $isStart;
-                setActivity('incidentStartComplete', $activityData);
+
+        if ($fld_status == '5') {
+            $data = array('fld_status' => 0);
+            $data['fld_incident_end_time'] = date("Y-m-d H:i:s", time());
+            $tbleName = 'tbl_incident';
+            $process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
+            $isStart = '';
+        } else {
+            $data = array('fld_status' => 5);
+            $data['fld_incident_start_time'] = date("Y-m-d H:i:s", time());
+            $tbleName = 'tbl_incident';
+            $process = $this->common_model->updateData("fld_id", $id, $data, $tbleName);
+            $isStart = 'start';
+        }
+
+        $incidentInfo = get_assigned_incident_data($id);
+        $activityData['uid'] = UID;
+        $activityData['tid'] = $incidentInfo[0]->fld_uid;
+        $activityData['sid'] = $id;
+        $activityData['incTitle'] = $incidentInfo[0]->fld_inci_title;
+        $activityData['isStart'] = $isStart;
+        setActivity('incidentStartComplete', $activityData);
         echo json_encode(array('id' => $process));
     }
-    
-    
-	public function timeStatusUpdate() {
-        if($this->input->post('status')=='1'){
-			$id = decode($this->input->post('fld_id'));
-            $result = $this->common_model->updateData("fld_id", $id, array('fld_end_time'=> date("Y-m-d H:i:s", time())), 'tbl_track');
-        }else{            
+
+    public function timeStatusUpdate() {
+        if ($this->input->post('status') == '1') {
+            $id = decode($this->input->post('fld_id'));
+            $result = $this->common_model->updateData("fld_id", $id, array('fld_end_time' => date("Y-m-d H:i:s", time())), 'tbl_track');
+        } else {
             $iid = decode($this->input->post('iid'));
-			$rmId = UID;
+            $rmId = UID;
             $smeId = decode($this->input->post('smeId'));
 
             $data = array(
-                'fld_iid'   =>  $iid,
-                'fld_rm_id' =>  $rmId,
-                'fld_sme_id'   => $smeId,
+                'fld_iid' => $iid,
+                'fld_rm_id' => $rmId,
+                'fld_sme_id' => $smeId,
                 'fld_start_time' => date("Y-m-d H:i:s", time()),
             );
             $tbleName = 'tbl_track';
@@ -1158,114 +1166,115 @@ class Process extends CI_Controller {
         }
         echo json_encode(array('fld_id' => $result));
     }
-	public function updateGlobals() {
-        $logo = $_FILES['profile']['name'];		
-		$company = $this->input->post('company');
-		$email = $this->input->post('email');
-		$address = $this->input->post('address');
-		$data = array();
-        if($logo) {
-			$data['fld_logo'] = $this->uploadImg('profile', 'assets/images/', 'thumbs', $height = 240, $width = 360);
-		}else if($company){
-			$data['fld_company_name'] = $company;
-		}else if($email){
-			$data['fld_email'] = $email;
-			$data['fld_phone'] = $this->input->post('phone');
-			$data['fld_company_description'] = $this->input->post('description');
-		}else if($address){
-			$data = array(
-                'fld_address1'   =>  $this->input->post('address1'),
-                'fld_address2' =>  $this->input->post('address2'),
-                'fld_city'   => $this->input->post('city'),
-				'fld_country'   => $this->input->post('country'),
-				'fld_zip'   => $this->input->post('zip')
-            );	
-		}
+
+    public function updateGlobals() {
+        $logo = $_FILES['profile']['name'];
+        $company = $this->input->post('company');
+        $email = $this->input->post('email');
+        $address = $this->input->post('address');
+        $data = array();
+        if ($logo) {
+            $data['fld_logo'] = $this->uploadImg('profile', 'assets/images/', 'thumbs', $height = 240, $width = 360);
+        } else if ($company) {
+            $data['fld_company_name'] = $company;
+        } else if ($email) {
+            $data['fld_email'] = $email;
+            $data['fld_phone'] = $this->input->post('phone');
+            $data['fld_company_description'] = $this->input->post('description');
+        } else if ($address) {
+            $data = array(
+                'fld_address1' => $this->input->post('address1'),
+                'fld_address2' => $this->input->post('address2'),
+                'fld_city' => $this->input->post('city'),
+                'fld_country' => $this->input->post('country'),
+                'fld_zip' => $this->input->post('zip')
+            );
+        }
         $process = $this->common_model->updateData("fld_id", '1', $data, 'tbl_default');
     }
-	
-	public function addEditAdminProfile() {
-        $profile = $_FILES['profile']['name'];	
-		$password = $this->input->post('password');
-		$aid = decode($this->input->post('aid'));
-		$username = $this->input->post('username');
-		$email = $this->input->post('email');
-		$data = array(
-			'fld_fname'   =>  $this->input->post('fname'),
-			'fld_lname' =>  $this->input->post('lname'),
-			'fld_email'   => $email,
-			'fld_username'   => $username,
-			'fld_role'   => $this->input->post('role')
-		);
-		if($aid){
-			$isEmail = $this->common_model->getNotInData('fld_id', 'tbl_admin', array('fld_email'=>$email), 'fld_id', array($aid));
-			$isUser = $this->common_model->getNotInData('fld_id', 'tbl_admin', array('fld_username'=>$username), 'fld_id', array($aid));
-		}else{
-			$isEmail = $this->common_model->getAll(array('fld_email'=>$email),'','tbl_admin');
-			$isUser = $this->common_model->getAll(array('fld_username'=>$username),'','tbl_admin');
-		}
-		if(count($isEmail) > 0){
-			echo 'email';
-			return false;
-		}
-		if(count($isUser) > 0){
-			echo 'user';
-			return false;
-		}
-		
-        if($profile) {
-			$data['fld_avtar'] = $this->uploadImg('profile', 'uploads/profile/', 'thumbs', $height = 240, $width = 360);
-		}
-		if($password) {
-			$data['fld_password'] = md5($password);
-		}
-		if($aid){
-			$id = $this->common_model->updateData("fld_id", $aid, $data, 'tbl_admin');
-		}else{
-			$id = $this->common_model->saveData("tbl_admin", $data);
-			if($this->input->post('confirmMail')) {
-				$this->load->helper('email_helper');
-				$data['case'] = 'new_admin';				
-				$data['email'] = $email;
-				$data['password'] = $password;
-				$data['fName'] = $data['fld_fname'];
-				$data['lName'] = $data['fld_lname'];
-				$emailConfig['subject'] = 'Account Created - ' . LOGO_NAME;
-				$emailConfig['to_email'] = $data['fld_email'];
-				sendEmail($data, $emailConfig);
-			}
-		}  
-		echo $id;      
+
+    public function addEditAdminProfile() {
+        $profile = $_FILES['profile']['name'];
+        $password = $this->input->post('password');
+        $aid = decode($this->input->post('aid'));
+        $username = $this->input->post('username');
+        $email = $this->input->post('email');
+        $data = array(
+            'fld_fname' => $this->input->post('fname'),
+            'fld_lname' => $this->input->post('lname'),
+            'fld_email' => $email,
+            'fld_username' => $username,
+            'fld_role' => $this->input->post('role')
+        );
+        if ($aid) {
+            $isEmail = $this->common_model->getNotInData('fld_id', 'tbl_admin', array('fld_email' => $email), 'fld_id', array($aid));
+            $isUser = $this->common_model->getNotInData('fld_id', 'tbl_admin', array('fld_username' => $username), 'fld_id', array($aid));
+        } else {
+            $isEmail = $this->common_model->getAll(array('fld_email' => $email), '', 'tbl_admin');
+            $isUser = $this->common_model->getAll(array('fld_username' => $username), '', 'tbl_admin');
+        }
+        if (count($isEmail) > 0) {
+            echo 'email';
+            return false;
+        }
+        if (count($isUser) > 0) {
+            echo 'user';
+            return false;
+        }
+
+        if ($profile) {
+            $data['fld_avtar'] = $this->uploadImg('profile', 'uploads/profile/', 'thumbs', $height = 240, $width = 360);
+        }
+        if ($password) {
+            $data['fld_password'] = md5($password);
+        }
+        if ($aid) {
+            $id = $this->common_model->updateData("fld_id", $aid, $data, 'tbl_admin');
+        } else {
+            $id = $this->common_model->saveData("tbl_admin", $data);
+            if ($this->input->post('confirmMail')) {
+                $this->load->helper('email_helper');
+                $data['case'] = 'new_admin';
+                $data['email'] = $email;
+                $data['password'] = $password;
+                $data['fName'] = $data['fld_fname'];
+                $data['lName'] = $data['fld_lname'];
+                $emailConfig['subject'] = 'Account Created - ' . LOGO_NAME;
+                $emailConfig['to_email'] = $data['fld_email'];
+                sendEmail($data, $emailConfig);
+            }
+        }
+        echo $id;
     }
-	public function addEditPackage() {
-		$pid = decode($this->input->post('pid'));        
-		$data = array(
-			'fld_title'   =>  $this->input->post('title'),
-			'fld_price' =>  $this->input->post('price'),
-			'fld_plan_label'   => $this->input->post('label'),
-			'fld_duration'   => $this->input->post('duration'),
-			'fld_detail'   => $this->input->post('detail'),
-			'fld_extra_price'   => $this->input->post('extraPrice'),
-			'fld_type'   => $this->input->post('type')
-		);	
-		
-		if($pid){
-			$id = $this->common_model->updateData("fld_id", $pid, $data, 'tbl_package');
-		}else{
-			$data['fld_createdDt'] = date("Y-m-d H:i:s", time());
-			$id = $this->common_model->saveData("tbl_package", $data);
-		} 
-        
+
+    public function addEditPackage() {
+        $pid = decode($this->input->post('pid'));
+        $data = array(
+            'fld_title' => $this->input->post('title'),
+            'fld_price' => $this->input->post('price'),
+            'fld_plan_label' => $this->input->post('label'),
+            'fld_duration' => $this->input->post('duration'),
+            'fld_detail' => $this->input->post('detail'),
+            'fld_extra_price' => $this->input->post('extraPrice'),
+            'fld_type' => $this->input->post('type')
+        );
+
+        if ($pid) {
+            $id = $this->common_model->updateData("fld_id", $pid, $data, 'tbl_package');
+        } else {
+            $data['fld_createdDt'] = date("Y-m-d H:i:s", time());
+            $id = $this->common_model->saveData("tbl_package", $data);
+        }
     }
-    
+
     public function incidentsmeListModel($incID) {
         $iid = decode($incID);
         $inciSME = assignedSMEData($iid);
-		$adminInfo = adminInfo();
-		$adminData = $actionBTN = '';
-       	if($adminInfo[0]['fld_role'] == '0'){
-			$actionBTN = '<th class="col-md-1">Action</th>';
-		}
+        $adminInfo = adminInfo();
+        $adminData = $actionBTN = '';
+        if ($adminInfo[0]['fld_role'] == '0') {
+            $actionBTN = '<th class="col-md-1">Action</th>';
+        }
         $usetPreview = '<div class="modal-dialog modal-lg">
 		
 		  <input type="hidden" value="' . $incID . '" class="selectedIID" />
@@ -1282,38 +1291,38 @@ class Process extends CI_Controller {
                     <th>Paypal Id</th>
                     <th>Total Work</th>
                     <th>Amount Paid </th>
-                    '.$actionBTN.'
+                    ' . $actionBTN . '
                   </tr>
                 </thead>
                 <tbody class="boxInputFull">';
         foreach ($inciSME as $inciSMEList) {
-                $inciSMEData = userInfo($inciSMEList['fld_sme_id']);
-                $totaltime = trackSMETotalTime($inciSMEList['fld_sme_id'], $inciSMEList['fld_rm_id'], $iid);
-				$smeIDE = encode($inciSMEList['fld_sme_id']);
-                if(($inciSMEList['fld_isPaid'] == '0')){
-                        $paybutton = "<span class='btn btn-sm btn-primary'>Paid</span>"; 
-                }else{
-                        $paybutton = '<a class="btn btn-sm btn-primary" href="'. base_url().'superadmin/rmPaymentInvoice?iid='.$incID.'&rid='.$smeIDE.'&usertype=1&rmid='.$inciSMEList['fld_rm_id'].'"><i class="fa fa-eye"></i> Payment</a>'; 
-                }
-                
-				$smePaymentData =getPaymentSMEIncident($iid,$inciSMEList['fld_sme_id']);
-                     
-				if(!empty($smePaymentData[0]['fld_total'])){
-					$amount = $smePaymentData[0]['fld_total'] . '<small> '.$smePaymentData[0]['fld_currency'].'</small>';
-				}else{
-					$amount = '<span class="label label-danger">Not Paid</span>';
-				} 
-                $adminData .= '<tr class=""> 
+            $inciSMEData = userInfo($inciSMEList['fld_sme_id']);
+            $totaltime = trackSMETotalTime($inciSMEList['fld_sme_id'], $inciSMEList['fld_rm_id'], $iid);
+            $smeIDE = encode($inciSMEList['fld_sme_id']);
+            if (($inciSMEList['fld_isPaid'] == '0')) {
+                $paybutton = "<span class='btn btn-sm btn-primary'>Paid</span>";
+            } else {
+                $paybutton = '<a class="btn btn-sm btn-primary" href="' . base_url() . 'superadmin/rmPaymentInvoice?iid=' . $incID . '&rid=' . $smeIDE . '&usertype=1&rmid=' . $inciSMEList['fld_rm_id'] . '"><i class="fa fa-eye"></i> Payment</a>';
+            }
+
+            $smePaymentData = getPaymentSMEIncident($iid, $inciSMEList['fld_sme_id']);
+
+            if (!empty($smePaymentData[0]['fld_total'])) {
+                $amount = $smePaymentData[0]['fld_total'] . '<small> ' . $smePaymentData[0]['fld_currency'] . '</small>';
+            } else {
+                $amount = '<span class="label label-danger">Not Paid</span>';
+            }
+            $adminData .= '<tr class=""> 
                                 <td>' . $inciSMEData[0]['fld_fname'] . ' ' . $inciSMEData[0]['fld_mname'] . ' ' . $inciSMEData[0]['fld_lname'] . '</td>
                                 <td>' . $inciSMEData[0]['fld_paypal'] . '</td>
-                                <td> '.$totaltime[0]->TotalTime .'</td>
-                                <td> '.$amount.'</td>';
-				if($adminInfo[0]['fld_role'] == '0'){
-				$adminData .= '<td><div class="col-md-2">
-                                       '.$paybutton.' 
+                                <td> ' . $totaltime[0]->TotalTime . '</td>
+                                <td> ' . $amount . '</td>';
+            if ($adminInfo[0]['fld_role'] == '0') {
+                $adminData .= '<td><div class="col-md-2">
+                                       ' . $paybutton . ' 
                                       </div></td>
                               </tr>';
-				}
+            }
         }
         $usetPreview .= $adminData . '</tbody>
               </table>
@@ -1327,60 +1336,67 @@ class Process extends CI_Controller {
         </div>';
         echo $usetPreview;
     }
-	
-	
-	public function addEditReview() {
-		$rid = decode($this->input->post('rid'));        
-		$data = array(
-			'fld_is_solved'   =>  $this->input->post('isSolved'),
-			'fld_rating' =>  $this->input->post('rating'),
-			'fld_feedback'   => $this->input->post('feedback')
-		);
-		if($rid){
-			$id = $this->common_model->updateData("fld_id", $rid, $data, 'tbl_rating');
-		}else{
-			$data['fld_uid'] = AID;
-			$data['fld_isAdmin'] = 0;
-			$data['fld_incident_id'] = $this->input->post('iid');
-			$data['fld_rating_ID'] = decode($this->input->post('tid'));
-			$data['fld_rating'] = $this->input->post('rating');
-			$data['fld_is_solved'] = $this->input->post('isSolved');
-			$data['fld_feedback'] = $this->input->post('feedback');
-			$data['fld_created_date'] = date("Y-m-d H:i:s", time());
-			$id = $this->common_model->saveData("tbl_rating", $data);
-		}
-		echo 'Sucess';       
+
+    public function addEditReview() {
+        $rid = decode($this->input->post('rid'));
+        $data = array(
+            'fld_is_solved' => $this->input->post('isSolved'),
+            'fld_rating' => $this->input->post('rating'),
+            'fld_feedback' => $this->input->post('feedback')
+        );
+        if ($rid) {
+            $id = $this->common_model->updateData("fld_id", $rid, $data, 'tbl_rating');
+        } else {
+            $data['fld_uid'] = AID;
+            $data['fld_isAdmin'] = 0;
+            $data['fld_incident_id'] = $this->input->post('iid');
+            $data['fld_rating_ID'] = decode($this->input->post('tid'));
+            $data['fld_rating'] = $this->input->post('rating');
+            $data['fld_is_solved'] = $this->input->post('isSolved');
+            $data['fld_feedback'] = $this->input->post('feedback');
+            $data['fld_created_date'] = date("Y-m-d H:i:s", time());
+            $id = $this->common_model->saveData("tbl_rating", $data);
+        }
+        echo 'Sucess';
     }
-	
-	public function findIncidentOnUser($id='') {
-		$id = decode($id);
-		$iid = $title = array();
-		$userData = $this->common_model->getAll(array("fld_id" => $id, 'fld_isDeleted'=>'0'), '', 'tbl_user');
-		if($userData[0]['fld_user_type'] == '0'){
-			$userInci = $this->common_model->getAll(array("fld_uid" => $id, 'fld_isDeleted'=>'0'), '', 'tbl_incident');
-		}else if($userData[0]['fld_user_type'] == '2'){
-			$userInci = $this->common_model->getAll(array("fld_sme_id" => $id, 'fld_isDeleted'=>'0'), '', 'tbl_incident_sme');
-		}else if($userData[0]['fld_user_type'] == '3'){
-			$userInci = $this->common_model->getAll(array("fld_rm_id" => $id, 'fld_isDeleted'=>'0'), '', 'tbl_incident_rm');
-		}
-		foreach($userInci as $userInciData){
-			if($userData[0]['fld_user_type'] == '0'){
-				$incidentIDR = $userInciData['fld_id'];
-			}else{
-				$incidentIDR = $userInciData['fld_incident_id'];
-			}
-			$incList = $this->common_model->getAll(array("fld_id" => $incidentIDR, 'fld_isDeleted'=>'0'), '', 'tbl_incident');
-			array_push($title,$incList[0]['fld_inci_title']);
-			array_push($iid,$incList[0]['fld_id']);
-		}
-		echo json_encode(array('title' => $title, 'iid' => $iid));
+
+    public function findIncidentOnUser($id = '') {
+        $id = decode($id);
+        $iid = $title = array();
+        $userData = $this->common_model->getAll(array("fld_id" => $id, 'fld_isDeleted' => '0'), '', 'tbl_user');
+        if ($userData[0]['fld_user_type'] == '0') {
+            $userInci = $this->common_model->getAll(array("fld_uid" => $id, 'fld_isDeleted' => '0'), '', 'tbl_incident');
+        } else if ($userData[0]['fld_user_type'] == '2') {
+            $userInci = $this->common_model->getAll(array("fld_sme_id" => $id, 'fld_isDeleted' => '0'), '', 'tbl_incident_sme');
+        } else if ($userData[0]['fld_user_type'] == '3') {
+            $userInci = $this->common_model->getAll(array("fld_rm_id" => $id, 'fld_isDeleted' => '0'), '', 'tbl_incident_rm');
+        }
+        foreach ($userInci as $userInciData) {
+            if ($userData[0]['fld_user_type'] == '0') {
+                $incidentIDR = $userInciData['fld_id'];
+            } else {
+                $incidentIDR = $userInciData['fld_incident_id'];
+            }
+            $incList = $this->common_model->getAll(array("fld_id" => $incidentIDR, 'fld_isDeleted' => '0'), '', 'tbl_incident');
+            array_push($title, $incList[0]['fld_inci_title']);
+            array_push($iid, $incList[0]['fld_id']);
+        }
+        echo json_encode(array('title' => $title, 'iid' => $iid));
     }
-	public function updateReadAllNoti($isAdmin='') {
-		$this->user_model->updateNotReadP(UID,$isAdmin);
+
+    public function updateReadAllNoti($isAdmin = '') {
+        $this->user_model->updateNotReadP(UID, $isAdmin);
+    }
+
+    public function deleteAllNotify($isAdmin = '') {
+        $this->user_model->deleteAllNotify(UID, $isAdmin);
     }
     
-    public function deleteAllNotify($isAdmin='') {
-		$this->user_model->deleteAllNotify(UID,$isAdmin);
+     public function deleteActivity($id = '') {
+         $id = decode($id);
+        $isAdmin = AID ? TRUE: '';
+        $this->user_model->deleteActivity(UID, $id );
+        
     }
-    
+
 }
