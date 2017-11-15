@@ -1,3 +1,6 @@
+$(document).on('change','input[name=notifications]',function(){
+	Notification.requestPermission();
+});
 function updateNotReadAll(isAdmin){
 	if($('.badge').html()){
 		$.ajax({
@@ -5932,7 +5935,7 @@ function sts(status) {
 	var url = base_url + "process/onoff/"+status;
     s.src = url;
     document.body.appendChild(s);
-	setTimeout(function(){ $('script[src="'+url+'"]').remove() }, 2000);
+	//setTimeout(function(){ $('script[src="'+url+'"]').remove() }, 2000);
 }
 
 function check_userID_exists(selfObj) {
@@ -6663,26 +6666,6 @@ $('.serviceLevelSelection .rmTypeList').on('ifChanged', function(event){
 			radioClass: 'iradio_flat-green'
 		});
 	});
-});
-
-
-$('.serviceLevelSelection .rmTypeList').on('ifChanged', function(event){
-	//$('.activeRado').removeClass('activeRado');
-	//$(this).closest('.radio').addClass('activeRado');
-	//getRMListing(this.value);
-	//var inputData = {levelType:this.value,userType:'3'};
-	//$.ajax({
-//		type: "POST",
-//		url: base_url + 'process/getRMList',
-//		data: inputData
-//	}).done(function(data) {				
-//		$('.rm-list').html(data);
-//		installRating('rateyo');
-//		$('.rm-list input.flat').iCheck({
-//			checkboxClass: 'icheckbox_flat-green',
-//			radioClass: 'iradio_flat-green'
-//		});
-//	});
 });
 
 $(document).on("submit", "#updtCustomer", function (e) {

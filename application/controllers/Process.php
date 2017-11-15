@@ -157,6 +157,12 @@ class Process extends CI_Controller {
     public function onoff($status = '') {
         if (isset($_SESSION['UID'])) {
             $this->user_model->updateData("fld_id", UID, array("fld_activity" => $status), "tbl_user");
+			$userDataInfo = userInfo(UID);
+			$userType = $userDataInfo[0]['fld_user_type'];
+			if($userType == '0'){
+				$userPersonalInc = $this->common_model->getAll(array("fld_notifications" => '0', "fld_uid" => UID, "fld_isDeleted" => 0), '', 'tbl_incident');
+				
+			}
             return true;
         }
         return false;
