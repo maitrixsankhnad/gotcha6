@@ -809,7 +809,7 @@ class Process extends CI_Controller {
 
             case 'SMEincidentAcptDecl':
                 if (decode($param) == '2') {
-                    $data['fld_isDeleted'] = 1;
+                   // $data['fld_isDeleted'] = 1;
                     $data['fld_status'] = 2;
                     $isSMEDeclined = 'Declined';
                     $this->common_model->updateData(array('fld_incident_id' => $id, 'fld_sme_id' => UID), '', $data, 'tbl_incident_sme');

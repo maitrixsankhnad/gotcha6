@@ -126,7 +126,8 @@ class CustomProcess extends CI_Controller {
 		$smeList = $this->common_model->getPartial('fld_uid','tbl_user_service_tag',array(),array(),'','fld_uid','fld_serviceTag_id',$onlyServiceID);
 		if(count($smeList)>0){
 			$allSMEID = array_column($smeList, 'fld_uid');
-			$selectedSMEID = $this->common_model->getAll(array('fld_incident_id'=>$iid, 'fld_isDeleted'=>'0'),'','tbl_incident_sme');
+			$selectedSMEID = $this->common_model->getAll(array('fld_incident_id'=>$iid),'','tbl_incident_sme','all','','fld_status',array(0,1));
+                       
 			$selectedSMEID = array_column($selectedSMEID, 'fld_sme_id');
 			$smeDetail = $this->common_model->getAll(array('fld_approved'=>'0', 'fld_isDeleted'=>'0', 'fld_status'=>'0'),'','tbl_user','all','','fld_id',$allSMEID);
 		}else{
