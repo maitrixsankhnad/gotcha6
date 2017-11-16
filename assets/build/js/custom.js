@@ -1,225 +1,219 @@
-$(document).on('change','input[name=notifications]',function(){
-	Notification.requestPermission();
+$(document).on('change', 'input[name=notifications]', function() {
+    Notification.requestPermission();
 });
-function updateNotReadAll(isAdmin){
-	if($('.badge').html()){
-		$.ajax({
-			url: base_url+'process/updateReadAllNoti/'+isAdmin,
-			type: 'POST',
-			success: function(data){
-				$('.badge').remove();
-			}
-		 });	
-	}
+
+function updateNotReadAll(isAdmin) {
+    if ($('.badge').html()) {
+        $.ajax({
+            url: base_url + 'process/updateReadAllNoti/' + isAdmin,
+            type: 'POST',
+            success: function(data) {
+                $('.badge').remove();
+            }
+        });
+    }
 }
 
-function clearAllNotifyActivity(selfObj,isAdmin){
-	    swal({
-		title: "Are you sure?",
-		text: "Deleted All Activity !!",
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Yes, I am sure!",
-		cancelButtonText: "No, cancel it!"
-              }).then(function () {
-            $.ajax({
-                        url: base_url+'process/deleteAllNotify/'+isAdmin,
-                        type: 'POST',
-                        success: function(data){
+function clearAllNotifyActivity(selfObj, isAdmin) {
+    swal({
+        title: "Are you sure?",
+        text: "Deleted All Activity !!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, I am sure!",
+        cancelButtonText: "No, cancel it!"
+    }).then(function() {
+        $.ajax({
+            url: base_url + 'process/deleteAllNotify/' + isAdmin,
+            type: 'POST',
+            success: function(data) {
+                swal("Deleted!", "The record has been deleted.", "success");
+                $('.messages li').remove();
+                $('.messages').html('<li>No record found</li>');
+            }
+        });
 
-                            swal("Deleted!", "The record has been deleted.", "success");
-                                     $('.messages li').remove();
-                                     $('.messages').html('<li>No record found</li>');
-
-                        }
-    });
-
-    }, function (dismiss) {
+    }, function(dismiss) {
         if (dismiss === 'cancel') {
             swal("Cancelled", "This record is in safe :)", "error");
-		}
-    });	
-	
-}
-
-function deleteActivity(selfObj,id){
-    
-	    swal({
-		title: "Are you sure?",
-		text: "Deleted Activity !!",
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Yes, I am sure!",
-		cancelButtonText: "No, cancel it!"
-              }).then(function () {
-            $.ajax({
-                        url: base_url+'process/deleteActivity/'+id,
-                        type: 'POST',
-                        success: function(data){
-
-                            swal("Deleted!", "The record has been deleted.", "success");
-                                    
-                                    if($('.notiFD').val()){
-                                            $(selfObj).closest('li').remove();
-                                    }
-
-                        }
-    });
-
-    }, function (dismiss) {
-        if (dismiss === 'cancel') {
-            swal("Cancelled", "This record is in safe :)", "error");
-		}
-    });	
-	
-}
-
-
-function findIncidentList(val){
-	$('#preloader').fadeIn();
-	var userType = $('select.userLisingL:selected').data('type');
-	$.ajax({
-        url: base_url + 'process/findIncidentOnUser/'+val,
-        type: 'POST',
-		dataType: 'json',
-        processData: false,
-        contentType: false,
-        success: function (res) {
-			var iid		=	res.iid;
-			var titles	=	res.title;
-			var usrLr = '';
-			for(var i=0; i < titles.length; i++){
-				usrLr += '<option value="'+iid[i]+'">'+titles[i]+'</option>';
-			};
-			$('select.incidentListing').removeAttr('disabled').html(usrLr)
-			$('.incidentListing').selectpicker('refresh');
-			$('#preloader').fadeOut();
-        },
-        error: function () {
         }
     });
 }
-$(document).on("submit", ".addEditReview", function (e) {
-	e.preventDefault();
-	$('#preloader').fadeIn();
-	if($('.rid').val()){
-		var subj = 'Updated Successfully!';
-		var msg = 'Review has been updated';
-	}else{
-		var subj = 'Added Successfully!';
-		var msg = 'New review has been added';	
-	}
+
+function deleteActivity(selfObj, id) {
+
+    swal({
+        title: "Are you sure?",
+        text: "Deleted Activity !!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, I am sure!",
+        cancelButtonText: "No, cancel it!"
+    }).then(function() {
+        $.ajax({
+            url: base_url + 'process/deleteActivity/' + id,
+            type: 'POST',
+            success: function(data) {
+
+                swal("Deleted!", "The record has been deleted.", "success");
+
+                if ($('.notiFD').val()) {
+                    $(selfObj).closest('li').remove();
+                }
+
+            }
+        });
+
+    }, function(dismiss) {
+        if (dismiss === 'cancel') {
+            swal("Cancelled", "This record is in safe :)", "error");
+        }
+    });
+
+}
+
+
+function findIncidentList(val) {
+    $('#preloader').fadeIn();
+    var userType = $('select.userLisingL:selected').data('type');
+    $.ajax({
+        url: base_url + 'process/findIncidentOnUser/' + val,
+        type: 'POST',
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success: function(res) {
+            var iid = res.iid;
+            var titles = res.title;
+            var usrLr = '';
+            for (var i = 0; i < titles.length; i++) {
+                usrLr += '<option value="' + iid[i] + '">' + titles[i] + '</option>';
+            };
+            $('select.incidentListing').removeAttr('disabled').html(usrLr)
+            $('.incidentListing').selectpicker('refresh');
+            $('#preloader').fadeOut();
+        },
+        error: function() {}
+    });
+}
+$(document).on("submit", ".addEditReview", function(e) {
+    e.preventDefault();
+    $('#preloader').fadeIn();
+    if ($('.rid').val()) {
+        var subj = 'Updated Successfully!';
+        var msg = 'Review has been updated';
+    } else {
+        var subj = 'Added Successfully!';
+        var msg = 'New review has been added';
+    }
     $.ajax({
         url: base_url + 'Process/addEditReview',
         type: 'POST',
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-   			$('#preloader').fadeOut();
-			swal({
-				title: subj,
-				text: msg,
-				type: 'success',
-				confirmButtonColor: '#009688',
-				confirmButtonText: 'Okay!'
-			})
-			window.location.href = base_url + 'review';
+        success: function(data) {
+            $('#preloader').fadeOut();
+            swal({
+                title: subj,
+                text: msg,
+                type: 'success',
+                confirmButtonColor: '#009688',
+                confirmButtonText: 'Okay!'
+            })
+            window.location.href = base_url + 'review';
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
-$(document).on("submit", ".addEditAdminProfile", function (e) {
-	e.preventDefault();
-	$('#preloader').fadeIn();
-	if($('.aid').val()){
-		var subj = 'Updated Successfully!';
-		var msg = 'Admin has been updated';
-	}else{
-		var subj = 'Created Successfully!';
-		var msg = 'New admin has been created';	
-	}
+$(document).on("submit", ".addEditAdminProfile", function(e) {
+    e.preventDefault();
+    $('#preloader').fadeIn();
+    if ($('.aid').val()) {
+        var subj = 'Updated Successfully!';
+        var msg = 'Admin has been updated';
+    } else {
+        var subj = 'Created Successfully!';
+        var msg = 'New admin has been created';
+    }
     $.ajax({
         url: base_url + 'Process/addEditAdminProfile',
         type: 'POST',
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-   			$('#preloader').fadeOut();
-			if(data == 'user'){
-				swal("Sorry!", "This username is not available, choose a different username.", "error");
-			}else if(data == 'email'){
-				swal("Sorry!", "This email address is not available, choose a different email address.", "error");
-			}else{
-				swal({
-					title: subj,
-					text: msg,
-					type: 'success',
-					confirmButtonColor: '#009688',
-					confirmButtonText: 'Okay!'
-				})
-				window.location.href = base_url + 'superadmin/admin_users';
-			}
+        success: function(data) {
+            $('#preloader').fadeOut();
+            if (data == 'user') {
+                swal("Sorry!", "This username is not available, choose a different username.", "error");
+            } else if (data == 'email') {
+                swal("Sorry!", "This email address is not available, choose a different email address.", "error");
+            } else {
+                swal({
+                    title: subj,
+                    text: msg,
+                    type: 'success',
+                    confirmButtonColor: '#009688',
+                    confirmButtonText: 'Okay!'
+                })
+                window.location.href = base_url + 'superadmin/admin_users';
+            }
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
-$(document).on("submit", ".addEditPackage", function (e) {
-	e.preventDefault();
-	$('#preloader').fadeIn();
-	if($('.pid').val()){
-		var subj = 'Updated Successfully!';
-		var msg = 'Package has been updated';
-	}else{
-		var subj = 'Created Successfully!';
-		var msg = 'New package has been created';	
-	}
+$(document).on("submit", ".addEditPackage", function(e) {
+    e.preventDefault();
+    $('#preloader').fadeIn();
+    if ($('.pid').val()) {
+        var subj = 'Updated Successfully!';
+        var msg = 'Package has been updated';
+    } else {
+        var subj = 'Created Successfully!';
+        var msg = 'New package has been created';
+    }
     $.ajax({
         url: base_url + 'Process/addEditPackage',
         type: 'POST',
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-   			$('#preloader').fadeOut();
-			if(data == 'user'){
-				swal("Sorry!", "This username is not available, choose a different username.", "error");
-			}else if(data == 'email'){
-				swal("Sorry!", "This email address is not available, choose a different email address.", "error");
-			}else{
-				swal({
-					title: subj,
-					text: msg,
-					type: 'success',
-					confirmButtonColor: '#009688',
-					confirmButtonText: 'Okay!'
-				})
-				window.location.href = base_url + 'superadmin/packages_list';
-			}
+        success: function(data) {
+            $('#preloader').fadeOut();
+            if (data == 'user') {
+                swal("Sorry!", "This username is not available, choose a different username.", "error");
+            } else if (data == 'email') {
+                swal("Sorry!", "This email address is not available, choose a different email address.", "error");
+            } else {
+                swal({
+                    title: subj,
+                    text: msg,
+                    type: 'success',
+                    confirmButtonColor: '#009688',
+                    confirmButtonText: 'Okay!'
+                })
+                window.location.href = base_url + 'superadmin/packages_list';
+            }
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
-$(document).on("submit", ".globalSettings", function (e) {
-	e.preventDefault();
-	$('#preloader').fadeIn();
+$(document).on("submit", ".globalSettings", function(e) {
+    e.preventDefault();
+    $('#preloader').fadeIn();
     $.ajax({
         url: base_url + 'Process/updateGlobals',
         type: 'POST',
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-   			$('#preloader').fadeOut();
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Updated!',
                 text: "Settings has been updated",
@@ -228,36 +222,35 @@ $(document).on("submit", ".globalSettings", function (e) {
                 confirmButtonText: 'Okay!'
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
-function checkEmailUserExist(selfObj, type){
-	var data = $(selfObj).val();
-	var uid = $('.userID').val();
-	var postVal = "uid=" + uid;
-	postVal += "&data=" + data;
-	postVal += "&type=" + type;	
-    $.post(base_url + "process/userEmailExist", postVal, function (data) {
+function checkEmailUserExist(selfObj, type) {
+    var data = $(selfObj).val();
+    var uid = $('.userID').val();
+    var postVal = "uid=" + uid;
+    postVal += "&data=" + data;
+    postVal += "&type=" + type;
+    $.post(base_url + "process/userEmailExist", postVal, function(data) {
         if (data == '1') {
             $('.errrorUsr').show();
-        }else if (data == '2') {
+        } else if (data == '2') {
             $('.errrorEmail').show();
         }
     });
 }
-$(document).on("submit", "#userProfile", function (e) {
-	e.preventDefault();
-	$('#preloader').fadeIn();
+$(document).on("submit", "#userProfile", function(e) {
+    e.preventDefault();
+    $('#preloader').fadeIn();
     $.ajax({
         url: base_url + 'Process/updateUserProfile',
         type: 'POST',
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-   			$('#preloader').fadeOut();
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Updated!',
                 text: "Profile has been updated",
@@ -266,30 +259,29 @@ $(document).on("submit", "#userProfile", function (e) {
                 confirmButtonText: 'Okay!'
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
-$(document).on("ifChecked","input[name=userType]",function(){
-	$('input[name=serviceLevel]').iCheck('uncheck');
-	if(this.value == 3){
-		$('.targetLerlw').slideDown();
-	}else{
-		$('.targetLerlw').slideUp();
-	}
-	if(this.value == 2){
-		$('.smeboxser').fadeIn();
-	}else{
-		$('.smeboxser').fadeOut();
-	}
+$(document).on("ifChecked", "input[name=userType]", function() {
+    $('input[name=serviceLevel]').iCheck('uncheck');
+    if (this.value == 3) {
+        $('.targetLerlw').slideDown();
+    } else {
+        $('.targetLerlw').slideUp();
+    }
+    if (this.value == 2) {
+        $('.smeboxser').fadeIn();
+    } else {
+        $('.smeboxser').fadeOut();
+    }
 });
 
 
 
-(function ($, sr) {
+(function($, sr) {
     // debouncing function from John Hann
     // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
-    var debounce = function (func, threshold, execAsap) {
+    var debounce = function(func, threshold, execAsap) {
         var timeout;
 
         return function debounced() {
@@ -312,7 +304,7 @@ $(document).on("ifChecked","input[name=userType]",function(){
     };
 
     // smartresize 
-    jQuery.fn[sr] = function (fn) {
+    jQuery.fn[sr] = function(fn) {
         return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr);
     };
 
@@ -327,10 +319,10 @@ function validateForm(targetFlag) {
         if ($(this).is("select") && $(this).val() == null) {
             $(this).closest('div').addClass('errorDropdown');
             isValidForm = false;
-        } else if ($(this).is(":file") && $(this).val() =='') {
+        } else if ($(this).is(":file") && $(this).val() == '') {
             $(this).addClass('errorFileType');
             isValidForm = false;
-        } else if ($(this).is("textarea") && $(this).val() =='') {
+        } else if ($(this).is("textarea") && $(this).val() == '') {
             $(this).addClass('errorTextArea');
             isValidForm = false;
         } else if ($(this).is(":checkbox") && $(this).is(":not(:checked)")) {
@@ -373,7 +365,7 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
 // Sidebar
 function init_sidebar() {
     // TODO: This is some kind of easy fix, maybe we can improve this
-    var setContentHeight = function () {
+    var setContentHeight = function() {
         // reset height
         $RIGHT_COL.css('min-height', $(window).height());
 
@@ -388,12 +380,12 @@ function init_sidebar() {
         $RIGHT_COL.css('min-height', contentHeight);
     };
 
-    $SIDEBAR_MENU.find('a').on('click', function (ev) {
+    $SIDEBAR_MENU.find('a').on('click', function(ev) {
         var $li = $(this).parent();
 
         if ($li.is('.active')) {
             $li.removeClass('active active-sm');
-            $('ul:first', $li).slideUp(function () {
+            $('ul:first', $li).slideUp(function() {
                 setContentHeight();
             });
         } else {
@@ -409,14 +401,14 @@ function init_sidebar() {
             }
             $li.addClass('active');
 
-            $('ul:first', $li).slideDown(function () {
+            $('ul:first', $li).slideDown(function() {
                 setContentHeight();
             });
         }
     });
 
     // toggle small or large menu 
-    $MENU_TOGGLE.on('click', function () {
+    $MENU_TOGGLE.on('click', function() {
 
 
         if ($BODY.hasClass('nav-md')) {
@@ -435,14 +427,14 @@ function init_sidebar() {
     // check active menu
     $SIDEBAR_MENU.find('a[href="' + CURRENT_URL + '"]').parent('li').addClass('current-page');
 
-    $SIDEBAR_MENU.find('a').filter(function () {
+    $SIDEBAR_MENU.find('a').filter(function() {
         return this.href == CURRENT_URL;
-    }).parent('li').addClass('current-page').parents('ul').slideDown(function () {
+    }).parent('li').addClass('current-page').parents('ul').slideDown(function() {
         setContentHeight();
     }).parent().addClass('active');
 
     // recompute content when resizing
-    $(window).smartresize(function () {
+    $(window).smartresize(function() {
         setContentHeight();
     });
 
@@ -461,21 +453,21 @@ function init_sidebar() {
 };
 // /Sidebar
 
-var randNum = function () {
+var randNum = function() {
     return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
 };
 
 
 // Panel toolbox
-$(document).ready(function () {
-    $('.collapse-link').on('click', function () {
+$(document).ready(function() {
+    $('.collapse-link').on('click', function() {
         var $BOX_PANEL = $(this).closest('.x_panel'),
             $ICON = $(this).find('i'),
             $BOX_CONTENT = $BOX_PANEL.find('.x_content');
 
         // fix for some div with hardcoded fix class
         if ($BOX_PANEL.attr('style')) {
-            $BOX_CONTENT.slideToggle(200, function () {
+            $BOX_CONTENT.slideToggle(200, function() {
                 $BOX_PANEL.removeAttr('style');
             });
         } else {
@@ -486,7 +478,7 @@ $(document).ready(function () {
         $ICON.toggleClass('fa-chevron-up fa-chevron-down');
     });
 
-    $('.close-link').click(function () {
+    $('.close-link').click(function() {
         var $BOX_PANEL = $(this).closest('.x_panel');
 
         $BOX_PANEL.remove();
@@ -495,13 +487,14 @@ $(document).ready(function () {
 // /Panel toolbox
 
 // Tooltip
-$(document).ready(function () {
+$(document).ready(function() {
     processTooltip();
 });
-function processTooltip(){
-	$('[data-toggle="tooltip"]').tooltip({
+
+function processTooltip() {
+    $('[data-toggle="tooltip"]').tooltip({
         container: 'body'
-    });	
+    });
 }
 // /Tooltip
 
@@ -512,10 +505,10 @@ if ($(".progress .progress-bar")[0]) {
 // /Progressbar
 
 // Switchery
-$(document).ready(function () {
+$(document).ready(function() {
     if ($(".js-switch")[0]) {
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
-        elems.forEach(function (html) {
+        elems.forEach(function(html) {
             var switchery = new Switchery(html, {
                 color: '#26B99A'
             });
@@ -526,9 +519,9 @@ $(document).ready(function () {
 
 
 // iCheck
-$(document).ready(function () {
+$(document).ready(function() {
     if ($("input.flat")[0]) {
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('input.flat').iCheck({
                 checkboxClass: 'icheckbox_flat-green',
                 radioClass: 'iradio_flat-green'
@@ -539,12 +532,12 @@ $(document).ready(function () {
 // /iCheck
 
 // Table
-$('table input').on('ifChecked', function () {
+$('table input').on('ifChecked', function() {
     checkState = '';
     $(this).parent().parent().parent().addClass('selected');
     countChecked();
 });
-$('table input').on('ifUnchecked', function () {
+$('table input').on('ifUnchecked', function() {
     checkState = '';
     $(this).parent().parent().parent().removeClass('selected');
     countChecked();
@@ -552,21 +545,21 @@ $('table input').on('ifUnchecked', function () {
 
 var checkState = '';
 
-$('.bulk_action input').on('ifChecked', function () {
+$('.bulk_action input').on('ifChecked', function() {
     checkState = '';
     $(this).parent().parent().parent().addClass('selected');
     countChecked();
 });
-$('.bulk_action input').on('ifUnchecked', function () {
+$('.bulk_action input').on('ifUnchecked', function() {
     checkState = '';
     $(this).parent().parent().parent().removeClass('selected');
     countChecked();
 });
-$('.bulk_action input#check-all').on('ifChecked', function () {
+$('.bulk_action input#check-all').on('ifChecked', function() {
     checkState = 'all';
     countChecked();
 });
-$('.bulk_action input#check-all').on('ifUnchecked', function () {
+$('.bulk_action input#check-all').on('ifUnchecked', function() {
     checkState = 'none';
     countChecked();
 });
@@ -593,8 +586,8 @@ function countChecked() {
 
 
 // Accordion
-$(document).ready(function () {
-    $(".expand").on("click", function () {
+$(document).ready(function() {
+    $(".expand").on("click", function() {
         $(this).next().slideToggle(200);
         $expand = $(this).find(">:first-child");
 
@@ -608,11 +601,11 @@ $(document).ready(function () {
 
 // NProgress
 if (typeof NProgress != 'undefined') {
-    $(document).ready(function () {
+    $(document).ready(function() {
         NProgress.start();
     });
 
-    $(window).load(function () {
+    $(window).load(function() {
         NProgress.done();
     });
 }
@@ -620,7 +613,7 @@ if (typeof NProgress != 'undefined') {
 
 //hover and retain popover when on popover content
 var originalLeave = $.fn.popover.Constructor.prototype.leave;
-$.fn.popover.Constructor.prototype.leave = function (obj) {
+$.fn.popover.Constructor.prototype.leave = function(obj) {
     var self = obj instanceof this.constructor ?
         obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type);
     var container, timeout;
@@ -630,11 +623,11 @@ $.fn.popover.Constructor.prototype.leave = function (obj) {
     if (obj.currentTarget) {
         container = $(obj.currentTarget).siblings('.popover');
         timeout = self.timeout;
-        container.one('mouseenter', function () {
+        container.one('mouseenter', function() {
             //We entered the actual popover – call off the dogs
             clearTimeout(timeout);
             //Let's monitor popover content instead
-            container.one('mouseleave', function () {
+            container.one('mouseleave', function() {
                 $.fn.popover.Constructor.prototype.leave.call(self, self);
             });
         });
@@ -684,6 +677,7 @@ function init_flot_chart() {
         [gd(2012, 1, 6), 6],
         [gd(2012, 1, 7), 9]
     ];
+
 
     var arr_data3 = [
         [0, 1],
@@ -812,7 +806,7 @@ function init_flot_chart() {
             margin: [0, -25],
             noColumns: 0,
             labelBoxBorderColor: null,
-            labelFormatter: function (label, series) {
+            labelFormatter: function(label, series) {
                 return label + '&nbsp;&nbsp;';
             },
             width: 40,
@@ -924,11 +918,11 @@ function init_starrr() {
         rating: 4
     });
 
-    $('.stars').on('starrr:change', function (e, value) {
+    $('.stars').on('starrr:change', function(e, value) {
         $('.stars-count').html(value);
     });
 
-    $('.stars-existing').on('starrr:change', function (e, value) {
+    $('.stars-existing').on('starrr:change', function(e, value) {
         $('.stars-count-existing').html(value);
     });
 
@@ -1051,7 +1045,7 @@ function init_chart_doughnut() {
             }
         }
 
-        $('.canvasDoughnut').each(function () {
+        $('.canvasDoughnut').each(function() {
 
             var chart_element = $(this);
             var chart_doughnut = new Chart(chart_element, chart_doughnut_settings);
@@ -1067,8 +1061,6 @@ function init_gauge() {
     if (typeof(Gauge) === 'undefined') {
         return;
     }
-
-
 
 
 
@@ -1211,6 +1203,7 @@ function init_sparklines() {
         lineColor: '#26B99A',
         fillColor: '#26B99A',
         spotColor: '#4578a0',
+
         minSpotColor: '#728fb2',
         maxSpotColor: '#6d93c4',
         highlightSpotColor: '#ef5179',
@@ -1524,7 +1517,7 @@ function init_autocomplete() {
         ZZ: "Unknown or Invalid Region"
     };
 
-    var countriesArray = $.map(countries, function (value, key) {
+    var countriesArray = $.map(countries, function(value, key) {
         return {
             value: value,
             data: key
@@ -1559,14 +1552,14 @@ function init_parsley() {
     }
 
 
-    $ /*.listen*/('parsley:field:validate', function () {
+    $ /*.listen*/ ('parsley:field:validate', function() {
         validateFront();
     });
-    $('#demo-form .btn').on('click', function () {
+    $('#demo-form .btn').on('click', function() {
         $('#demo-form').parsley().validate();
         validateFront();
     });
-    var validateFront = function () {
+    var validateFront = function() {
         if (true === $('#demo-form').parsley().isValid()) {
             $('.bs-callout-info').removeClass('hidden');
             $('.bs-callout-warning').addClass('hidden');
@@ -1576,14 +1569,14 @@ function init_parsley() {
         }
     };
 
-    $ /*.listen*/('parsley:field:validate', function () {
+    $ /*.listen*/ ('parsley:field:validate', function() {
         validateFront();
     });
-    $('#demo-form2 .btn').on('click', function () {
+    $('#demo-form2 .btn').on('click', function() {
         $('#demo-form2').parsley().validate();
         validateFront();
     });
-    var validateFront = function () {
+    var validateFront = function() {
         if (true === $('#demo-form2').parsley().isValid()) {
             $('.bs-callout-info').removeClass('hidden');
             $('.bs-callout-warning').addClass('hidden');
@@ -1595,8 +1588,7 @@ function init_parsley() {
 
     try {
         hljs.initHighlightingOnLoad();
-    } catch (err) {
-    }
+    } catch (err) {}
 
 };
 
@@ -1665,24 +1657,24 @@ function init_wysiwyg() {
                 'Times New Roman', 'Verdana'
             ],
             fontTarget = $('[title=Font]').siblings('.dropdown-menu');
-        $.each(fonts, function (idx, fontName) {
+        $.each(fonts, function(idx, fontName) {
             fontTarget.append($('<li><a data-edit="fontName ' + fontName + '" style="font-family:\'' + fontName + '\'">' + fontName + '</a></li>'));
         });
         $('a[title]').tooltip({
             container: 'body'
         });
-        $('.dropdown-menu input').click(function () {
-            return false;
-        })
-            .change(function () {
+        $('.dropdown-menu input').click(function() {
+                return false;
+            })
+            .change(function() {
                 $(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');
             })
-            .keydown('esc', function () {
+            .keydown('esc', function() {
                 this.value = '';
                 $(this).change();
             });
 
-        $('[data-role=magic-overlay]').each(function () {
+        $('[data-role=magic-overlay]').each(function() {
             var overlay = $(this),
                 target = $(overlay.data('target'));
             overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
@@ -1711,7 +1703,7 @@ function init_wysiwyg() {
             '<strong>File upload error</strong> ' + msg + ' </div>').prependTo('#alerts');
     }
 
-    $('.editor-wrapper').each(function () {
+    $('.editor-wrapper').each(function() {
         var id = $(this).attr('id'); //editor-one
 
         $(this).wysiwyg({
@@ -1748,7 +1740,7 @@ function init_cropper() {
     var options = {
         aspectRatio: 16 / 9,
         preview: '.img-preview',
-        crop: function (e) {
+        crop: function(e) {
             $dataX.val(Math.round(e.x));
             $dataY.val(Math.round(e.y));
             $dataHeight.val(Math.round(e.height));
@@ -1766,25 +1758,25 @@ function init_cropper() {
 
     // Cropper
     $image.on({
-        'build.cropper': function (e) {
+        'build.cropper': function(e) {
 
         },
-        'built.cropper': function (e) {
+        'built.cropper': function(e) {
 
         },
-        'cropstart.cropper': function (e) {
+        'cropstart.cropper': function(e) {
 
         },
-        'cropmove.cropper': function (e) {
+        'cropmove.cropper': function(e) {
 
         },
-        'cropend.cropper': function (e) {
+        'cropend.cropper': function(e) {
 
         },
-        'crop.cropper': function (e) {
+        'crop.cropper': function(e) {
 
         },
-        'zoom.cropper': function (e) {
+        'zoom.cropper': function(e) {
 
         }
     }).cropper(options);
@@ -1808,7 +1800,7 @@ function init_cropper() {
 
 
     // Options
-    $('.docs-toggles').on('change', 'input', function () {
+    $('.docs-toggles').on('change', 'input', function() {
         var $this = $(this);
         var name = $this.attr('name');
         var type = $this.prop('type');
@@ -1824,7 +1816,7 @@ function init_cropper() {
             cropBoxData = $image.cropper('getCropBoxData');
             canvasData = $image.cropper('getCanvasData');
 
-            options.built = function () {
+            options.built = function() {
                 $image.cropper('setCropBoxData', cropBoxData);
                 $image.cropper('setCanvasData', canvasData);
             };
@@ -1837,7 +1829,7 @@ function init_cropper() {
 
 
     // Methods
-    $('.docs-buttons').on('click', '[data-method]', function () {
+    $('.docs-buttons').on('click', '[data-method]', function() {
         var $this = $(this);
         var data = $this.data();
         var $target;
@@ -1896,7 +1888,7 @@ function init_cropper() {
     });
 
     // Keyboard
-    $(document.body).on('keydown', function (e) {
+    $(document.body).on('keydown', function(e) {
         if (!$image.data('cropper') || this.scrollTop > 300) {
             return;
         }
@@ -1930,7 +1922,7 @@ function init_cropper() {
     var blobURL;
 
     if (URL) {
-        $inputImage.change(function () {
+        $inputImage.change(function() {
             var files = this.files;
             var file;
 
@@ -1943,7 +1935,7 @@ function init_cropper() {
 
                 if (/^image\/\w+$/.test(file.type)) {
                     blobURL = URL.createObjectURL(file);
-                    $image.one('built.cropper', function () {
+                    $image.one('built.cropper', function() {
 
                         // Revoke when load complete
                         URL.revokeObjectURL(blobURL);
@@ -1972,20 +1964,20 @@ function init_knob() {
     }
 
     $(".knob").knob({
-        change: function (value) {
+        change: function(value) {
 
         },
-        release: function (value) {
+        release: function(value) {
 
 
         },
-        cancel: function () {
+        cancel: function() {
 
         },
         /*format : function (value) {
          return value + '%';
          },*/
-        draw: function () {
+        draw: function() {
 
             // "tron" case
             if (this.$.data('skin') == 'tron') {
@@ -2031,12 +2023,12 @@ function init_knob() {
         i = 0,
         $idir = $("div.idir"),
         $ival = $("div.ival"),
-        incr = function () {
+        incr = function() {
             i++;
             $idir.show().html("+").fadeOut();
             $ival.html(i);
         },
-        decr = function () {
+        decr = function() {
             i--;
             $idir.show().html("-").fadeOut();
             $ival.html(i);
@@ -2045,7 +2037,7 @@ function init_knob() {
         min: 0,
         max: 20,
         stopper: false,
-        change: function () {
+        change: function() {
             if (v > this.cv) {
                 if (up) {
                     decr();
@@ -2173,7 +2165,7 @@ function init_IonRangeSlider() {
         from: +moment().subtract(6, "hours").format("X"),
         grid: true,
         force_edges: true,
-        prettify: function (num) {
+        prettify: function(num) {
             var m = moment(num, "X");
             return m.format("Do MMMM, HH:mm");
         }
@@ -2191,7 +2183,7 @@ function init_daterangepicker() {
     }
 
 
-    var cb = function (start, end, label) {
+    var cb = function(start, end, label) {
 
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     };
@@ -2237,25 +2229,25 @@ function init_daterangepicker() {
 
     $('#reportrange span').html(moment().subtract(29, 'days').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
     $('#reportrange').daterangepicker(optionSet1, cb);
-    $('#reportrange').on('show.daterangepicker', function () {
+    $('#reportrange').on('show.daterangepicker', function() {
 
     });
-    $('#reportrange').on('hide.daterangepicker', function () {
+    $('#reportrange').on('hide.daterangepicker', function() {
 
     });
-    $('#reportrange').on('apply.daterangepicker', function (ev, picker) {
+    $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
         //console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
     });
-    $('#reportrange').on('cancel.daterangepicker', function (ev, picker) {
+    $('#reportrange').on('cancel.daterangepicker', function(ev, picker) {
 
     });
-    $('#options1').click(function () {
+    $('#options1').click(function() {
         $('#reportrange').data('daterangepicker').setOptions(optionSet1, cb);
     });
-    $('#options2').click(function () {
+    $('#options2').click(function() {
         $('#reportrange').data('daterangepicker').setOptions(optionSet2, cb);
     });
-    $('#destroy').click(function () {
+    $('#destroy').click(function() {
         $('#reportrange').data('daterangepicker').remove();
     });
 
@@ -2268,7 +2260,7 @@ function init_daterangepicker_right() {
     }
 
 
-    var cb = function (start, end, label) {
+    var cb = function(start, end, label) {
         //console.log(start.toISOString(), end.toISOString(), label);
         $('#reportrange_right span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
     };
@@ -2316,28 +2308,28 @@ function init_daterangepicker_right() {
 
     $('#reportrange_right').daterangepicker(optionSet1, cb);
 
-    $('#reportrange_right').on('show.daterangepicker', function () {
+    $('#reportrange_right').on('show.daterangepicker', function() {
 
     });
-    $('#reportrange_right').on('hide.daterangepicker', function () {
+    $('#reportrange_right').on('hide.daterangepicker', function() {
 
     });
-    $('#reportrange_right').on('apply.daterangepicker', function (ev, picker) {
+    $('#reportrange_right').on('apply.daterangepicker', function(ev, picker) {
         //console.log("apply event fired, start/end dates are " + picker.startDate.format('MMMM D, YYYY') + " to " + picker.endDate.format('MMMM D, YYYY'));
     });
-    $('#reportrange_right').on('cancel.daterangepicker', function (ev, picker) {
+    $('#reportrange_right').on('cancel.daterangepicker', function(ev, picker) {
 
     });
 
-    $('#options1').click(function () {
+    $('#options1').click(function() {
         $('#reportrange_right').data('daterangepicker').setOptions(optionSet1, cb);
     });
 
-    $('#options2').click(function () {
+    $('#options2').click(function() {
         $('#reportrange_right').data('daterangepicker').setOptions(optionSet2, cb);
     });
 
-    $('#destroy').click(function () {
+    $('#destroy').click(function() {
         $('#reportrange_right').data('daterangepicker').remove();
     });
 
@@ -2353,25 +2345,25 @@ function init_daterangepicker_single_call() {
     $('#single_cal1').daterangepicker({
         singleDatePicker: true,
         singleClasses: "picker_1"
-    }, function (start, end, label) {
+    }, function(start, end, label) {
         //console.log(start.toISOString(), end.toISOString(), label);
     });
     $('#single_cal2').daterangepicker({
         singleDatePicker: true,
         singleClasses: "picker_2"
-    }, function (start, end, label) {
+    }, function(start, end, label) {
         //console.log(start.toISOString(), end.toISOString(), label);
     });
     $('#single_cal3').daterangepicker({
         singleDatePicker: true,
         singleClasses: "picker_3"
-    }, function (start, end, label) {
+    }, function(start, end, label) {
         //console.log(start.toISOString(), end.toISOString(), label);
     });
     $('#single_cal4').daterangepicker({
         singleDatePicker: true,
         singleClasses: "picker_4"
-    }, function (start, end, label) {
+    }, function(start, end, label) {
         //console.log(start.toISOString(), end.toISOString(), label);
     });
 
@@ -2386,7 +2378,7 @@ function init_daterangepicker_reservation() {
     }
 
 
-    $('#reservation').daterangepicker(null, function (start, end, label) {
+    $('#reservation').daterangepicker(null, function(start, end, label) {
 
     });
 
@@ -2440,11 +2432,11 @@ function init_validator() {
         .on('change', 'select.required', validator.checkField)
         .on('keypress', 'input[required][pattern]', validator.keypress);
 
-    $('.multi.required').on('keyup blur', 'input', function () {
+    $('.multi.required').on('keyup blur', 'input', function() {
         validator.checkField.apply($(this).siblings().last()[0]);
     });
 
-    $('form').submit(function (e) {
+    $('form').submit(function(e) {
         e.preventDefault();
         var submit = true;
 
@@ -2480,7 +2472,7 @@ function init_PNotify() {
         addclass: 'dark',
         styling: 'bootstrap3',
         hide: false,
-        before_close: function (PNotify) {
+        before_close: function(PNotify) {
             PNotify.update({
                 title: PNotify.options.title + " - Enjoy your Stay",
                 before_close: null
@@ -2505,7 +2497,7 @@ function init_CustomNotification() {
 
     var cnt = 10;
 
-    TabbedNotification = function (options) {
+    TabbedNotification = function(options) {
         var message = "<div id='ntf" + cnt + "' class='text alert-" + options.type + "' style='display:none'><h2><i class='fa fa-bell'></i> " + options.title +
             "</h2><div class='close'><a href='javascript:;' class='notification_close'><i class='fa fa-close'></i></a></div><p>" + options.text + "</p></div>";
 
@@ -2519,11 +2511,11 @@ function init_CustomNotification() {
         }
     };
 
-    CustomTabs = function (options) {
+    CustomTabs = function(options) {
         $('.tabbed_notifications > div').hide();
         $('.tabbed_notifications > div:first-of-type').show();
         $('#custom_notifications').removeClass('dsp_none');
-        $('.notifications a').click(function (e) {
+        $('.notifications a').click(function(e) {
             e.preventDefault();
             var $this = $(this),
                 tabbed_notifications = '#' + $this.parents('.notifications').data('tabbed_notifications'),
@@ -2540,13 +2532,14 @@ function init_CustomNotification() {
 
     var tabid = idname = '';
 
-    $(document).on('click', '.notification_close', function (e) {
+    $(document).on('click', '.notification_close', function(e) {
         idname = $(this).parent().parent().attr("id");
         tabid = idname.substr(-2);
         $('#ntf' + tabid).remove();
         $('#ntlink' + tabid).parent().remove();
         $('.notifications a').first().addClass('active');
         $('#notif-group div').first().css('display', 'block');
+
     });
 
 };
@@ -2569,18 +2562,18 @@ function init_EasyPieChart() {
         lineWidth: 20,
         trackWidth: 16,
         lineCap: 'butt',
-        onStep: function (from, to, percent) {
+        onStep: function(from, to, percent) {
             $(this.el).find('.percent').text(Math.round(percent));
         }
     });
     var chart = window.chart = $('.chart').data('easyPieChart');
-    $('.js_update').on('click', function () {
+    $('.js_update').on('click', function() {
         chart.update(Math.random() * 200 - 100);
     });
 
     //hover and retain popover when on popover content
     var originalLeave = $.fn.popover.Constructor.prototype.leave;
-    $.fn.popover.Constructor.prototype.leave = function (obj) {
+    $.fn.popover.Constructor.prototype.leave = function(obj) {
         var self = obj instanceof this.constructor ?
             obj : $(obj.currentTarget)[this.type](this.getDelegateOptions()).data('bs.' + this.type);
         var container, timeout;
@@ -2590,11 +2583,11 @@ function init_EasyPieChart() {
         if (obj.currentTarget) {
             container = $(obj.currentTarget).siblings('.popover');
             timeout = self.timeout;
-            container.one('mouseenter', function () {
+            container.one('mouseenter', function() {
                 //We entered the actual popover – call off the dogs
                 clearTimeout(timeout);
                 //Let's monitor popover content instead
-                container.one('mouseleave', function () {
+                container.one('mouseleave', function() {
                     $.fn.popover.Constructor.prototype.leave.call(self, self);
                 });
             });
@@ -3022,7 +3015,7 @@ function init_compose() {
     }
 
 
-    $('#compose, .compose-close').click(function () {
+    $('#compose, .compose-close').click(function() {
         $('.compose').slideToggle();
     });
 
@@ -3052,13 +3045,13 @@ function init_calendar() {
         },
         selectable: true,
         selectHelper: true,
-        select: function (start, end, allDay) {
+        select: function(start, end, allDay) {
             $('#fc_create').click();
 
             started = start;
             ended = end;
 
-            $(".antosubmit").on("click", function () {
+            $(".antosubmit").on("click", function() {
                 var title = $("#title").val();
                 if (end) {
                     ended = end;
@@ -3086,13 +3079,13 @@ function init_calendar() {
                 return false;
             });
         },
-        eventClick: function (calEvent, jsEvent, view) {
+        eventClick: function(calEvent, jsEvent, view) {
             $('#fc_edit').click();
             $('#title2').val(calEvent.title);
 
             categoryClass = $("#event_type").val();
 
-            $(".antosubmit2").on("click", function () {
+            $(".antosubmit2").on("click", function() {
                 calEvent.title = $("#title2").val();
 
                 calendar.fullCalendar('updateEvent', calEvent);
@@ -3141,14 +3134,14 @@ function init_DataTables() {
         return;
     }
 
-    var handleDataTableButtons = function () {
+    var handleDataTableButtons = function() {
         if ($("#datatable-buttons").length) {
             $("#datatable-buttons").DataTable({
                 dom: "Bfrtip",
                 buttons: [{
-                    extend: "copy",
-                    className: "btn-sm"
-                },
+                        extend: "copy",
+                        className: "btn-sm"
+                    },
                     {
                         extend: "csv",
                         className: "btn-sm"
@@ -3171,10 +3164,10 @@ function init_DataTables() {
         }
     };
 
-    TableManageButtons = function () {
+    TableManageButtons = function() {
         "use strict";
         return {
-            init: function () {
+            init: function() {
                 handleDataTableButtons();
             }
         };
@@ -3186,7 +3179,7 @@ function init_DataTables() {
         keys: true
     });
 
-	
+
     $('#datatable-responsive').DataTable();
 
     $('#datatable-scroller').DataTable({
@@ -3212,7 +3205,7 @@ function init_DataTables() {
             targets: [0]
         }]
     });
-    $datatable.on('draw.dt', function () {
+    $datatable.on('draw.dt', function() {
         $('checkbox input').iCheck({
             checkboxClass: 'icheckbox_flat-green'
         });
@@ -3235,9 +3228,9 @@ function init_morris_charts() {
         Morris.Bar({
             element: 'graph_bar',
             data: [{
-                device: 'iPhone 4',
-                geekbench: 380
-            },
+                    device: 'iPhone 4',
+                    geekbench: 380
+                },
                 {
                     device: 'iPhone 4S',
                     geekbench: 655
@@ -3292,10 +3285,10 @@ function init_morris_charts() {
         Morris.Bar({
             element: 'graph_bar_group',
             data: [{
-                "period": "2016-10-01",
-                "licensed": 807,
-                "sorned": 660
-            },
+                    "period": "2016-10-01",
+                    "licensed": 807,
+                    "sorned": 660
+                },
                 {
                     "period": "2016-09-30",
                     "licensed": 1251,
@@ -3358,11 +3351,11 @@ function init_morris_charts() {
         Morris.Bar({
             element: 'graphx',
             data: [{
-                x: '2015 Q1',
-                y: 2,
-                z: 3,
-                a: 4
-            },
+                    x: '2015 Q1',
+                    y: 2,
+                    z: 3,
+                    a: 4
+                },
                 {
                     x: '2015 Q2',
                     y: 3,
@@ -3388,7 +3381,7 @@ function init_morris_charts() {
             hideHover: 'auto',
             labels: ['Y', 'Z', 'A'],
             resize: true
-        }).on('click', function (i, row) {
+        }).on('click', function(i, row) {
             //console.log(i, row);
         });
 
@@ -3399,11 +3392,11 @@ function init_morris_charts() {
         Morris.Area({
             element: 'graph_area',
             data: [{
-                period: '2014 Q1',
-                iphone: 2666,
-                ipad: null,
-                itouch: 2647
-            },
+                    period: '2014 Q1',
+                    iphone: 2666,
+                    ipad: null,
+                    itouch: 2647
+                },
                 {
                     period: '2014 Q2',
                     iphone: 2778,
@@ -3475,9 +3468,9 @@ function init_morris_charts() {
         Morris.Donut({
             element: 'graph_donut',
             data: [{
-                label: 'Jam',
-                value: 25
-            },
+                    label: 'Jam',
+                    value: 25
+                },
                 {
                     label: 'Frosted',
                     value: 40
@@ -3492,7 +3485,7 @@ function init_morris_charts() {
                 }
             ],
             colors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
-            formatter: function (y) {
+            formatter: function(y) {
                 return y + "%";
             },
             resize: true
@@ -3510,9 +3503,9 @@ function init_morris_charts() {
             hideHover: 'auto',
             lineColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
             data: [{
-                year: '2012',
-                value: 20
-            },
+                    year: '2012',
+                    value: 20
+                },
                 {
                     year: '2013',
                     value: 10
@@ -3533,7 +3526,7 @@ function init_morris_charts() {
             resize: true
         });
 
-        $MENU_TOGGLE.on('click', function () {
+        $MENU_TOGGLE.on('click', function() {
             $(window).resize();
         });
 
@@ -4037,7 +4030,7 @@ function init_echarts() {
                 },
                 axisLabel: {
                     show: true,
-                    formatter: function (v) {
+                    formatter: function(v) {
                         switch (v + '') {
                             case '10':
                                 return 'a';
@@ -4245,7 +4238,7 @@ function init_echarts() {
                 type: 'scatter',
                 tooltip: {
                     trigger: 'item',
-                    formatter: function (params) {
+                    formatter: function(params) {
                         if (params.value.length > 1) {
                             return params.seriesName + ' :<br/>' + params.value[0] + 'cm ' + params.value[1] + 'kg ';
                         } else {
@@ -4535,7 +4528,7 @@ function init_echarts() {
                 type: 'scatter',
                 tooltip: {
                     trigger: 'item',
-                    formatter: function (params) {
+                    formatter: function(params) {
                         if (params.value.length > 1) {
                             return params.seriesName + ' :<br/>' + params.value[0] + 'cm ' + params.value[1] + 'kg ';
                         } else {
@@ -5230,7 +5223,7 @@ function init_echarts() {
             },
             tooltip: {
                 trigger: 'item',
-                formatter: function (params) {
+                formatter: function(params) {
                     var value = (params.value + '').split('.');
                     value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,') + '.' + value[1];
                     return params.seriesName + '<br/>' + params.name + ' : ' + value;
@@ -5560,6 +5553,7 @@ function init_echarts() {
                     value: 97.743
                 }, {
                     name: 'Kuwait',
+
                     value: 2991.58
                 }, {
                     name: 'Laos',
@@ -5828,7 +5822,7 @@ function init_echarts() {
 }
 
 
-$(document).ready(function () {
+$(document).ready(function() {
 
     init_sparklines();
     init_flot_chart();
@@ -5867,15 +5861,15 @@ $(document).ready(function () {
 
 });
 
-function removeError(selfObj){
+function removeError(selfObj) {
     $(selfObj).removeClass('errorInput');
     $('#errorEmailMsg').slideUp()
 }
 
-$(document).on("submit", "#expertRegistration", function (e) {
+$(document).on("submit", "#expertRegistration", function(e) {
     e.preventDefault();
     if (!validateForm('expertRegistration')) return false;
-	$('#preloader').fadeIn();
+    $('#preloader').fadeIn();
     $.ajax({
         url: base_url + 'process/update_sme',
         dataType: 'json',
@@ -5883,9 +5877,9 @@ $(document).on("submit", "#expertRegistration", function (e) {
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
-            if(data == 'dublicate'){
+        success: function(data) {
+            $('#preloader').fadeOut();
+            if (data == 'dublicate') {
                 swal({
                     title: 'Opps!!',
                     text: "Thank you for registering on our website. - Gotcha-6.",
@@ -5893,7 +5887,7 @@ $(document).on("submit", "#expertRegistration", function (e) {
                     confirmButtonColor: '#009688',
                     confirmButtonText: 'Okay!'
                 })
-            }else{
+            } else {
                 swal({
                     title: 'Registration Completed!',
                     text: "Thank you for submitting the details",
@@ -5901,21 +5895,20 @@ $(document).on("submit", "#expertRegistration", function (e) {
                     allowOutsideClick: false,
                     confirmButtonColor: '#009688',
                     confirmButtonText: 'Okay!'
-                }).then(function () {
-					if($("input[name=fld_user_type]").val() == '3'){
-                    	window.location.href = base_url + 'dashboard';
-					}else{
-						window.location.href = base_url + 'dashboard/self_assessment';
-					}
+                }).then(function() {
+                    if ($("input[name=fld_user_type]").val() == '3') {
+                        window.location.href = base_url + 'dashboard';
+                    } else {
+                        window.location.href = base_url + 'dashboard/self_assessment';
+                    }
                 })
             }
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
-function alertToCompleteForm(){
+function alertToCompleteForm() {
     swal({
         title: 'Oops!!',
         text: 'Please complete this form before proceeding further steps',
@@ -5923,19 +5916,21 @@ function alertToCompleteForm(){
     });
 }
 
-setInterval(function(){
-	sts('0');
+setInterval(function() {
+    sts('0');
 }, 5000);
-$(window).bind("beforeunload", function() { 
-	sts('1');
+$(window).bind("beforeunload", function() {
+    sts('1');
 })
 
 function sts(status) {
     var s = document.createElement("script");
-	var url = base_url + "process/onoff/"+status;
+    var url = base_url + "process/onoff/" + status;
     s.src = url;
-    document.body.appendChild(s);
-	//setTimeout(function(){ $('script[src="'+url+'"]').remove() }, 2000);
+	document.body.appendChild(s);
+    setTimeout(function() {
+        //$('script[src="' + url + '"]').remove()
+    }, 2000);
 }
 
 function check_userID_exists(selfObj) {
@@ -5945,17 +5940,17 @@ function check_userID_exists(selfObj) {
     $(selfObj).val(userName);
     $('#errorEmailMsg').hide();
     var postVal = "username=" + userName;
-    $.post(base_url + "process/username_exists", postVal, function (data) {
+    $.post(base_url + "process/username_exists", postVal, function(data) {
         if (data == 1) {
             $('#errorEmailMsg').show();
         }
     });
 }
 
-function addnewTimeSlotDropdown(){
-	var hours = '';
+function addnewTimeSlotDropdown() {
+    var hours = '';
     var minuts = '';
-	var num = Math.floor(Math.random() * 90000) + 10000;
+    var num = Math.floor(Math.random() * 90000) + 10000;
     for (var h = 0; h <= 23; h++) {
         hours += '<option value="' + ('0' + h).slice(-2) + '">' + ('0' + h).slice(-2) + '</option>';
     }
@@ -5963,226 +5958,234 @@ function addnewTimeSlotDropdown(){
         minuts += '<option value="' + ('0' + m).slice(-2) + '">' + ('0' + m).slice(-2) + '</option>';
         m += 4;
     }
-	
-	var timeTexHTL = '<div class="row">' +
-		'<div class="col-sm-6 selH'+num+'">' +
-		  '<select title="Hour" name="starthours[]" data-size="5" data-width="100%">' +
-			hours +
-		  '</select>' +
-		'</div>' +
-		'<div class="col-sm-6 selM'+num+'">' +
-		  '<select title="Minut" name="starthours[]" data-size="5" data-width="100%">' +
-			minuts +
-		  '</select>' +
-		'<span data-sltid="'+num+'" class="dlttimeSlror"><i class="fa fa-times"></i></span></div>' +
-	  '</div>';
-	  $('.boxFinArR > div').append(timeTexHTL);
-	  $('.selH'+num+' select, .selM'+num+' select').selectpicker();
-	  return num;
+
+    var timeTexHTL = '<div class="row">' +
+        '<div class="col-sm-6 selH' + num + '">' +
+        '<select title="Hour" name="starthours[]" data-size="5" data-width="100%">' +
+        hours +
+        '</select>' +
+        '</div>' +
+        '<div class="col-sm-6 selM' + num + '">' +
+        '<select title="Minut" name="starthours[]" data-size="5" data-width="100%">' +
+        minuts +
+        '</select>' +
+        '<span data-sltid="' + num + '" class="dlttimeSlror"><i class="fa fa-times"></i></span></div>' +
+        '</div>';
+    $('.boxFinArR > div').append(timeTexHTL);
+    $('.selH' + num + ' select, .selM' + num + ' select').selectpicker();
+    return num;
 }
 
-$('.endSarlr').on('click','.dlttimeSlror',function(){
-	$('.selM'+$(this).data("sltid")).remove();
-	$('.selH'+$(this).data("sltid")).remove();
+$('.endSarlr').on('click', '.dlttimeSlror', function() {
+    $('.selM' + $(this).data("sltid")).remove();
+    $('.selH' + $(this).data("sltid")).remove();
 });
 
 
 $('.certificationDate').daterangepicker({
-	singleDatePicker: true,
-	locale: {
-				format: 'DD/MM/YYYY'
-	},
-	singleClasses: "picker_3"
-}, function (start, end, label) {
-	//console.log(start.toISOString(), end.toISOString(), label);
+    singleDatePicker: true,
+    locale: {
+        format: 'DD/MM/YYYY'
+    },
+    singleClasses: "picker_3"
+}, function(start, end, label) {
+    //console.log(start.toISOString(), end.toISOString(), label);
 });
 
-function addNewBoxingTag(){
-	$('.newBoxAddService').append($('.dublicateBoxing').html())
-	$('.certificationDate').daterangepicker({
-		singleDatePicker: true,
-		singleClasses: "picker_3"
-	}, function (start, end, label) {
-	});	
-	$('.newBoxAddService .customSelectpicker').selectpicker();
+function addNewBoxingTag() {
+    $('.newBoxAddService').append($('.dublicateBoxing').html())
+    $('.certificationDate').daterangepicker({
+        singleDatePicker: true,
+        singleClasses: "picker_3"
+    }, function(start, end, label) {});
+    $('.newBoxAddService .customSelectpicker').selectpicker();
 }
 
-$(document).on("submit", "#selfAssesment", function (e) {
+$(document).on("submit", "#selfAssesment", function(e) {
     e.preventDefault();
-	$('#preloader').fadeIn();
-	$.ajax({
+    $('#preloader').fadeIn();
+    $.ajax({
         url: base_url + 'process/update_selfAssesment',
         dataType: 'json',
         type: 'POST',
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Information Updated!',
                 text: "Your information has been updated",
                 type: 'success',
-				allowOutsideClick: false,
+                allowOutsideClick: false,
                 confirmButtonColor: '#009688',
-                confirmButtonText: 'Okay!'				
-            }).then(function () {
+                confirmButtonText: 'Okay!'
+            }).then(function() {
                 window.location.href = base_url + 'dashboard';
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
-$(document).on("submit", "#updateUserServiceTag", function (e) {
+$(document).on("submit", "#updateUserServiceTag", function(e) {
     e.preventDefault();
-	$('#preloader').fadeIn();
-	var formData = new FormData(this);
-	var status = [] ;
-	$('.statusBox').each(function(index, element) {
-        if($(this).is(':checked')){
-			status.push(0);
-		}else{
-			status.push(1);
-		}		
+    $('#preloader').fadeIn();
+    var formData = new FormData(this);
+    var status = [];
+    $('.statusBox').each(function(index, element) {
+        if ($(this).is(':checked')) {
+            status.push(0);
+        } else {
+            status.push(1);
+        }
     });
 
-	formData.append('status', status);
-	$.ajax({
+    formData.append('status', status);
+    $.ajax({
         url: base_url + 'process/updateUserServiceTag',
         dataType: 'json',
         type: 'POST',
         data: formData,
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Information Updated!',
                 text: "Information has been updated",
                 type: 'success',
                 confirmButtonColor: '#009688',
-                confirmButtonText: 'Okay!'				
-            }).then(function () {
+                confirmButtonText: 'Okay!'
+            }).then(function() {
                 window.history.back();
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
 
-$(document).on("submit", ".superadminForm", function (e) {
+$(document).on("submit", ".superadminForm", function(e) {
     e.preventDefault();
-	$('#preloader').fadeIn();
-	$.ajax({
+    $('#preloader').fadeIn();
+    $.ajax({
         url: base_url + 'process/update_userpAdmin',
         dataType: 'json',
         type: 'POST',
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Information Updated!',
                 text: "Your information has been updated",
                 type: 'success',
-				allowOutsideClick: false,
+                allowOutsideClick: false,
                 confirmButtonColor: '#009688',
-                confirmButtonText: 'Okay!'				
-            }).then(function () {
+                confirmButtonText: 'Okay!'
+            }).then(function() {
                 location.reload();
             })
         },
-        error: function () {
-			$('#preloader').fadeOut();
+        error: function() {
+            $('#preloader').fadeOut();
         }
     });
 });
-$(document).on("submit", ".superadminPassword", function (e) {
+$(document).on("submit", ".superadminPassword", function(e) {
     var oPassword = $('.oPassword').val();
-	var nPassword = $('.nPassword').val();
-	var cPassword = $('.cPassword').val();
-	
-	if(oPassword || nPassword){
-		if(!oPassword){
-			swal( 'Oops...','To change your password please enter Old Password','error');
-			return false;
-		}
-		if(!nPassword){
-			swal( 'Oops...','To change your password please enter New Password','error');
-			return false;
-		}
-		if(!cPassword){
-			swal( 'Oops...','To change your password please enter Confirm New Password','error');
-			return false;
-		}
-		if(cPassword != nPassword){
-			swal( 'Oops...','Your new password and confirmation password do not match, please retype','error');
-			return false;
-		}
-	}
-    e.preventDefault();	
+    var nPassword = $('.nPassword').val();
+    var cPassword = $('.cPassword').val();
+
+    if (oPassword || nPassword) {
+        if (!oPassword) {
+            swal('Oops...', 'To change your password please enter Old Password', 'error');
+            return false;
+        }
+        if (!nPassword) {
+            swal('Oops...', 'To change your password please enter New Password', 'error');
+            return false;
+        }
+        if (!cPassword) {
+            swal('Oops...', 'To change your password please enter Confirm New Password', 'error');
+            return false;
+        }
+        if (cPassword != nPassword) {
+            swal('Oops...', 'Your new password and confirmation password do not match, please retype', 'error');
+            return false;
+        }
+    }
+    e.preventDefault();
     $.ajax({
-            url: base_url+'process/updateSuperAdminPassword',
-            dataType: 'json',
-            type: 'POST',
-			data: new FormData(this),
-            processData: false,
-            contentType: false,
-            success: function(data) {
-				if(data.result == 'sucess'){
-					swal({
-					  showCancelButton: false,
-					  showConfirmButton: false,
-					  showConfirmButton: false,
-					  showCloseButton: false,
-					  timer: 2000,
-					  title: 'Congrats!',
-					  text: "You profile has been updated ",
-					  type: 'success'
-					}).then(function () {
-					  $('.oPassword').val('');
-					  $('.nPassword').val('');
-					  $('.cPassword').val('');
-					});
-				}else{
-					swal( 'Oops...',data.result,'error');					
-				}
-            },
-            error: function() {}
-       });
+        url: base_url + 'process/updateSuperAdminPassword',
+        dataType: 'json',
+        type: 'POST',
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            if (data.result == 'sucess') {
+                swal({
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    showConfirmButton: false,
+                    showCloseButton: false,
+                    timer: 2000,
+                    title: 'Congrats!',
+                    text: "You profile has been updated ",
+                    type: 'success'
+                }).then(function() {
+                    $('.oPassword').val('');
+                    $('.nPassword').val('');
+                    $('.cPassword').val('');
+                });
+            } else {
+                swal('Oops...', data.result, 'error');
+            }
+        },
+        error: function() {}
+    });
 });
 
 $('.dataTable').DataTable();
-$('.selfAssesementTbl').dataTable( {
-	"bFilter": false,
-	"bInfo": false,
-	"order": [],
-    "aoColumns": [
-		{ "bSortable": false },
-		{ "bSortable": false },
-		{ "bSortable": false },
-		{ "bSortable": false },
-		{ "bSortable": false }
-	],
-	"sDom": '<"top">rt<"bottom"lp><"clear">'
+$('.selfAssesementTbl').dataTable({
+    "bFilter": false,
+    "bInfo": false,
+    "order": [],
+    "aoColumns": [{
+            "bSortable": false
+        },
+        {
+            "bSortable": false
+        },
+        {
+            "bSortable": false
+        },
+        {
+            "bSortable": false
+        },
+        {
+            "bSortable": false
+        }
+    ],
+    "sDom": '<"top">rt<"bottom"lp><"clear">'
 });
-function removeTRsection(selfObj){
-	$(selfObj).closest('tr').remove();
-}
-function switchEditProfileTab(){
-	$('.tabTopFlow li').removeClass('active');
-	$('.editProfile').addClass('active');
+
+function removeTRsection(selfObj) {
+    $(selfObj).closest('tr').remove();
 }
 
-$(document).on("submit", "#create_incident", function (e) {
+function switchEditProfileTab() {
+    $('.tabTopFlow li').removeClass('active');
+    $('.editProfile').addClass('active');
+}
+
+$(document).on("submit", "#create_incident", function(e) {
     e.preventDefault();
     var notchecked = false;
-	$('#preloader').fadeIn();
-    if(!$('input:radio[name="rm_id"]').is(':checked')) {
+    $('#preloader').fadeIn();
+    if (!$('input:radio[name="rm_id"]').is(':checked')) {
         var notchecked = true;
         $('input:radio[name="rm_id"]:eq(0)').prop("checked", true);
     }
@@ -6192,121 +6195,119 @@ $(document).on("submit", "#create_incident", function (e) {
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
-			if($('.incidentID').val()){
-				var subject = 'Updated!';
-				var msg = 'Your Incident has been updated';
-			}else{				
-				var subject = 'Create Incident Successfull!';
-				var msg = 'Thank you for Create Incident on our website. - Gotcha-6.';
-			}
+        success: function(data) {
+            $('#preloader').fadeOut();
+            if ($('.incidentID').val()) {
+                var subject = 'Updated!';
+                var msg = 'Your Incident has been updated';
+            } else {
+                var subject = 'Create Incident Successfull!';
+                var msg = 'Thank you for Create Incident on our website. - Gotcha-6.';
+            }
             swal({
                 title: subject,
                 text: msg,
                 type: 'success',
-				allowOutsideClick: false,
+                allowOutsideClick: false,
                 confirmButtonColor: '#009688',
                 confirmButtonText: 'Okay!'
-            }).then(function () {
+            }).then(function() {
                 window.location.href = base_url + 'dashboard/all_incident';
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
-    if(notchecked){
+    if (notchecked) {
         $('input:radio[name="rm_id"]').removeAttr('checked')
     }
 });
 
 /* Reset the Resource Manager Checked value In Incident creation */
 
-function resetRMList(){
-	$('[name=rm_id]').iCheck('uncheck');
+function resetRMList() {
+    $('[name=rm_id]').iCheck('uncheck');
 }
 
 /*  Assign The default resource Manager to the incident  */
 
-function selectDefaultRM(msg) {	
-	if(msg){
-		if($('.incidentID').val()){
-			msg = 'You are about to update this Incident.';
-			var yesBtn = 'Okay! Update Incident';
-		}else{				
-			msg = 'You are about to create a New Incident.';
-			var yesBtn = 'Okay! Create Incident';
-		}		
-	}else{
-		msg = 'Do you want to assign a random generated Rource Manager for your Incident?';
-		var yesBtn = 'Yes, Assign it!';
-	}
+function selectDefaultRM(msg) {
+    if (msg) {
+        if ($('.incidentID').val()) {
+            msg = 'You are about to update this Incident.';
+            var yesBtn = 'Okay! Update Incident';
+        } else {
+            msg = 'You are about to create a New Incident.';
+            var yesBtn = 'Okay! Create Incident';
+        }
+    } else {
+        msg = 'Do you want to assign a random generated Rource Manager for your Incident?';
+        var yesBtn = 'Yes, Assign it!';
+    }
     swal({
-		title: 'Are you sure?',
-		text: msg,
-		type: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: yesBtn,
-		cancelButtonText: 'No, cancel!',
-		confirmButtonClass: 'btn btn-success',
-		cancelButtonClass: 'btn btn-danger',
-		buttonsStyling: false
-	}).then(function () {
-		$("#create_incident").submit();
-	})	
+        title: 'Are you sure?',
+        text: msg,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: yesBtn,
+        cancelButtonText: 'No, cancel!',
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        buttonsStyling: false
+    }).then(function() {
+        $("#create_incident").submit();
+    })
 }
 
 
-$(document).on("submit", "#update_incident", function (e) {
+$(document).on("submit", "#update_incident", function(e) {
     e.preventDefault();
-	$('#preloader').fadeIn();
+    $('#preloader').fadeIn();
     $.ajax({
         url: base_url + 'process/update_incident',
         type: 'POST',
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Update Incident Successfull!',
                 text: "Thank you for Update Incident on our website. - Gotcha-6.",
                 type: 'success',
                 confirmButtonColor: '#009688',
                 confirmButtonText: 'Okay!'
-            }).then(function () {
+            }).then(function() {
                 //window.location.href = base_url + 'dashboard';
             })
-			
+
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
-function selectPlanTab(selfObj, val){
-	$('.boxPricePanl .panel-primary').toggleClass('panel-primary panel-default');
-	$('.boxPricePanl .btn-success').toggleClass('btn-primary btn-success').html('Select');
-	$(selfObj).closest('.panel').toggleClass('panel-default panel-primary');
-	$(selfObj).text('Selected').toggleClass('btn-primary btn-success');
-	$('.planValue').val(val);
+function selectPlanTab(selfObj, val) {
+    $('.boxPricePanl .panel-primary').toggleClass('panel-primary panel-default');
+    $('.boxPricePanl .btn-success').toggleClass('btn-primary btn-success').html('Select');
+    $(selfObj).closest('.panel').toggleClass('panel-default panel-primary');
+    $(selfObj).text('Selected').toggleClass('btn-primary btn-success');
+    $('.planValue').val(val);
 }
 
-function acceptDeclineIncident(selfObj,id,peram,target,type){
-	if(type=='1'){
-		var subject = 'Are you sure?';
-		var msg = 'To accept this incident';
-		var cSubject = 'Accepted!!';
-		var cMsg = 'You have been assigned for this incident.';
-	}else{
-		var subject = 'Are you sure?';
-		var msg = 'To decline this incident';
-		var cSubject = 'Declined!!';
-		var cMsg = 'You have been removed from this incident.';		
-	}
-	swal({
+function acceptDeclineIncident(selfObj, id, peram, target, type) {
+    if (type == '1') {
+        var subject = 'Are you sure?';
+        var msg = 'To accept this incident';
+        var cSubject = 'Accepted!!';
+        var cMsg = 'You have been assigned for this incident.';
+    } else {
+        var subject = 'Are you sure?';
+        var msg = 'To decline this incident';
+        var cSubject = 'Declined!!';
+        var cMsg = 'You have been removed from this incident.';
+    }
+    swal({
         title: subject,
         text: msg,
         type: 'warning',
@@ -6318,141 +6319,151 @@ function acceptDeclineIncident(selfObj,id,peram,target,type){
         confirmButtonClass: 'btn btn-success',
         cancelButtonClass: 'btn btn-danger',
         buttonsStyling: false
-    }).then(function () {
-		$.post(base_url + "process/changeStatus/"+id+"/"+peram+"/"+target, function (data) {
-			if(target == 'SMEincidentAcptDecl'){
-				if(type=='1'){
-					$(selfObj).closest('tr').find('.boxStarw').html('<span class="label label-info statusIn">Accepted</span>');	
-					$(selfObj).html('<i class="fa fa-line-chart"></i>');
-				}else{
-					$(selfObj).closest('tr').find('.boxStarw').html('<span class="label label-danger statusIn">Declined</span>');
-					$(selfObj).closest('tr').find('.btnAssign, .acpBtn').remove();				
-					$(selfObj).remove();
-				}	
-			}else{
-				if(type=='1'){
-					$(selfObj).closest('tr').find('.boxStarw').html('<span class="label label-info statusIn">Approved</span>');	
-					$(selfObj).html('<i class="fa fa-user-plus"></i>').attr('onClick','assignSME(this)').attr('data-original-title', 'Assign SME');
-					$(selfObj).click();
-				}else{
-					$(selfObj).closest('tr').find('.boxStarw').html('<span class="label label-danger statusIn">Declined</span>');
-					$(selfObj).closest('tr').find('.btnAssign, .acpBtn').remove();				
-					$(selfObj).remove();
-				}
-			}
-			
-			processTooltip();
-			swal({
-				title: cSubject,
-				text: cMsg,
-				type: 'success'
-			});
-		});
+    }).then(function() {
+        $.post(base_url + "process/changeStatus/" + id + "/" + peram + "/" + target, function(data) {
+            if (target == 'SMEincidentAcptDecl') {
+                if (type == '1') {
+                    $(selfObj).closest('tr').find('.boxStarw').html('<span class="label label-info statusIn">Accepted</span>');
+                    $(selfObj).html('<i class="fa fa-line-chart"></i>');
+                } else {
+                    $(selfObj).closest('tr').find('.boxStarw').html('<span class="label label-danger statusIn">Declined</span>');
+                    $(selfObj).closest('tr').find('.btnAssign, .acpBtn').remove();
+                    $(selfObj).remove();
+                }
+            } else {
+                if (type == '1') {
+                    $(selfObj).closest('tr').find('.boxStarw').html('<span class="label label-info statusIn">Approved</span>');
+                    $(selfObj).html('<i class="fa fa-user-plus"></i>').attr('onClick', 'assignSME(this)').attr('data-original-title', 'Assign SME');
+                    $(selfObj).click();
+                } else {
+                    $(selfObj).closest('tr').find('.boxStarw').html('<span class="label label-danger statusIn">Declined</span>');
+                    $(selfObj).closest('tr').find('.btnAssign, .acpBtn').remove();
+                    $(selfObj).remove();
+                }
+            }
+
+            processTooltip();
+            swal({
+                title: cSubject,
+                text: cMsg,
+                type: 'success'
+            });
+        });
     })
 }
-$(document).on('ifChanged','.smeListCh',function(){
-	if($('.smeListCh:checked').length){
-		$('.assnSME').attr('onClick','assignSME(this,1)').removeClass('btn-primary').addClass('btn-success').html('Assign SME');
-	}else{
-		$('.assnSME').attr('onClick','').removeClass('btn-success').addClass('btn-primary').html('Select SME');
-	}
+$(document).on('ifChanged', '.smeListCh', function() {
+    if ($('.smeListCh:checked').length) {
+        $('.assnSME').attr('onClick', 'assignSME(this,1)').removeClass('btn-primary').addClass('btn-success').html('Assign SME');
+    } else {
+        $('.assnSME').attr('onClick', '').removeClass('btn-success').addClass('btn-primary').html('Select SME');
+    }
 });
-function assignSME(selfObj,id){	
-	if(id){
-		swal({
-			title: 'Are you sure?',
-			text: "Assign this SME. You won't be able to revert this!",
-			type: 'warning',
-			showCancelButton: true,
-			confirmButtonColor: '#3085d6',
-			cancelButtonColor: '#d33',
-			confirmButtonText: 'Yes, Assign it!',
-			cancelButtonText: 'No, cancel!',
-			confirmButtonClass: 'btn btn-success',
-			cancelButtonClass: 'btn btn-danger',
-			buttonsStyling: false
-		}).then(function () {
-			$('#submitSMELIST').submit();
-		}, function (dismiss) {
-			if (dismiss === 'cancel') {
-				swal('Cancelled','Assign another SME','error');
-			}
-		})
-	}else{
-		var iid = $(selfObj).data('iid');
-		$('#preloader').fadeIn();
-		$.ajax({
-			url: base_url+'CustomProcess/smeListModel/'+iid,
-			type: 'POST',
-			success: function(data){
-				$('#defaultModelSite').html(data).modal();
-				$('#preloader').fadeOut();
-				$('#datatable-responsive').DataTable();
-				installRating('rateyo');
-				$(".smeListCh").iCheck({
-					checkboxClass: 'icheckbox_flat-green',
-					radioClass: 'iradio_flat-green'
-				});
-			}
-		});
-	}
+
+function assignSME(selfObj, id) {
+    if (id) {
+        swal({
+            title: 'Are you sure?',
+            text: "Assign this SME. You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Assign it!',
+            cancelButtonText: 'No, cancel!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+        }).then(function() {
+            $('#submitSMELIST').submit();
+        }, function(dismiss) {
+            if (dismiss === 'cancel') {
+                swal('Cancelled', 'Assign another SME', 'error');
+            }
+        })
+    } else {
+        var iid = $(selfObj).data('iid');
+        $('#preloader').fadeIn();
+        $.ajax({
+            url: base_url + 'CustomProcess/smeListModel/' + iid,
+            type: 'POST',
+            success: function(data) {
+                $('#defaultModelSite').html(data).modal();
+                $('#preloader').fadeOut();
+                $('#datatable-responsive').DataTable();
+                installRating('rateyo');
+                $(".smeListCh").iCheck({
+                    checkboxClass: 'icheckbox_flat-green',
+                    radioClass: 'iradio_flat-green'
+                });
+            }
+        });
+    }
 }
 
-$(document).on("submit", "#submitSMELIST", function (e) {
-	e.preventDefault();
-	var multiVal = [];
-	$(".smeListCh:checked").each(function(){
-		multiVal.push($(this).val()); 
-	});
-	var iid = $('.selectedIID').val();
-	var inputData = {smeID:multiVal, incidentID:iid};
-	$.ajax({
-		type: "POST",
-		url: base_url + "process/assigneSME",
-		data: inputData,
-		dataType: "JSON",
-		cache:false,
-		success:function(data){
-			$('.btnAssign').html('<i class="fa fa-line-chart"></i>').attr('onClick','').attr('data-original-title', 'Update Process');
-			swal({
-				title: 'Assigned!!',
-				text: 'Selected SME have been assigned for this incident.',
-				type: 'success'
-			}).then(function () {
-				$("#defaultModelSite").modal('hide');
-			})
-		}
-	});
+$(document).on("submit", "#submitSMELIST", function(e) {
+    e.preventDefault();
+    var multiVal = [];
+    $(".smeListCh:checked").each(function() {
+        multiVal.push($(this).val());
+    });
+    var iid = $('.selectedIID').val();
+    var inputData = {
+        smeID: multiVal,
+        incidentID: iid
+    };
+    $.ajax({
+        type: "POST",
+        url: base_url + "process/assigneSME",
+        data: inputData,
+        dataType: "JSON",
+        cache: false,
+        success: function(data) {
+            $('.btnAssign').html('<i class="fa fa-line-chart"></i>').attr('onClick', '').attr('data-original-title', 'Update Process');
+            swal({
+                title: 'Assigned!!',
+                text: 'Selected SME have been assigned for this incident.',
+                type: 'success'
+            }).then(function() {
+                $("#defaultModelSite").modal('hide');
+            })
+        }
+    });
 });
 
 
 /* Manage certificate edit button js    */
-function editTRsection(id){
-	//alert($('#'+id+ ' '+'td'+' '+'.selfDiscBoxselect:selected'));
-	$('#'+id+ ' '+'td').removeClass("disableMouse");
-	if($('#'+id+ ' '+'td'+ ' ' +'button.changetxt').text() != 'Update'){
-            $('#'+id+ ' '+'td'+ ' ' +'button.changetxt').text('Update');
-            return false
-        }
-        var inputServicetags = $('#'+id+ ' '+'td'+' '+'.selectpicker').val();
-        var inputRating = $('#'+id).find('.strRatrnr').val();
-        var bkpRatVal = $('#'+id).find('.bkpRatVal').val();
-        inputRating = inputRating ? inputRating : bkpRatVal;
-        var inputCertificate_num = $('#'+id+ ' '+'td'+' '+'input[name=certification_no]').val();
-        var inputCertificate_date = $('#'+id+ ' '+'td'+' '+'input[name=certification_date]').val();
-        var uid = $('#uId').val();
-        
-        
-        var inputData = {uid:uid,servicetags:inputServicetags, rating:inputRating, certificate_num:inputCertificate_num, certificate_date:inputCertificate_date};
-       
-	//$('#preloader').fadeIn();
-	$.ajax({
+function editTRsection(id) {
+    //alert($('#'+id+ ' '+'td'+' '+'.selfDiscBoxselect:selected'));
+    $('#' + id + ' ' + 'td').removeClass("disableMouse");
+    if ($('#' + id + ' ' + 'td' + ' ' + 'button.changetxt').text() != 'Update') {
+        $('#' + id + ' ' + 'td' + ' ' + 'button.changetxt').text('Update');
+        return false
+    }
+    var inputServicetags = $('#' + id + ' ' + 'td' + ' ' + '.selectpicker').val();
+    var inputRating = $('#' + id).find('.strRatrnr').val();
+    var bkpRatVal = $('#' + id).find('.bkpRatVal').val();
+    inputRating = inputRating ? inputRating : bkpRatVal;
+    var inputCertificate_num = $('#' + id + ' ' + 'td' + ' ' + 'input[name=certification_no]').val();
+    var inputCertificate_date = $('#' + id + ' ' + 'td' + ' ' + 'input[name=certification_date]').val();
+    var uid = $('#uId').val();
+
+
+    var inputData = {
+        uid: uid,
+        servicetags: inputServicetags,
+        rating: inputRating,
+        certificate_num: inputCertificate_num,
+        certificate_date: inputCertificate_date
+    };
+
+    //$('#preloader').fadeIn();
+    $.ajax({
         url: base_url + 'process/manageCertificate',
         dataType: 'json',
         type: 'POST',
         data: inputData,
-       
-        success: function (data) {
+
+        success: function(data) {
             $('#preloader').fadeOut();
             swal({
                 title: 'Information Updated!',
@@ -6460,24 +6471,23 @@ function editTRsection(id){
                 type: 'success',
                 confirmButtonColor: '#009688',
                 confirmButtonText: 'Okay!'
-            }).then(function () {
+            }).then(function() {
                 //window.location.href = base_url + 'dashboard';
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
-	
 
-	
+
+
 }
 
 
 /* strip payment */
 
-$(document).on("submit", "#strip", function (e) {
+$(document).on("submit", "#strip", function(e) {
     e.preventDefault();
-	$('#preloader').fadeIn();
+    $('#preloader').fadeIn();
     $.ajax({
         url: base_url + 'stripintegration/strip_submit',
         dataType: 'json',
@@ -6485,193 +6495,202 @@ $(document).on("submit", "#strip", function (e) {
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Information Updated!',
                 text: "Your information has been updated",
                 type: 'success',
                 confirmButtonColor: '#009688',
                 confirmButtonText: 'Okay!'
-            }).then(function () {
+            }).then(function() {
                 window.location.href = base_url + 'dashboard';
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
 
 /* SME accept the incident */
 
-function sme_accept_incident(id){
+function sme_accept_incident(id) {
     //alert($('#'+id).attr('data-attr'));
-    var fld_id = $('#'+id).attr('data-attr');
-    var inputData = {val:fld_id};
-	$('#preloader').fadeIn();
+    var fld_id = $('#' + id).attr('data-attr');
+    var inputData = {
+        val: fld_id
+    };
+    $('#preloader').fadeIn();
     $.ajax({
         type: "POST",
         url: base_url + "process/sme_accept_incident",
         data: inputData,
         dataType: "JSON",
-        cache:false,
-        success: function (data) {
-			$('#preloader').fadeOut();
+        cache: false,
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Incident Accepted!',
                 text: "Your information has been updated",
                 type: 'success',
                 confirmButtonColor: '#009688',
                 confirmButtonText: 'Okay!'
-            }).then(function () {
+            }).then(function() {
                 window.location.href = base_url + 'dashboard';
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
 
 }
 
 /* SME Reject the incident */
 
-function sme_decline_incident(id){
+function sme_decline_incident(id) {
     //alert(id);
     //alert($('#'+id).attr('data-attr'));
-    var fld_id = $('#'+id).attr('data-attr');
-    var inputData = {val:fld_id};
-	$('#preloader').fadeIn();
+    var fld_id = $('#' + id).attr('data-attr');
+    var inputData = {
+        val: fld_id
+    };
+    $('#preloader').fadeIn();
     $.ajax({
         type: "POST",
         url: base_url + "process/sme_decline_incident",
         data: inputData,
         dataType: "JSON",
-        cache:false,
-        success: function (data) {
-			$('#preloader').fadeOut();
+        cache: false,
+        success: function(data) {
+            $('#preloader').fadeOut();
             swal({
                 title: 'Incident Decline!',
                 text: "Your information has been updated",
                 type: 'success',
                 confirmButtonColor: '#009688',
                 confirmButtonText: 'Okay!'
-            }).then(function () {
+            }).then(function() {
                 window.location.href = base_url + 'dashboard';
             })
         },
-        error: function () {
-        }
+        error: function() {}
     });
 
 }
 
 /* RM Decline the incident */
 
-function rm_decline_incident(id){
-    var fld_id = $('#'+id).attr('data-attr');
-    var inputData = {val:fld_id};
-	swal({
-	  title: "Are you sure?",
-	  text: "You will not be able to recover this incident!",
-	  type: "warning",
-	  showCancelButton: true,
-	  confirmButtonColor: "#DD6B55",
-	  confirmButtonText: "Yes, do it!",
-	},
-	function(){
-		$('#preloader').fadeIn();
-	   $.ajax({
-			type: "POST",
-			url: base_url + "process/rm_decline_incident",
-			data: inputData,
-			dataType: "JSON",
-			cache:false,
-			success: function (data) {
-				$('#preloader').fadeOut();
-				swal("Incident Declined!", "This incident has been declined.", "success");
-			},
-			error: function () {
-			}
-    	});	  
-	});
+function rm_decline_incident(id) {
+    var fld_id = $('#' + id).attr('data-attr');
+    var inputData = {
+        val: fld_id
+    };
+    swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this incident!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, do it!",
+        },
+        function() {
+            $('#preloader').fadeIn();
+            $.ajax({
+                type: "POST",
+                url: base_url + "process/rm_decline_incident",
+                data: inputData,
+                dataType: "JSON",
+                cache: false,
+                success: function(data) {
+                    $('#preloader').fadeOut();
+                    swal("Incident Declined!", "This incident has been declined.", "success");
+                },
+                error: function() {}
+            });
+        });
 }
 
 
 
 /*------ Rm Detials ------------- */
-function rmDetails(rmId) {		
-		var rmid	=	rmId;	
-		var inputData = {id:rmid};
-   		 $.ajax({
-			type: "POST",
-			url: base_url + "process/getRMInfo",
-			data: inputData,
-			dataType: "JSON",
-			cache:false,
-			success: function (res) {
-				obj		=	res.rmDetials;
-				obj1	=	res.rmSlots;
-				//alert(data);
-				$('#myModal').modal('show');				
-				//alert(obj[0].fld_email)
-				// Social Infomration
-				$(".rm-fb").attr("href", ""+obj[0].fld_facebook+"");
-				$(".rm-ln").attr("href", ""+obj[0].fld_linkedin+"");
-				$(".rm-gp").attr("href", ""+obj[0].fld_google+"");
-				$('.rm-email').val(obj[0].fld_email);
-				$('.rm-country').val(obj[0].fld_CountryName);
-				$('.rm-name').val(obj[0].fld_fname + ' ' +  obj[0].fld_mname + ' '+  obj[0].fld_lname);
-				$('.rm-timeZone').val(obj[0].fld_time_zone);
-				$('.rm-desc').html(obj[0].fld_about);
-				// Profile Pic
-				$(".rm-profile").attr("src", ""+base_url+"uploads/profile/thumbs/"+obj[0].fld_picture+"");
-				if(obj[0].fld_service_level==1) { $('.rm-type').val('Project Manager'); 
-				} else if(obj[0].fld_service_level==0) { $('.rm-type').val('Incident Manager'); 
-				} else if(obj[0].fld_service_level==2) { $('.rm-type').val('IT/Director Manager');} 
-				if(obj[0].fld_resume) { 
-					$(".rm-resume").attr("href", ""+base_url+"uploads/resume/"+obj[0].fld_resume+"");
-				}
-				else {
-					$(".rm-resume").attr("href", "#");
-				}
-				
-				var slotTime='';
-				for(var i = 0;i<obj1.length;i++) {
-						slotTime += '<p  class="form-control">'+obj1[i].fld_start_time + ' To '+ obj1[i].fld_end_time+'</p>';
-					}
-				$('.rm-slots').html(slotTime);	
-				
-			},
-			error: function () {
-			}
-    	});	
+function rmDetails(rmId) {
+    var rmid = rmId;
+    var inputData = {
+        id: rmid
+    };
+    $.ajax({
+        type: "POST",
+        url: base_url + "process/getRMInfo",
+        data: inputData,
+        dataType: "JSON",
+        cache: false,
+        success: function(res) {
+            obj = res.rmDetials;
+            obj1 = res.rmSlots;
+            //alert(data);
+            $('#myModal').modal('show');
+            //alert(obj[0].fld_email)
+            // Social Infomration
+            $(".rm-fb").attr("href", "" + obj[0].fld_facebook + "");
+            $(".rm-ln").attr("href", "" + obj[0].fld_linkedin + "");
+            $(".rm-gp").attr("href", "" + obj[0].fld_google + "");
+            $('.rm-email').val(obj[0].fld_email);
+            $('.rm-country').val(obj[0].fld_CountryName);
+            $('.rm-name').val(obj[0].fld_fname + ' ' + obj[0].fld_mname + ' ' + obj[0].fld_lname);
+            $('.rm-timeZone').val(obj[0].fld_time_zone);
+            $('.rm-desc').html(obj[0].fld_about);
+            // Profile Pic
+            $(".rm-profile").attr("src", "" + base_url + "uploads/profile/thumbs/" + obj[0].fld_picture + "");
+            if (obj[0].fld_service_level == 1) {
+                $('.rm-type').val('Project Manager');
+            } else if (obj[0].fld_service_level == 0) {
+                $('.rm-type').val('Incident Manager');
+            } else if (obj[0].fld_service_level == 2) {
+                $('.rm-type').val('IT/Director Manager');
+            }
+            if (obj[0].fld_resume) {
+                $(".rm-resume").attr("href", "" + base_url + "uploads/resume/" + obj[0].fld_resume + "");
+            } else {
+                $(".rm-resume").attr("href", "#");
+            }
+
+            var slotTime = '';
+            for (var i = 0; i < obj1.length; i++) {
+                slotTime += '<p  class="form-control">' + obj1[i].fld_start_time + ' To ' + obj1[i].fld_end_time + '</p>';
+            }
+            $('.rm-slots').html(slotTime);
+
+        },
+        error: function() {}
+    });
 }
 
 
-$('.serviceLevelSelection .rmTypeList').on('ifChanged', function(event){
-	$('.activeRado').removeClass('activeRado');
-	$(this).closest('.radio').addClass('activeRado');
-	var inputData = {levelType:this.value,userType:'3'};
-	$.ajax({
-		type: "POST",
-		url: base_url + 'process/getRMList',
-		data: inputData
-	})
-	.done(function(data) {				
-		$('.rm-list').html(data);
-		installRating('rateyo');
-		$('.rm-list input.flat').iCheck({
-			checkboxClass: 'icheckbox_flat-green',
-			radioClass: 'iradio_flat-green'
-		});
-	});
+$('.serviceLevelSelection .rmTypeList').on('ifChanged', function(event) {
+    $('.activeRado').removeClass('activeRado');
+    $(this).closest('.radio').addClass('activeRado');
+    var inputData = {
+        levelType: this.value,
+        userType: '3'
+    };
+    $.ajax({
+            type: "POST",
+            url: base_url + 'process/getRMList',
+            data: inputData
+        })
+        .done(function(data) {
+            $('.rm-list').html(data);
+            installRating('rateyo');
+            $('.rm-list input.flat').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            });
+        });
 });
 
-$(document).on("submit", "#updtCustomer", function (e) {
+$(document).on("submit", "#updtCustomer", function(e) {
     e.preventDefault();
     if (!validateForm('updtCustomer')) return false;
-	$('#preloader').fadeIn();
+    $('#preloader').fadeIn();
     $.ajax({
         url: base_url + 'process/update_sme',
         dataType: 'json',
@@ -6679,206 +6698,204 @@ $(document).on("submit", "#updtCustomer", function (e) {
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
-               swal({
-                    title: 'Update Successfully!',
-                    text: "Thank you for updating all details",
-                    type: 'success',
-                    allowOutsideClick: false,
-                    confirmButtonColor: '#009688',
-                    confirmButtonText: 'Okay!'
-                }).then(function () {
-					if($("input[name=fld_user_type]").val() == '3'){
-                    	window.location.href = base_url + 'dashboard/profile';
-					}
-                })            
+        success: function(data) {
+            $('#preloader').fadeOut();
+            swal({
+                title: 'Update Successfully!',
+                text: "Thank you for updating all details",
+                type: 'success',
+                allowOutsideClick: false,
+                confirmButtonColor: '#009688',
+                confirmButtonText: 'Okay!'
+            }).then(function() {
+                if ($("input[name=fld_user_type]").val() == '3') {
+                    window.location.href = base_url + 'dashboard/profile';
+                }
+            })
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
 
 
-$(document).on('change','#uploadImage',function(){
-  var countFiles = $(this)[0].files.length;
-  var imgPath = $(this)[0].value;
-  var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+$(document).on('change', '#uploadImage', function() {
+    var countFiles = $(this)[0].files.length;
+    var imgPath = $(this)[0].value;
+    var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
 
-  if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg" || extn == "GIF" || extn == "PNG" || extn == "JPG" || extn == "JPEG") {
-	if (typeof(FileReader) != "undefined") {
-	  for (var i = 0; i < countFiles; i++) 
-	  {
-		var reader = new FileReader();
-		reader.onload = function(e) {
-			$('.previewImgSrc').attr('src',e.target.result);
-		}
-		reader.readAsDataURL($(this)[0].files[i]);
-	  }
-	}
-  } else {
-	swal("Sorry!", "Pls select only images.", "error");
-  }
+    if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg" || extn == "GIF" || extn == "PNG" || extn == "JPG" || extn == "JPEG") {
+        if (typeof(FileReader) != "undefined") {
+            for (var i = 0; i < countFiles; i++) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('.previewImgSrc').attr('src', e.target.result);
+                }
+                reader.readAsDataURL($(this)[0].files[i]);
+            }
+        }
+    } else {
+        swal("Sorry!", "Pls select only images.", "error");
+    }
 });
 
 
-function updateAdminImage(selfObj,logo){
-	var fdata       = new FormData();
-	var myform      = $('#uploadImage'); // specify the form element
-	var idata       = myform.serializeArray();
-	var fileName    = $('#uploadImage')[0].files[0];
-	fdata.append('profile', fileName);
-	$.each(idata,function(key,input){
-		fdata.append(input.name,input.value);
-	});
-	if(logo=='logo'){
-		var url = base_url + "process/updateGlobals";
-	}else if(logo=='user'){
-		var url = base_url + "process/updatesuperadminImage/user";
-	}else{
-		var url = base_url + "process/updatesuperadminImage";	
-	}
-	$.ajax({
-		url: url,
-		type: "POST",
-		data: fdata,
-		processData: false,
-		contentType: false,
-		beforeSend: function() {
-			$('#preloader').fadeIn();
-		},
-		success:function(data) {
-			$('#preloader').fadeOut();
-			swal("Update!", "Your profile image has been updated.", "success");
-			location.reload(true);
-		}
-	});
+function updateAdminImage(selfObj, logo) {
+    var fdata = new FormData();
+    var myform = $('#uploadImage'); // specify the form element
+    var idata = myform.serializeArray();
+    var fileName = $('#uploadImage')[0].files[0];
+    fdata.append('profile', fileName);
+    $.each(idata, function(key, input) {
+        fdata.append(input.name, input.value);
+    });
+    if (logo == 'logo') {
+        var url = base_url + "process/updateGlobals";
+    } else if (logo == 'user') {
+        var url = base_url + "process/updatesuperadminImage/user";
+    } else {
+        var url = base_url + "process/updatesuperadminImage";
+    }
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: fdata,
+        processData: false,
+        contentType: false,
+        beforeSend: function() {
+            $('#preloader').fadeIn();
+        },
+        success: function(data) {
+            $('#preloader').fadeOut();
+            swal("Update!", "Your profile image has been updated.", "success");
+            location.reload(true);
+        }
+    });
 }
 
 //function work for change member status
-function changeStatus(selfObj,id,type){
-	if ($(selfObj).is(':checked')) {
-		var status = 0;
-	}else{
-		var status = 1;
-	}	
-	$.ajax({
-		url: base_url+'process/changeStatus/'+id+'/'+status+'/'+type,
-		dataType: 'json',
-		type: 'POST',
-		success: function(data){
-				//$("#packageId_"+packageId).remove();
-		}
-	 });
+function changeStatus(selfObj, id, type) {
+    if ($(selfObj).is(':checked')) {
+        var status = 0;
+    } else {
+        var status = 1;
+    }
+    $.ajax({
+        url: base_url + 'process/changeStatus/' + id + '/' + status + '/' + type,
+        dataType: 'json',
+        type: 'POST',
+        success: function(data) {
+            //$("#packageId_"+packageId).remove();
+        }
+    });
 }
 // End Function
 
 //function work for change Approval of Expert
-function changeApproval(selfObj,id,type){
-	if ($(selfObj).is(':checked')) {
-		var status = 0;
-	}else{
-		var status = 1;
-	}	
-	$.ajax({
-		url: base_url+'process/changeApproval/'+id+'/'+status+'/'+type,
-		dataType: 'json',
-		type: 'POST',
-		success: function(data){
-				//$("#packageId_"+packageId).remove();
-		}
-	 });
+function changeApproval(selfObj, id, type) {
+    if ($(selfObj).is(':checked')) {
+        var status = 0;
+    } else {
+        var status = 1;
+    }
+    $.ajax({
+        url: base_url + 'process/changeApproval/' + id + '/' + status + '/' + type,
+        dataType: 'json',
+        type: 'POST',
+        success: function(data) {
+            //$("#packageId_"+packageId).remove();
+        }
+    });
 }
 // End Approval
 
 
 
 //Start Common Delete
-function deleteCommon(selfObj,id,type)
-{
-	var isIncident = $('.isIncident').val();
-	if(isIncident){
-		var msg = 'You will not be able to recover once this get Cancelled';
-	}else{
-		var msg = 'You will not be able to recover once this get deleted';
-	}
-	swal({
-		title: "Are you sure?",
-		text: msg,
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Yes, I am sure!",
-		cancelButtonText: "No, cancel it!"
-    }).then(function () {
+function deleteCommon(selfObj, id, type) {
+    var isIncident = $('.isIncident').val();
+    if (isIncident) {
+        var msg = 'You will not be able to recover once this get Cancelled';
+    } else {
+        var msg = 'You will not be able to recover once this get deleted';
+    }
+    swal({
+        title: "Are you sure?",
+        text: msg,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, I am sure!",
+        cancelButtonText: "No, cancel it!"
+    }).then(function() {
         $.ajax({
-				url: base_url+'process/deleteCommon/'+id+'/'+type,
-				dataType: 'json',
-				type: 'POST',
-				success: function(data){
-					if(isIncident){
-						swal("Cancelled!", "The incident has been cancelled.", "success");
-						$(selfObj).attr("disabled", true).addClass('disableMouse').closest('tr').find('.statusIn').html('Cancelled');
-					}else{
-						swal("Deleted!", "The record has been deleted.", "success");
-						$(selfObj).closest('tr').remove();
-					}
-                                        if($('.notiFD').val()){
-                                            $(selfObj).closest('li').remove();
-                                        }
-					
-				}
-			 });
+            url: base_url + 'process/deleteCommon/' + id + '/' + type,
+            dataType: 'json',
+            type: 'POST',
+            success: function(data) {
+                if (isIncident) {
+                    swal("Cancelled!", "The incident has been cancelled.", "success");
+                    $(selfObj).attr("disabled", true).addClass('disableMouse').closest('tr').find('.statusIn').html('Cancelled');
+                } else {
+                    swal("Deleted!", "The record has been deleted.", "success");
+                    $(selfObj).closest('tr').remove();
+                }
+                if ($('.notiFD').val()) {
+                    $(selfObj).closest('li').remove();
+                }
 
-    }, function (dismiss) {
+            }
+        });
+
+    }, function(dismiss) {
         if (dismiss === 'cancel') {
             swal("Cancelled", "This record is in safe :)", "error");
-		}
-    });	
+        }
+    });
 }
 //End Common Delete
 
 //Start User Info
-function getUserDetails(id){
-	$('#preloader').fadeIn();
-	$.ajax({
-		url: base_url+'CustomProcess/userPreview/'+id,
-		type: 'POST',
-		success: function(data){
-			$('#profileView').html(data).modal();
-			$('#preloader').fadeOut();
-		}
-	});
+function getUserDetails(id) {
+    $('#preloader').fadeIn();
+    $.ajax({
+        url: base_url + 'CustomProcess/userPreview/' + id,
+        type: 'POST',
+        success: function(data) {
+            $('#profileView').html(data).modal();
+            $('#preloader').fadeOut();
+        }
+    });
 }
-function installRating(className){
-	$("."+className).rateYo({
-	  numStars: 5,
-	  precision: 10,
-	  starWidth: "20px",
-	  spacing: "5px",
-	  multiColor: {
-		startColor: "#1ABB9C",
-		endColor  : "#1ABB9C"
-	  },
-	  onInit: function () {
-		//console.log("On Init");
-	  },
-	  onSet: function () {
-		//console.log("On Set");
-	  }
-	})
-	.on("rateyo.set", function (e, data) {
-		console.log(data.rating); 
-	})
+
+function installRating(className) {
+    $("." + className).rateYo({
+            numStars: 5,
+            precision: 10,
+            starWidth: "20px",
+            spacing: "5px",
+            multiColor: {
+                startColor: "#1ABB9C",
+                endColor: "#1ABB9C"
+            },
+            onInit: function() {
+                //console.log("On Init");
+            },
+            onSet: function() {
+                //console.log("On Set");
+            }
+        })
+        .on("rateyo.set", function(e, data) {
+            console.log(data.rating);
+        })
 }
 
 
-$(document).on("submit", "#inctTicket", function (e) {
-	e.preventDefault();
-	$('#preloader').fadeIn();
-	var str =  $('.instList').val();
-	window.location.href= ''+base_url + 'dashboard/incident_preview/'+encodeURIComponent(str)+''; 
+$(document).on("submit", "#inctTicket", function(e) {
+    e.preventDefault();
+    $('#preloader').fadeIn();
+    var str = $('.instList').val();
+    window.location.href = '' + base_url + 'dashboard/incident_preview/' + encodeURIComponent(str) + '';
 });
 
 
@@ -6926,75 +6943,77 @@ $(document).on("submit", "#inctTicket", function (e) {
 //	 
 //}
 
-$(document).on('click', '.confirmBeforeIncident', function () {
-	if($('.startStopIncidentBtn').is(':checked')){
-		var fld_status = '5';
-		var msg = 'You incident timer and billing will Stop if you enable Stop master';
-		var pMsg = 'This incident is still in progress';
-	}else{
-		var fld_status = '0';
-		var msg = 'You incident timer and billing will start if you enable start master'
-		var pMsg = 'This incident is not started yet';
-	}
-	var id = $('.inctVal').val();
-	var inputData = {id:id, status:fld_status};
-	swal({
-		title: "Are you sure?",
-		text: msg,
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Yes, I am sure!",
-		cancelButtonText: "No, cancel it!"
-	}).then(function () {
-		$('.startStopIncidentBtn').prop('checked', true).change()
-		$.ajax({
-			url: base_url+'Process/materTimeUpdt/'+encodeURIComponent(id),
-			type: 'POST',
-			data : inputData,
-			success: function(data){
-					$('#preloader').fadeOut();
-					 if(fld_status == "5"){
-							var title = 'Stopped!'
-							var finalMsg = 'Your incident has been stopped'
+$(document).on('click', '.confirmBeforeIncident', function() {
+    if ($('.startStopIncidentBtn').is(':checked')) {
+        var fld_status = '5';
+        var msg = 'You incident timer and billing will Stop if you enable Stop master';
+        var pMsg = 'This incident is still in progress';
+    } else {
+        var fld_status = '0';
+        var msg = 'You incident timer and billing will start if you enable start master'
+        var pMsg = 'This incident is not started yet';
+    }
+    var id = $('.inctVal').val();
+    var inputData = {
+        id: id,
+        status: fld_status
+    };
+    swal({
+        title: "Are you sure?",
+        text: msg,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, I am sure!",
+        cancelButtonText: "No, cancel it!"
+    }).then(function() {
+        $('.startStopIncidentBtn').prop('checked', true).change()
+        $.ajax({
+            url: base_url + 'Process/materTimeUpdt/' + encodeURIComponent(id),
+            type: 'POST',
+            data: inputData,
+            success: function(data) {
+                $('#preloader').fadeOut();
+                if (fld_status == "5") {
+                    var title = 'Stopped!'
+                    var finalMsg = 'Your incident has been stopped'
 
-					}else{
-							var title = 'Started!'
-							var finalMsg = 'Your incident has been started'
-					}
-					swal(
-					{
-					  title: title,
-					  text: finalMsg,
-					  timer: 3000,
-					  onOpen: function () {
-							swal.showLoading()
-					  }
-					}).then(
-					  function () {},
-					  function (dismiss) {
-							if (dismiss === 'timer') {
-							  window.location.href= ''+base_url + 'dashboard/incident_preview/'+encodeURIComponent(id)+'';
-							}
-					  }
-					)
-				location.reload(true);
-			}
-	});
+                } else {
+                    var title = 'Started!'
+                    var finalMsg = 'Your incident has been started'
+                }
+                swal({
+                    title: title,
+                    text: finalMsg,
+                    timer: 3000,
+                    onOpen: function() {
+                        swal.showLoading()
+                    }
+                }).then(
+                    function() {},
+                    function(dismiss) {
+                        if (dismiss === 'timer') {
+                            window.location.href = '' + base_url + 'dashboard/incident_preview/' + encodeURIComponent(id) + '';
+                        }
+                    }
+                )
+                location.reload(true);
+            }
+        });
 
-	}, function (dismiss) {
-		if (dismiss === 'cancel') {
-			swal("Pending", pMsg, "error");
-		}
-	});
+    }, function(dismiss) {
+        if (dismiss === 'cancel') {
+            swal("Pending", pMsg, "error");
+        }
+    });
 });
 
 
-$(document).on("submit", "#inctMessge", function (e) {
-	e.preventDefault();
-	$('#preloader').fadeIn();
-	var id = $('.inctVal').val();
-	var smechatid = $('.smechatid').val();
+$(document).on("submit", "#inctMessge", function(e) {
+    e.preventDefault();
+    $('#preloader').fadeIn();
+    var id = $('.inctVal').val();
+    var smechatid = $('.smechatid').val();
     $.ajax({
         url: base_url + 'Process/inciMessage',
         dataType: 'json',
@@ -7002,27 +7021,26 @@ $(document).on("submit", "#inctMessge", function (e) {
         data: new FormData(this),
         processData: false,
         contentType: false,
-        success: function (data) {
-			$('#preloader').fadeOut();
-			location.reload(true);
+        success: function(data) {
+            $('#preloader').fadeOut();
+            location.reload(true);
         },
-        error: function () {
-        }
+        error: function() {}
     });
 });
 
 function readImage(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
-		if (/image/.test(input.files[0].type)) {
-			reader.onload = function(e) {
-				$(input).closest('.previewImgArea').find('.previewImag img').attr('src', e.target.result);
-			}
-		}else{
-			$(input).closest('.previewImgArea').find('.previewImag img').attr('src',base_url + "uploads/file.png");
-			$('.fileNameUp').remove();
-			$(input).closest('.previewImgArea').append('<div class="fileNameUp">'+input.files[0].name+'</div>');
-		}
+        if (/image/.test(input.files[0].type)) {
+            reader.onload = function(e) {
+                $(input).closest('.previewImgArea').find('.previewImag img').attr('src', e.target.result);
+            }
+        } else {
+            $(input).closest('.previewImgArea').find('.previewImag img').attr('src', base_url + "uploads/file.png");
+            $('.fileNameUp').remove();
+            $(input).closest('.previewImgArea').append('<div class="fileNameUp">' + input.files[0].name + '</div>');
+        }
         reader.readAsDataURL(input.files[0]);
     }
 }
@@ -7031,41 +7049,46 @@ $(".previewImgArea input").change(function() {
     readImage(this);
 });
 
-function ChangeIncidentTimeStatus(selfObj,fld_id,fld_sme_id){
-	var iid = $('#iid').val();
-	if($(selfObj).is(':checked')){
-		var status = '0'
-	}else{
-		var status = '1'
-	}
-	var inputData = {iid:iid,smeId:fld_sme_id, fld_id:fld_id, status:status};
-	$.ajax({
-		url: base_url+'Process/timeStatusUpdate/',
-		type: 'POST',
-		data : inputData,
-		success: function(data){
-			$('#preloader').fadeOut();
-			location.reload(true);
-		}
-	});
+function ChangeIncidentTimeStatus(selfObj, fld_id, fld_sme_id) {
+    var iid = $('#iid').val();
+    if ($(selfObj).is(':checked')) {
+        var status = '0'
+    } else {
+        var status = '1'
+    }
+    var inputData = {
+        iid: iid,
+        smeId: fld_sme_id,
+        fld_id: fld_id,
+        status: status
+    };
+    $.ajax({
+        url: base_url + 'Process/timeStatusUpdate/',
+        type: 'POST',
+        data: inputData,
+        success: function(data) {
+            $('#preloader').fadeOut();
+            location.reload(true);
+        }
+    });
 }
 
 
-function getIncidentSMEList(selfObj,id){
-	var id = $(selfObj).data('iid');
-	$('#preloader').fadeIn();
-	$.ajax({
-		url: base_url+'Process/incidentsmeListModel/'+id,
-		type: 'POST',
-		success: function(data){
-			$('#defaultModelSite').html(data).modal();
-			$('#preloader').fadeOut();
-			$('#datatable-responsive').DataTable();			
-		}
-	});
+function getIncidentSMEList(selfObj, id) {
+    var id = $(selfObj).data('iid');
+    $('#preloader').fadeIn();
+    $.ajax({
+        url: base_url + 'Process/incidentsmeListModel/' + id,
+        type: 'POST',
+        success: function(data) {
+            $('#defaultModelSite').html(data).modal();
+            $('#preloader').fadeOut();
+            $('#datatable-responsive').DataTable();
+        }
+    });
 }
 
 
-function gotoPage(url){
-	window.location.href= url;
+function gotoPage(url) {
+    window.location.href = url;
 }

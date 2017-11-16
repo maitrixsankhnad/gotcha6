@@ -33,35 +33,35 @@ foreach($activityList as $activityData){
 			$nHeading  = 'New chat Message ';
 			$nMessage  = $activityData->fld_message;
 			break;
-                case 'incidentCreate':
-                    if($aid){
-                        $innerUrl = "superadmin";
-                    }else{
-                         $innerUrl = "dashboard";
-                    }
+		case 'incidentCreate':
+			if($aid){
+				$innerUrl = "superadmin";
+			}else{
+				 $innerUrl = "dashboard";
+			}
 			$nURL = base_url().''.$innerUrl.'/incident_preview/'.encode($nSuptID);
 			$nImage = base_url().'uploads/notification/default.png';
 			$nHeading  = 'New Incident Message';
 			$nMessage  = $activityData->fld_message;
 			break; 
-                case 'incidentAccptDecline':
-                    if($aid){
-                        $innerUrl = "superadmin";
-                    }else{
-                         $innerUrl = "dashboard";
-                    }
+		case 'incidentAccptDecline':
+			if($aid){
+				$innerUrl = "superadmin";
+			}else{
+				 $innerUrl = "dashboard";
+			}
 			$nURL = base_url().''.$innerUrl.'/incident_preview/'.encode($nSuptID);
 			$nImage = base_url().'uploads/notification/default.png';
 			$nHeading  = 'Incident Status';
 			$nMessage  = $activityData->fld_message;
 			break;  
                 
-                case 'SMEincidentAcptDecl':
-                    if($aid){
-                        $innerUrl = "superadmin";
-                    }else{
-                         $innerUrl = "dashboard";
-                    }
+		case 'SMEincidentAcptDecl':
+			if($aid){
+				$innerUrl = "superadmin";
+			}else{
+				 $innerUrl = "dashboard";
+			}
 			$nURL = base_url().''.$innerUrl.'/incident_preview/'.encode($nSuptID);
 			$nImage = base_url().'uploads/notification/default.png';
 			$nHeading  = 'Incident Status';

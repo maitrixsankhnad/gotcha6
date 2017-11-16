@@ -520,7 +520,11 @@ class User_model extends CI_Model {
     public function gettotalIncidentCustomer($id) {
         $sql = "SELECT COUNT(fld_id) AS NumberOfIncident FROM tbl_incident WHERE `fld_uid` ='$id'";
         $query = $this->db->query($sql);
-        // echo $this->db->last_query();
+        return $query->result();
+    }
+	public function getPushNotfiCan($cTime,$uid) {
+       $sql = "SELECT * FROM `tbl_recent_activity` WHERE fld_created_date > '".$cTime."' AND fld_target_id = '".$uid."' AND (fld_data_type LIKE '%incident%' OR fld_data_type = 'dropMessage')";
+        $query = $this->db->query($sql);
         return $query->result();
     }
 }
