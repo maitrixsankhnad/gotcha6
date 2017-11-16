@@ -9,7 +9,6 @@ class Process extends CI_Controller {
         $this->email->set_mailtype("html");
         define('UID', userID());
         define('AID', adminID());
-		define('currentDateTime', date("Y-m-d H:i:s", time()));
     }
 
     public function index() {
@@ -171,12 +170,14 @@ class Process extends CI_Controller {
     public function onoff($status = '') {
         if (isset($_SESSION['UID'])) {
             $this->user_model->updateData("fld_id", UID, array("fld_activity" => $status), "tbl_user");
-			
+			$_SESSION['cDateTime'] = isset($_SESSION['cDateTime']) ? $_SESSION['cDateTime'] :date("Y-m-d H:i:s", time());
 			$userDataInfo = userInfo(UID);
 			$userType = $userDataInfo[0]['fld_user_type'];
-			
+			$notIn = '0';			
+			$_SESSION['indIDSR'] = isset($_SESSION['indIDSR']) ? $_SESSION['indIDSR'] : '0';
+			$allNotiIDS = '';
 			if($userType == '0'){
-				$userNotiData = $this->user_model->getPushNotfiCan(currentDateTime,UID);
+				$userNotiData = $this->user_model->getPushNotfiCan($_SESSION['cDateTime'],UID,$_SESSION['indIDSR']);
 				//print_r($userNotiData);				
 				if(count($userNotiData) > 0){
 					foreach($userNotiData as $userNoti){
@@ -191,51 +192,61 @@ class Process extends CI_Controller {
 						$nStatsUsr = $userNoti->fld_status_user;
 						$nStatsAdm = $userNoti->fld_status_admin;
 						$nCrtDt = $userNoti->fld_created_date;
+						$isNotificaion  = $this->common_model->getPartial('fld_notifications','tbl_incident',array('fld_id'=>$nSuptID, 'fld_notifications'=>'0'));
 						$nURL = $nImage = $nHeading = $nMessage = '';
-						switch ($nDataTyp) {
-							case 'incidentCreate':
-								$nURL = base_url().'dashboard/incident_preview/'.encode($nSuptID);
-								$nImage = base_url().'uploads/notification/default.png';
-								$nHeading  = 'New Incident Message';
-								$nMessage  = $nMsg;
-								break;
-							case 'dropMessage':
-								$nURL = base_url().'dashboard/incident_preview/'.encode($nSuptID);
-								$nImage = base_url().'uploads/notification/default.png';
-								$nHeading  = 'New chat Message ';
-								$nMessage  = $nMsg;
-								break;
-							case 'incidentAccptDecline':
-								$nURL = base_url().'dashboard/incident_preview/'.encode($nSuptID);
-								$nImage = base_url().'uploads/notification/default.png';
-								$nHeading  = 'Incident Status';
-								$nMessage  = $nMsg;
-								break;
-							case 'incidentStartComplete':
-								$nURL = base_url().'dashboard/incident_preview/'.encode($nSuptID);
-								$nImage = base_url().'uploads/notification/default.png';
-								$nHeading  = 'Incident Status ';
-								$nMessage  = $nMsg;
-								break;
-							default:
-								exit;
-						}
-						if($nMessage){
-							echo "var theurl = '".$nURL."';
-							var notifikasi = new Notification('".$nHeading."', {
-								icon: '".$nImage."',
-								body: '".$nMessage."',
-							});
-							notifikasi.onclick = function () {
-								window.open(theurl); 
-								notifikasi.close();     
-							};
-							setTimeout(function(){
-								notifikasi.close();
-							}, 5000);";	
-						}
+						$allNotiIDS .= '"'.$nID.'",';
+						if(count($isNotificaion)>0){							
+							switch ($nDataTyp) {
+								case 'incidentCreate':
+									$nURL = base_url().'dashboard/incident_preview/'.encode($nSuptID);
+									$nImage = base_url().'uploads/notification/default.png';
+									$nHeading  = 'New Incident Message';
+									$nMessage  = $nMsg;
+									break;
+								case 'dropMessage':
+									$nURL = base_url().'dashboard/incident_preview/'.encode($nSuptID);
+									$nImage = base_url().'uploads/notification/default.png';
+									$nHeading  = 'New chat Message ';
+									$nMessage  = $nMsg;
+									break;
+								case 'incidentAccptDecline':
+									$nURL = base_url().'dashboard/incident_preview/'.encode($nSuptID);
+									$nImage = base_url().'uploads/notification/default.png';
+									$nHeading  = 'Incident Status';
+									$nMessage  = $nMsg;
+									break;
+								case 'incidentStartComplete':
+									$nURL = base_url().'dashboard/incident_preview/'.encode($nSuptID);
+									$nImage = base_url().'uploads/notification/default.png';
+									$nHeading  = 'Incident Status ';
+									$nMessage  = $nMsg;
+									break;
+								default:
+									exit;
+							}
+							
+							if($nMessage){
+								$randData = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
+								$randNum = substr(str_shuffle(str_repeat("0123456789", 4)), 0, 4);
+								echo "setTimeout(function(){ 
+									var theurl".$randData." = '".$nURL."';
+										var notifikasi".$randData." = new Notification('".$nHeading."', {
+											icon: '".$nImage."',
+											body: '".$nMessage."',
+										});
+										notifikasi".$randData.".onclick = function () {
+											window.open(theurl".$randData."); 
+											notifikasi".$randData.".close();     
+										};
+										
+								
+								 }, ".$randNum.");";
+								
+							}
+							$_SESSION['cDateTime'] = date("Y-m-d H:i:s", time());
+						}						
 					}
-					define('currentDateTime', date("Y-m-d H:i:s", time()));
+					$_SESSION['indIDSR'] = rtrim($allNotiIDS, ',');
 				}
 			}
             return true;
@@ -259,6 +270,7 @@ class Process extends CI_Controller {
             } else {
                 $id = encode($result[0]['fld_id']);
                 $this->session->set_userdata('UID', $id);
+				$this->session->set_userdata('cDateTime', date("Y-m-d H:i:s", time()));
                 $result = $this->onoff('0');
                 if ($rememberMe) {
                     $cookie = array(

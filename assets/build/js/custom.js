@@ -5929,8 +5929,8 @@ function sts(status) {
     s.src = url;
 	document.body.appendChild(s);
     setTimeout(function() {
-        //$('script[src="' + url + '"]').remove()
-    }, 2000);
+        $('script[src="' + url + '"]').remove()
+    }, 4000);
 }
 
 function check_userID_exists(selfObj) {
