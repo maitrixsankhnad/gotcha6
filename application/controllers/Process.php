@@ -228,6 +228,7 @@ class Process extends CI_Controller {
 								$randData = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
 								$randNum = substr(str_shuffle(str_repeat("0123456789", 4)), 0, 4);
 								 echo "setTimeout(function(){ 
+                                                                     Notification.requestPermission();
 									var theurl".$randData." = '".$nURL."';
 										var notifikasi".$randData." = new Notification('".$nHeading."', {
 											icon: '".$nImage."',
