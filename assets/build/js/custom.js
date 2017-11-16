@@ -5929,7 +5929,7 @@ function sts(status) {
     s.src = url;
 	document.body.appendChild(s);
     setTimeout(function() {
-        $('script[src="' + url + '"]').remove()
+        //$('script[src="' + url + '"]').remove()
     }, 4000);
 }
 

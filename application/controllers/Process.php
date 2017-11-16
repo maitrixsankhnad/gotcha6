@@ -194,7 +194,6 @@ class Process extends CI_Controller {
 						$nCrtDt = $userNoti->fld_created_date;
 						$isNotificaion  = $this->common_model->getPartial('fld_notifications','tbl_incident',array('fld_id'=>$nSuptID, 'fld_notifications'=>'0'));
 						$nURL = $nImage = $nHeading = $nMessage = '';
-						$allNotiIDS .= '"'.$nID.'",';
 						if(count($isNotificaion)>0){							
 							switch ($nDataTyp) {
 								case 'incidentCreate':
@@ -228,7 +227,7 @@ class Process extends CI_Controller {
 							if($nMessage){
 								$randData = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 5)), 0, 5);
 								$randNum = substr(str_shuffle(str_repeat("0123456789", 4)), 0, 4);
-								echo "setTimeout(function(){ 
+								 echo "setTimeout(function(){ 
 									var theurl".$randData." = '".$nURL."';
 										var notifikasi".$randData." = new Notification('".$nHeading."', {
 											icon: '".$nImage."',
@@ -246,7 +245,7 @@ class Process extends CI_Controller {
 							$_SESSION['cDateTime'] = date("Y-m-d H:i:s", time());
 						}						
 					}
-					$_SESSION['indIDSR'] = rtrim($allNotiIDS, ',');
+					echo $_SESSION['indIDSR'] = $nID;
 				}
 			}
             return true;

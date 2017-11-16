@@ -523,7 +523,7 @@ class User_model extends CI_Model {
         return $query->result();
     }
 	public function getPushNotfiCan($cTime,$uid,$notIn) {
-    	$sql = "SELECT * FROM `tbl_recent_activity` WHERE fld_created_date > '".$cTime."' AND fld_target_id = '".$uid."' AND (fld_data_type LIKE '%incident%' OR fld_data_type = 'dropMessage') AND fld_id NOT IN(".$notIn.")";
+    	$sql = "SELECT * FROM `tbl_recent_activity` WHERE fld_created_date > '".$cTime."' AND fld_target_id = '".$uid."' AND (fld_data_type LIKE '%incident%' OR fld_data_type = 'dropMessage') AND fld_id > ".$notIn;
         $query = $this->db->query($sql);
         return $query->result();
     }
